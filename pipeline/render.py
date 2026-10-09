@@ -270,12 +270,17 @@ def encode_segment(args):
            "-c:v", "libx264", "-preset", "medium", "-crf", str(crf), "-tune", "animation",
            "-pix_fmt", "yuv420p", "-colorspace", "bt709", "-color_primaries", "bt709",
            "-color_trc", "bt709", "-color_range", "tv", "-threads", "2", path]
+    if os.path.exists(path):
+        return path  # finished in an earlier (interrupted) run
+    part = path[:-4] + ".part.mp4"
+    cmd[-1] = part
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     for f in range(f0, f1):
         p.stdin.write(film.frame(f / FPS).tobytes())
     p.stdin.close()
     if p.wait() != 0:
         raise RuntimeError("ffmpeg failed")
+    os.replace(part, path)
     return path
 
 
@@ -304,9 +309,11 @@ def main():
         s, e = a.range.split(":")
         f0, f1 = int(float(s) * FPS), min(n, int(float(e) * FPS))
     # split on scene boundaries-ish: equal chunks
-    chunks = max(a.workers * 3, 1)
+    chunks = max(a.workers * 8, 1)
     step = math.ceil((f1 - f0) / chunks)
-    tmp = tempfile.mkdtemp(prefix="seg_", dir=os.path.dirname(os.path.abspath(a.out)))
+    # fixed segment folder so an interrupted render resumes where it stopped
+    tmp = os.path.abspath(a.out) + f".segments_{f0}_{f1}_{a.scale}_{a.crf}"
+    os.makedirs(tmp, exist_ok=True)
     jobs = [(a.layers, a.scale, s, min(s + step, f1), os.path.join(tmp, f"seg{j:03d}.mp4"), a.crf)
             for j, s in enumerate(range(f0, f1, step))]
     print(f"{f1-f0} frames, {(f1-f0)/FPS:.2f}s, {len(jobs)} segments", flush=True)
