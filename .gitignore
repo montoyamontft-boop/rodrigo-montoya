@@ -1,0 +1,6 @@
+build/
+salida/
+fuente/
+__pycache__/
+*.pdf
+*.mp4
