@@ -25,6 +25,11 @@ EASE = {
     "outCubic": lambda p: 1 - (1 - p) ** 3,
     "outQuart": lambda p: 1 - (1 - p) ** 4,
     "outQuint": lambda p: 1 - (1 - p) ** 5,
+    "outExpo": lambda p: 1.0 if p >= 1 else 1 - 2 ** (-10 * p),
+    "inOutExpo": lambda p: 0.0 if p <= 0 else 1.0 if p >= 1 else
+        (2 ** (20 * p - 10) / 2 if p < 0.5 else (2 - 2 ** (-20 * p + 10)) / 2),
+    "inOutQuart": lambda p: 8 * p ** 4 if p < 0.5 else 1 - (-2 * p + 2) ** 4 / 2,
+    "inQuart": lambda p: p ** 4,
     "inCubic": lambda p: p ** 3,
     "inOutCubic": lambda p: 4 * p ** 3 if p < 0.5 else 1 - (-2 * p + 2) ** 3 / 2,
     "inOutSine": lambda p: -(math.cos(math.pi * p) - 1) / 2,
@@ -42,11 +47,23 @@ def timeline():
     return starts, total
 
 
-EXIT_STAGGER = 0.28
-EXIT_DUR = 0.42
-CAM_PUSH = 0.025
-FADE_IN = 1.0      # first scene from black
+FADE_IN = 0.8      # first scene from black
 FADE_OUT = 1.4     # last scene to black
+
+# Energy of the entries: offsets are amplified, durations shortened, and
+# entries start once the incoming transition has mostly landed.
+OFFSET_GAIN = 1.8
+SCALE_GAIN = 1.6
+DUR_GAIN = 0.78
+ENTRY_DELAY = 0.15
+BG_GAIN = 2.0          # background settle amplitude (start scale - 1) x gain
+CAM_IN = 1.07          # whole-scene camera settle at the start of each scene
+CAM_IN_DUR = 1.8
+
+# Transition between scene i and i+1 (len = scenes - 1)
+TRANSITIONS = ["bar", "push_l", "zoom", "push_l", "push_d", "zoom",
+               "bar", "push_l", "push_d", "zoom", "push_l"]
+SHUTTER_SAMPLES = 12   # motion-blur sub-samples during transitions (180 deg shutter)
 
 
 class Scene:
@@ -88,37 +105,35 @@ class Scene:
         bb = self.bboxes.get(name, [0, 0, self.W, self.H])
         if "bg" in g:
             p = clamp(t / self.hold_end)
-            s = 1 + (g["bg"] - 1) * (1 - EASE["outCubic"](p))
+            s = 1 + (g["bg"] - 1) * BG_GAIN * (1 - EASE["outCubic"](p))
             return dict(op=1.0, s=s, ax=self.W / 2, ay=self.H / 2, dx=0, dy=0, wipe=None, clip=None)
-        p = clamp((t - g.get("t", 0)) / g.get("d", 0.8))
-        e = EASE[g.get("ease", "outCubic")](p)
+        t0 = g.get("t", 0) * DUR_GAIN + ENTRY_DELAY
+        d = g.get("d", 0.8) * DUR_GAIN
+        p = clamp((t - t0) / d)
+        ease = g.get("ease", "outExpo")
+        if ease in ("outCubic", "outQuart"):
+            ease = "outExpo"
+        e = EASE[ease](p)
         if g.get("wipe"):
             op = 1.0 if p > 0 else 0.0
         elif g.get("mask"):
-            op = EASE["outQuad"](clamp(p / 0.45))
+            op = EASE["outQuad"](clamp(p / 0.35))
         else:
-            op = EASE["outQuad"](clamp(p / 0.6))
-        dx = g.get("dx", 0) * PT * self.scale * (1 - e)
-        dy = g.get("dy", 0) * PT * self.scale * (1 - e)
-        s = 1 + (g.get("s0", 1.0) - 1) * (1 - e)
+            op = EASE["outQuad"](clamp(p / 0.45))
+        k = PT * self.scale * OFFSET_GAIN
+        dx = g.get("dx", 0) * k * (1 - e)
+        dy = g.get("dy", 0) * k * (1 - e)
+        s0 = g.get("s0", 1.0)
+        s0 = max(0.2, 1 + (s0 - 1) * SCALE_GAIN)
+        s = 1 + (s0 - 1) * (1 - e)
         ax, ay = anchor(bb, g.get("anchor", "c"))
         wipe = (g["wipe"], EASE[g.get("ease", "inOutCubic")](p), bb) if g.get("wipe") else None
         clip = bb if g.get("mask") else None
-        # exit
-        if not self.last and g.get("exit", "fade") == "fade":
-            t0 = self.dur - OVERLAP + self.exit_rank.get(name, 0) * EXIT_STAGGER
-            q = clamp((t - t0) / EXIT_DUR)
-            if q > 0:
-                qe = EASE["inCubic"](q)
-                op *= 1 - qe
-                dy -= 22 * PT * self.scale * qe
         return dict(op=op, s=s, ax=ax, ay=ay, dx=dx, dy=dy, wipe=wipe, clip=clip)
 
     def camera(self, t):
-        if self.last:
-            return 1.0
-        q = clamp((t - (self.dur - OVERLAP)) / OVERLAP)
-        return 1 + CAM_PUSH * EASE["inOutSine"](q)
+        """Whole-scene settle: starts slightly pushed in, lands on exactly 1.0."""
+        return 1 + (CAM_IN - 1) * (1 - EASE["outExpo"](clamp(t / CAM_IN_DUR)))
 
     def scene_alpha(self, t):
         a = 1.0
@@ -126,8 +141,6 @@ class Scene:
             a *= EASE["inOutSine"](clamp(t / FADE_IN))
         if self.last:
             a *= 1 - EASE["inOutSine"](clamp((t - (self.dur - FADE_OUT)) / FADE_OUT))
-        else:
-            a *= 1 - EASE["inOutSine"](clamp((t - (self.dur - OVERLAP)) / OVERLAP))
         return a
 
     def render(self, t):
@@ -192,6 +205,80 @@ class Scene:
         return rgb, alpha
 
 
+def shift(img, dx, dy):
+    """Integer translation of a full frame, uncovered area left black (never visible)."""
+    H, W = img.shape[:2]
+    out = np.zeros_like(img)
+    xs0, xs1 = max(0, -dx), min(W, W - dx)
+    ys0, ys1 = max(0, -dy), min(H, H - dy)
+    if xs1 > xs0 and ys1 > ys0:
+        out[ys0 + dy:ys1 + dy, xs0 + dx:xs1 + dx] = img[ys0:ys1, xs0:xs1]
+    return out
+
+
+def zoom(img, k):
+    """Scale a full frame about its centre (k >= 1 keeps the frame covered)."""
+    if abs(k - 1) < 1e-4:
+        return img
+    H, W = img.shape[:2]
+    im = Image.fromarray(np.clip(img + 0.5, 0, 255).astype(np.uint8))
+    cx, cy = W / 2, H / 2
+    im = im.transform((W, H), Image.AFFINE, (1 / k, 0, cx - cx / k, 0, 1 / k, cy - cy / k),
+                      resample=Image.BILINEAR)
+    return np.asarray(im, np.float32)
+
+
+def transition(kind, a, b, p, bar):
+    """Combine outgoing frame a and incoming frame b at progress p in [0, 1]."""
+    H, W = a.shape[:2]
+    if p <= 0:
+        return a
+    if p >= 1:
+        return b
+    if kind == "push_l":          # camera travels right: a exits left, b enters from right
+        e = EASE["inOutQuart"](p)
+        off = int(round(e * W))
+        out = shift(a, -off, 0)
+        out[:, W - off:] = b[:, :off] if off else out[:, W:]
+        return out
+    if kind == "push_d":          # hanging signs: b drops in from above, a falls out below
+        e = EASE["inOutQuart"](p)
+        off = int(round(e * H))
+        out = shift(a, 0, off)
+        if off:
+            out[:off] = b[H - off:]
+        return out
+    if kind == "zoom":            # zoom through: a rushes forward and dissolves into b
+        ea = EASE["inQuart"](p)
+        eb = EASE["outExpo"](clamp((p - 0.25) / 0.75))
+        A = zoom(a, 1 + 0.6 * ea)
+        B = zoom(b, 1.18 - 0.18 * eb)
+        f = EASE["inOutSine"](clamp((p - 0.2) / 0.6))
+        return A * (1 - f) + B * f
+    if kind == "bar":             # the deck's gradient bar sweeps across, revealing b
+        band, tail = bar
+        e = EASE["inOutQuart"](p)
+        bw, tw = int(W * 0.42), int(W * 0.10)
+        slant = 0.45
+        lead = -tw - int(H * slant) + e * (W + bw + tw + 2 * int(H * slant))
+        xs = np.arange(W, dtype=np.float32)[None, :]
+        ys = np.arange(H, dtype=np.float32)[:, None]
+        edge = lead + (H - ys) * slant        # leading edge leans like the deck's bar ends
+        u = edge - xs                          # distance behind the leading edge
+        out = np.where((u < 0)[..., None], zoom(a, 1 + 0.05 * e), 0)
+        m_tail = (u >= 0) & (u < tw)
+        m_band = (u >= tw) & (u < tw + bw)
+        m_in = u >= tw + bw
+        out = out + m_tail[..., None] * tail[None, None, :]
+        idx = np.clip(((u - tw) / bw * (len(band) - 1)).astype(np.int32), 0, len(band) - 1)
+        # gradient runs red (trailing) -> magenta (towards the tail), as on slide 1
+        idx = len(band) - 1 - idx
+        out = np.where(m_band[..., None], band[idx], out)
+        out = np.where(m_in[..., None], b, out)
+        return out.astype(np.float32)
+    raise ValueError(kind)
+
+
 def anchor(bb, a):
     x0, y0, x1, y1 = bb
     xm, ym = (x0 + x1) / 2, (y0 + y1) / 2
@@ -240,22 +327,50 @@ class Film:
             self.cache[i] = Scene(i, SCENES[i], self.man[i], self.dir, self.scale)
         return self.cache[i]
 
+    def scene_rgb(self, i, T):
+        sc = self.scene(i)
+        t = T - self.starts[i]
+        rgb, _ = sc.render(t)
+        return rgb * sc.scene_alpha(t)
+
     def frame(self, T):
         active = [i for i, s in enumerate(self.starts) if s <= T < s + SCENES[i]["dur"]]
         if not active:
             active = [len(SCENES) - 1]
-        out = None
-        # later scene underneath, earlier (outgoing) scene on top
-        for i in sorted(active, reverse=True):
-            sc = self.scene(i)
-            t = T - self.starts[i]
-            rgb, a = sc.render(t)
-            A = sc.scene_alpha(t)
-            if out is None:
-                out = rgb * A
-            else:
-                out = rgb * A + out * (1 - a * A)[..., None]
+        if len(active) == 1:
+            out = self.scene_rgb(active[0], T)
+        else:
+            i = active[0]
+            t0 = self.starts[i + 1]
+            a = self.scene_rgb(i, T)
+            b = self.scene_rgb(i + 1, T)
+            kind = TRANSITIONS[i]
+            # motion blur: average the transition geometry over a 180 deg shutter
+            acc = np.zeros_like(a)
+            n = SHUTTER_SAMPLES
+            for k in range(n):
+                ts = T + ((k + 0.5) / n - 0.5) * 0.5 / FPS
+                p = clamp((ts - t0) / OVERLAP)
+                acc += transition(kind, a, b, p, self.bar_colors())
+            out = acc / n
         return np.clip(out + 0.5, 0, 255).astype(np.uint8)
+
+    def bar_colors(self):
+        """Gradient band + navy tail sampled from the deck's own title bar (slide 1)."""
+        if not hasattr(self, "_bar"):
+            man = self.man[0]
+            band = tail = None
+            for L in man["layers"]:
+                im = np.asarray(Image.open(os.path.join(self.dir, L["file"])).convert("RGB"), np.float32)
+                if L["group"] == "bar":
+                    row = im[im.shape[0] // 2]
+                    a = np.asarray(Image.open(os.path.join(self.dir, L["file"])))[im.shape[0] // 2, :, 3]
+                    band = row[a > 250]
+                elif L["group"] == "bartail":
+                    a = np.asarray(Image.open(os.path.join(self.dir, L["file"])))[..., 3]
+                    tail = im[a > 250].mean(0)
+            self._bar = (band, tail)
+        return self._bar
 
     def nframes(self):
         return int(round(self.total * FPS))
