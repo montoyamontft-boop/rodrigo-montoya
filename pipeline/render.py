@@ -267,6 +267,8 @@ def encode_segment(args):
     W, H = int(3840 * scale), int(2160 * scale)
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
            "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
+           # convert RGB -> YUV with the BT.709 matrix the file is tagged with
+           "-vf", "scale=out_color_matrix=bt709:out_range=tv",
            "-c:v", "libx264", "-preset", "medium", "-crf", str(crf), "-tune", "animation",
            "-pix_fmt", "yuv420p", "-colorspace", "bt709", "-color_primaries", "bt709",
            "-color_trc", "bt709", "-color_range", "tv", "-threads", "2", path]
@@ -312,7 +314,7 @@ def main():
     chunks = max(a.workers * 8, 1)
     step = math.ceil((f1 - f0) / chunks)
     # fixed segment folder so an interrupted render resumes where it stopped
-    tmp = os.path.abspath(a.out) + f".segments_{f0}_{f1}_{a.scale}_{a.crf}"
+    tmp = os.path.abspath(a.out) + f".segments709_{f0}_{f1}_{a.scale}_{a.crf}"
     os.makedirs(tmp, exist_ok=True)
     jobs = [(a.layers, a.scale, s, min(s + step, f1), os.path.join(tmp, f"seg{j:03d}.mp4"), a.crf)
             for j, s in enumerate(range(f0, f1, step))]

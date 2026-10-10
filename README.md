@@ -9,7 +9,7 @@ en una pieza de motion graphics de 12 escenas, en el orden original.
 | Resolución | 3840 × 2160 (16:9) |
 | Frecuencia | 30 fps constantes |
 | Duración | 134,7 s (4041 cuadros) |
-| Códec | H.264 High, yuv420p, BT.709, CRF 16, sin audio |
+| Códec | H.264 High, yuv420p, conversión y etiquetado BT.709 (rango TV), CRF 16, sin audio |
 
 ## Cómo se hizo (fidelidad)
 
