@@ -1,5 +1,6 @@
-> Este repositorio contiene dos piezas: la presentación de Neuropatía/Nevrika (abajo) y el video
-> **Día del Médico** (CHINOIN), documentado en [`dia_del_medico/README.md`](dia_del_medico/README.md).
+> Este repositorio contiene tres piezas: la presentación de Neuropatía/Nevrika (abajo) y los videos
+> **Día del Médico** ([`dia_del_medico/README.md`](dia_del_medico/README.md)) y **Día del Pediatra**
+> ([`dia_del_pediatra/README.md`](dia_del_pediatra/README.md)), ambos de CHINOIN.
 
 # Neuropatía diabética dolorosa – Nevrika® · video animado
 
