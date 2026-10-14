@@ -1,3 +1,6 @@
+> Este repositorio contiene dos piezas: la presentación de Neuropatía/Nevrika (abajo) y el video
+> **Día del Médico** (CHINOIN), documentado en [`dia_del_medico/README.md`](dia_del_medico/README.md).
+
 # Neuropatía diabética dolorosa – Nevrika® · video animado
 
 Conversión de la presentación `VIDEO NEUROPATÍA - I.pdf` (12 diapositivas, Adobe Illustrator, 1920 × 1080 pt)
