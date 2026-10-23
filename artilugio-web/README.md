@@ -7,7 +7,8 @@ Rediseño de una sola página para artilugiogroup.com.mx. Es HTML, CSS y JS est�
 - **Paleta de marca.** Solo los colores de los backs y del logotipo (azul, cian, naranja, rojo y ámbar sobre blanco y azul marino), usados como colores sólidos.
 - **Fondos que cambian al deslizar.** Los dos backs se funden según el tema de cada sección (`data-theme="light|dark"`). El degradado de fondo está en `assets/base-*` y la red de nodos aparece sutil solo en los laterales (`assets/side-*`).
 - **Hero con el logo al centro de una red 3D** que reacciona al cursor y se puede arrastrar. Al bajar, la red cambia de forma en cada sección (`data-globe="x y radio dispersión opacidad"`; `data-globe-m` es la versión móvil).
-- **Marcas como constelación.** Los logos de las marcas forman una red conectada al logo de Artilugio, con pulsos que recorren las conexiones. Al pasar el cursor, la marca se ilumina junto con sus conexiones. En móvil se muestran en cuadrícula.
+- **Marcas.** Cuadrícula de tarjetas con los logos en gris; al pasar el cursor, el logo se enciende en sus colores originales (en pantallas táctiles se muestran a color).
+- **Servicios: de la prescripción al consumo.** Carrusel horizontal que avanza con el scroll vertical, con la barra Prescripción → Consumo y flechas. En móvil se desliza con el dedo.
 - **Reseñas.** Carrusel de testimonios con el logo de la marca del cliente.
 - **Escena Spline** en «Experiencia 3D». Se carga cuando el visitante se acerca y se activa con «Interactuar», así no atrapa el scroll.
 - **Menú siempre visible.** En pantallas angostas los enlaces se desplazan de lado. El logo de la esquina no aparece en la primera pantalla.
@@ -16,9 +17,13 @@ Rediseño de una sola página para artilugiogroup.com.mx. Es HTML, CSS y JS est�
 
 ## Logos de marcas
 
-`assets/marcas/<id>.svg` son vectores de un solo color; la página los tiñe con CSS (blanco sobre azul marino, o el color de texto en las reseñas). Se vectorizaron a partir de la captura del sitio actual, así que son nítidos a cualquier tamaño, pero los textos muy pequeños de algunos logos (por ejemplo, los lemas de Psicofarma y Exeltis) pierden detalle. Si consigues los archivos oficiales, reemplaza el SVG con el mismo nombre. Debe ser un SVG o PNG de un solo color con fondo transparente, porque el color lo pone la página.
+`assets/marcas/<id>.svg` son vectores en los colores originales de cada marca, obtenidos del video del sitio actual (el estado a color al pasar el cursor) y vectorizados por capa de color. Son nítidos a cualquier tamaño; los textos muy pequeños de algunos logos (por ejemplo, el lema de Psicofarma) pierden algo de detalle. Psicofarma nunca aparece a color en el video, así que está en gris oscuro. Si consigues los archivos oficiales, reemplaza el SVG con el mismo nombre.
 
-Para agregar o quitar marcas, edita el arreglo `BRANDS` de `index.html` (`id`, `name` y `ar`, que es ancho entre alto del logo). Los primeros 6 forman el anillo interior de la constelación.
+Para agregar o quitar marcas, edita el arreglo `BRANDS` de `index.html` (`id`, `name` y `ar`, que es ancho entre alto del logo).
+
+## Servicios
+
+Las tarjetas están en el arreglo `SERVICES` de `index.html`. Las 01, 02 y 03 están marcadas `pending: true` porque falta su texto: solo se muestran en la vista previa. Al pegar su título y texto, quita `pending`.
 
 ## Reseñas
 
@@ -38,7 +43,7 @@ Los logos se extrajeron del PDF de backs sin modificarlos:
 
 ## Pendientes antes de publicar
 
-1. **Reseñas.** Pegar los textos reales (ver arriba).
+1. **Reseñas** y **servicios 01–03.** Pegar los textos reales (ver arriba).
 2. **Textos originales.** Revisa contra el sitio en vivo, sobre todo el párrafo de «Quiénes somos» y el del origen griego del nombre (hay un comentario en la sección `#artilugio` que marca dónde va).
 3. **Contacto.** Escribe el correo de destino en `data-email` del formulario `#contactForm`. El formulario abre el cliente de correo del visitante. Si prefieres envío directo, conecta el formulario a tu backend o a un servicio de formularios.
 
