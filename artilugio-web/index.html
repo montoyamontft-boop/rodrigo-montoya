@@ -390,6 +390,7 @@ section{position:relative}
 .contact__grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(48px,7vw,120px);align-items:start}
 .contact h2{font-size:clamp(3.2rem,7vw,6.6rem);line-height:.95;font-weight:900;letter-spacing:-.05em}
 .contact h2 b{color:var(--orange)}
+.contact__mails{display:grid;justify-items:start;gap:12px}
 .contact__mail{justify-self:start;font-family:var(--font-display);font-weight:700;font-size:clamp(1.05rem,1.6vw,1.3rem);color:var(--fg);text-decoration:none;border-bottom:2px solid var(--orange);padding-bottom:4px;transition:color .3s;user-select:all;overflow-wrap:anywhere}
 .contact__mail:hover{color:var(--orange)}
 .form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
@@ -727,10 +728,13 @@ section{position:relative}
         <span class="label">Contacto</span>
         <h2>Hablemos<b>.</b></h2>
         <p class="lede">Co-creemos soluciones orientadas a resultados para tu marca, tus profesionales de la salud y tus pacientes.</p>
-        <a class="contact__mail" href="mailto:raquel@artilugiogroup.com.mx">raquel@artilugiogroup.com.mx</a>
+        <div class="contact__mails">
+          <a class="contact__mail" href="mailto:raquel@artilugiogroup.com.mx">raquel@artilugiogroup.com.mx</a>
+          <a class="contact__mail" href="mailto:myrnar@artilugiogroup.com.mx">myrnar@artilugiogroup.com.mx</a>
+        </div>
       </div>
-      <!-- El correo de destino se configura en data-email. -->
-      <form class="form panel" id="contactForm" data-email="raquel@artilugiogroup.com.mx" novalidate>
+      <!-- Los correos de destino se configuran en data-email (separados por coma). -->
+      <form class="form panel" id="contactForm" data-email="raquel@artilugiogroup.com.mx,myrnar@artilugiogroup.com.mx" novalidate>
         <div class="field"><label for="f-name">Nombre</label><input id="f-name" name="nombre" autocomplete="name" required></div>
         <div class="field"><label for="f-company">Empresa</label><input id="f-company" name="empresa" autocomplete="organization"></div>
         <div class="field field--full"><label for="f-email">Correo</label><input id="f-email" name="correo" type="email" autocomplete="email" required></div>
@@ -1136,7 +1140,7 @@ section{position:relative}
     e.preventDefault();
     if (!form.checkValidity()) { status.textContent = 'Completa tu nombre, un correo válido y tu mensaje.'; form.reportValidity(); return; }
     const to = form.dataset.email;
-    if (isPreview || !to) { status.textContent = `Para enviar tu mensaje, escríbenos a ${to || 'nuestro correo'}.`; return; }
+    if (isPreview || !to) { status.textContent = `Para enviar tu mensaje, escríbenos a ${to ? to.split(',').join(' o ') : 'nuestro correo'}.`; return; }
     const d = new FormData(form);
     const subject = encodeURIComponent('Contacto desde el sitio web: ' + d.get('nombre'));
     const bodyTxt = encodeURIComponent(`Nombre: ${d.get('nombre')}\nEmpresa: ${d.get('empresa')}\nCorreo: ${d.get('correo')}\n\n${d.get('mensaje')}`);

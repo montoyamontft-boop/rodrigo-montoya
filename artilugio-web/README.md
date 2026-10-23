@@ -32,7 +32,7 @@ Los logos se extrajeron del PDF de backs sin modificarlos:
 
 ## Contacto
 
-Los mensajes del formulario se dirigen a raquel@artilugiogroup.com.mx (atributo `data-email` de `#contactForm`); el correo también aparece visible en la sección de contacto. Al enviar, el formulario abre la aplicación de correo del visitante con el mensaje listo. Si prefieres que se envíe directo sin abrir el correo, hay que conectarlo a un backend o a un servicio de formularios.
+Los mensajes del formulario se dirigen a raquel@artilugiogroup.com.mx y myrnar@artilugiogroup.com.mx (atributo `data-email` de `#contactForm`, separados por coma); ambos correos también aparecen visibles en la sección de contacto. Al enviar, el formulario abre la aplicación de correo del visitante con el mensaje listo. Si prefieres que se envíe directo sin abrir el correo, hay que conectarlo a un backend o a un servicio de formularios.
 
 ## Pendientes antes de publicar
 
