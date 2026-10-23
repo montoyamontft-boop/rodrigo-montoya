@@ -7,13 +7,19 @@
 <meta name="description" content="Artilugio Group: el Arte de hacer comunicación con estrategia. Comunicación dirigida a los profesionales de la salud para favorecer el acceso de los pacientes a terapias de alto valor.">
 <meta name="theme-color" content="#03101e">
 <link rel="icon" type="image/svg+xml" href="assets/logo-artilugio.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;0,900;1,800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/montserrat-latin-800-normal.woff2" crossorigin>
 <link rel="preload" as="image" href="assets/base-light.webp">
 <style>
 /* Layout: a fixed "stage" (the two Artilugio backs + the node globe) sits behind full-bleed sections.
    Each section declares light/dark and where the globe sits. Palette = the backs and the logo, used as solid colors. */
+/* Montserrat, self-hosted (SIL Open Font License) */
+@font-face{font-family:"Montserrat";font-style:normal;font-weight:400;font-display:swap;src:url("assets/fonts/montserrat-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"Montserrat";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fonts/montserrat-latin-500-normal.woff2") format("woff2")}
+@font-face{font-family:"Montserrat";font-style:normal;font-weight:600;font-display:swap;src:url("assets/fonts/montserrat-latin-600-normal.woff2") format("woff2")}
+@font-face{font-family:"Montserrat";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fonts/montserrat-latin-700-normal.woff2") format("woff2")}
+@font-face{font-family:"Montserrat";font-style:normal;font-weight:800;font-display:swap;src:url("assets/fonts/montserrat-latin-800-normal.woff2") format("woff2")}
+@font-face{font-family:"Montserrat";font-style:normal;font-weight:900;font-display:swap;src:url("assets/fonts/montserrat-latin-900-normal.woff2") format("woff2")}
+@font-face{font-family:"Montserrat";font-style:italic;font-weight:800;font-display:swap;src:url("assets/fonts/montserrat-latin-800-italic.woff2") format("woff2")}
 :root{
   --navy:#03101e;
   --navy-2:#0a2340;
@@ -26,8 +32,8 @@
   --paper:#f7fbff;
 
   --font-display:"Montserrat","Avenir Next","Segoe UI",system-ui,sans-serif;
-  --font-body:"Manrope","Segoe UI",system-ui,-apple-system,sans-serif;
-  --font-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --font-body:"Montserrat","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --font-mono:"Montserrat","Avenir Next","Segoe UI",system-ui,sans-serif;
 
   --fg:var(--ink);
   --muted:#4d6079;
@@ -295,13 +301,9 @@ section{position:relative}
 .spec__bar i{position:absolute;top:50%;left:calc(var(--sp,0) * 100%);width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#fff;box-shadow:0 0 0 5px rgba(255,255,255,.15),0 0 18px rgba(7,140,255,.8)}
 .spec__view{overflow:hidden;margin-inline:calc(-1 * var(--gutter-l)) calc(-1 * var(--gutter-r));padding-inline:var(--gutter-l) var(--gutter-r)}
 .spec__track{position:relative;display:flex;gap:clamp(18px,2vw,30px);width:max-content;will-change:transform}
-.spec__track::before{
-  content:"";position:absolute;left:0;right:0;top:var(--line-y,168px);height:2px;z-index:2;pointer-events:none;
-  background:linear-gradient(90deg,var(--blue),var(--cyan) 35%,var(--orange));box-shadow:0 0 14px rgba(7,140,255,.6);
-}
 .spec-card{
   position:relative;flex:none;width:clamp(290px,31vw,460px);min-height:clamp(280px,34vh,360px);border-radius:28px;
-  padding:0 clamp(26px,2.4vw,36px) clamp(26px,2.4vw,36px);display:grid;grid-template-rows:var(--line-y,168px) auto;align-content:start;
+  padding:0 clamp(26px,2.4vw,36px) clamp(26px,2.4vw,36px);display:grid;grid-template-rows:auto auto;align-content:start;
   background:linear-gradient(180deg,rgba(14,40,72,.55),rgba(8,26,50,.35));border:1px solid rgba(160,200,255,.16);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:border-color .4s,transform .5s var(--ease);
 }
@@ -309,7 +311,7 @@ section{position:relative}
 .spec-card__top{display:grid;align-content:start;gap:12px;padding-top:clamp(26px,2.4vw,34px)}
 .spec-card__n{font-family:var(--font-display);font-weight:800;font-size:clamp(2.4rem,3.4vw,3.2rem);line-height:1;color:var(--c)}
 .spec-card h3{font-size:clamp(1.25rem,1.6vw,1.5rem);font-weight:800;line-height:1.2}
-.spec-card p{padding-top:24px;color:#c7d6ea;font-size:1.06rem;line-height:1.65}
+.spec-card p{padding-top:12px;color:#c7d6ea;font-size:1.06rem;line-height:1.65}
 .spec__foot{display:flex;justify-content:space-between;align-items:center;gap:16px}
 .spec__btns{display:flex;gap:10px}
 .spec .round{background:rgba(8,26,50,.6);color:#eaf3ff;border-color:rgba(160,200,255,.25)}
@@ -405,9 +407,9 @@ section{position:relative}
 .name__logo{width:clamp(96px,10vw,140px)}
 .name__word{
   display:flex;justify-content:center;font-family:var(--font-display);font-weight:900;color:var(--fg);
-  font-size:clamp(3.4rem,14vw,13.5rem);line-height:.9;letter-spacing:-.015em;
+  font-size:clamp(3.4rem,14vw,13.5rem);line-height:.9;letter-spacing:0;
 }
-.name__word span{display:inline-block;will-change:transform,opacity}
+.name__word span{display:inline-block;will-change:transform,opacity;margin-right:.012em}
 .name__sentence{font-family:var(--font-display);font-weight:700;font-size:clamp(1.2rem,2.3vw,1.9rem);line-height:1.3;max-width:40rem;text-wrap:balance}
 
 /* ---------- Contact ---------- */
@@ -443,7 +445,7 @@ section{position:relative}
 .footer__nav a:hover{color:#fff}
 .site-footer .btn--ghost{color:#eaf3ff;border-color:rgba(160,200,255,.25);background:rgba(8,26,50,.6)}
 .footer__big{
-  margin-top:56px;font-family:var(--font-display);font-weight:900;font-size:clamp(3rem,15vw,14rem);line-height:.85;letter-spacing:-.015em;
+  margin-top:56px;font-family:var(--font-display);font-weight:900;font-size:clamp(3rem,15vw,14rem);line-height:.85;letter-spacing:0;
   color:var(--orange);text-align:center;
 }
 .site-footer .round{background:rgba(8,26,50,.6);color:#eaf3ff;border-color:rgba(160,200,255,.25)}
@@ -1116,16 +1118,23 @@ section{position:relative}
     groups[i] = `<g class="piece" data-i="${i}" role="listitem" tabindex="0" aria-label="${name}">
       <path d="M${f(x0)} ${f(y0)} A${RO} ${RO} 0 0 1 ${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)} A${RI} ${RI} 0 0 0 ${f(x3)} ${f(y3)}Z" fill="${col}" stroke="#ffffff" stroke-width="5" stroke-linejoin="round"/>
       ${knobs.map(([d, r]) => { const [kx, ky] = pt(r, d); return `<circle cx="${f(kx)}" cy="${f(ky)}" r="${KNOB}" fill="${col}"/>`; }).join('')}
-      <text text-anchor="middle">${lines.map((l, k) => `<tspan x="${f(tx)}" y="${f(ty0 + k * lh)}">${l}</tspan>`).join('')}</text>
+      <text text-anchor="middle" data-x="${f(tx)}" data-y="${f(ty)}">${lines.map((l, k) => `<tspan x="${f(tx)}" y="${f(ty0 + k * lh)}">${l}</tspan>`).join('')}</text>
     </g>`;
   });
-  svg += groups.slice(1).join('') + groups[0];
+  svg += '<g id="wheelSpin">' + groups.slice(1).join('') + groups[0];
   // White bumps on the inner edge, and the logo disc in the middle.
   for (let i = 0; i < N; i++) { const [bx, by] = pt(RI + 2, i * 360 / N); svg += `<circle class="bump" cx="${f(bx)}" cy="${f(by)}" r="26" fill="#ffffff"/>`; }
-  svg += `<g class="wheel__core"><circle cx="${C}" cy="${C}" r="${RI - 8}" fill="#ffffff"/><image href="assets/logo-artilugio.svg" x="${C - 205}" y="${C - 200}" width="410" height="400" preserveAspectRatio="xMidYMid meet"/></g></svg>`;
+  svg += `</g><g class="wheel__core"><circle cx="${C}" cy="${C}" r="${RI - 8}" fill="#ffffff"/><image href="assets/logo-artilugio.svg" x="${C - 205}" y="${C - 200}" width="410" height="400" preserveAspectRatio="xMidYMid meet"/></g></svg>`;
   wheel.innerHTML = svg;
   const pieces = [...$$('.piece', wheel)].sort((a, b) => a.dataset.i - b.dataset.i), core = $('.wheel__core', wheel);
   const firstBump = $('.bump', wheel);
+  const spin = $('#wheelSpin', wheel), labels = $$('.piece text', wheel);
+  let spinA = 0;
+  // The whole wheel turns slowly; every label counter-rotates so it always reads upright.
+  const turn = (a) => {
+    spin.setAttribute('transform', `rotate(${a.toFixed(2)} ${C} ${C})`);
+    labels.forEach(t => t.setAttribute('transform', `rotate(${(-a).toFixed(2)} ${t.dataset.x} ${t.dataset.y})`));
+  };
   let active = -1, hovering = false, wheelVisible = false, autoT = 0, assemble = reduce ? 1 : 0;
   const showRole = (i) => {
     now.style.setProperty('--c', TEAM[i][2]);
@@ -1173,6 +1182,7 @@ section{position:relative}
   let wLast = performance.now();
   const wheelLoop = (t) => {
     const dt = Math.min(.1, (t - wLast) / 1000); wLast = t;
+    if (wheelVisible && !reduce) { spinA = (spinA + dt * (hovering ? 1.5 : 9)) % 360; turn(spinA); }
     if (wheelVisible && !hovering && assemble > .98) {
       autoT -= dt;
       if (autoT <= 0) { autoT = 2.2; setActive((active + 1) % N); }
