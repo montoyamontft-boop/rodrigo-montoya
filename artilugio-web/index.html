@@ -254,7 +254,7 @@ section{position:relative}
   display:flex;align-items:center;gap:.55em;padding-right:.55em;white-space:nowrap;
   font-family:var(--font-display);font-weight:800;font-size:clamp(1.8rem,4.2vw,3.6rem);line-height:1.15;letter-spacing:-.03em;
 }
-.marquee__item .o{color:transparent;-webkit-text-stroke:1.4px var(--orange)}
+.marquee__item .o{color:var(--orange)}
 .dot{display:inline-block;width:.26em;height:.26em;border-radius:50%;background:var(--c,var(--blue))}
 
 /* ---------- About ---------- */
@@ -277,20 +277,71 @@ section{position:relative}
 }
 .chip i{width:7px;height:7px;border-radius:50%;background:var(--blue)}
 
-/* ---------- Brands ---------- */
-.brands{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,1.6vw,22px);margin-top:clamp(48px,5vw,72px)}
-.brand{
-  display:grid;place-items:center;aspect-ratio:16/9;padding:clamp(18px,2.4vw,34px);border-radius:20px;
-  background:var(--surface-strong);border:1px solid var(--line);min-width:0;
-  transition:transform .5s var(--ease),box-shadow .5s var(--ease),border-color .4s;
+/* ---------- Brands: a constellation of logos linked like the backs' nodes ---------- */
+.constellation{position:relative;margin-top:clamp(48px,5vw,72px);height:clamp(560px,52vw,760px);touch-action:pan-y}
+.constellation__lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.constellation__lines line{stroke:rgba(160,200,255,.22);stroke-width:1;transition:stroke .35s,stroke-width .35s}
+.constellation__lines line.is-hot{stroke:var(--orange);stroke-width:1.6}
+.constellation__lines circle{fill:var(--orange)}
+.constellation__lines circle.b{fill:var(--cyan)}
+.core{
+  position:absolute;left:50%;top:50%;width:clamp(130px,13vw,180px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
+  display:grid;place-items:center;background:radial-gradient(circle,#0a2340 0%,#03101e 70%);
+  box-shadow:0 0 0 1px rgba(160,200,255,.2),0 0 80px 10px rgba(7,140,255,.28);z-index:2;
 }
-.brand:hover{transform:translateY(-4px);border-color:rgba(7,140,255,.35);box-shadow:0 30px 60px -40px rgba(7,140,255,.5)}
-.brand img{max-width:100%;max-height:100%;object-fit:contain;filter:grayscale(1);opacity:.75;transition:filter .5s,opacity .5s}
-.brand:hover img{filter:none;opacity:1}
-.brand--ph{border-style:dashed;color:var(--muted);font-family:var(--font-mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase}
-#marcas[hidden]{display:none}
+.core::before,.core::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(160,200,255,.18);animation:ping 3.2s var(--ease) infinite}
+.core::after{animation-delay:1.6s}
+@keyframes ping{from{transform:scale(.9);opacity:.9}to{transform:scale(1.5);opacity:0}}
+.core img{width:84%}
+.bnode{
+  position:absolute;left:0;top:0;z-index:3;margin:0;will-change:transform;
+  display:grid;place-items:center;padding:16px 20px;border-radius:18px;cursor:default;
+  background:rgba(8,26,50,.72);border:1px solid rgba(160,200,255,.16);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:border-color .35s,background .35s,box-shadow .35s;
+}
+.bnode i{
+  display:block;width:var(--w);height:var(--h);background:#dbe8f7;transition:background .35s,transform .45s var(--ease);
+  -webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat;
+}
+.bnode:hover,.bnode.is-hot{border-color:var(--orange);background:rgba(10,35,64,.92);box-shadow:0 20px 50px -20px rgba(255,106,26,.55)}
+.bnode:hover i{background:#ffffff;transform:scale(1.06)}
+.bnode figcaption{
+  position:absolute;left:50%;top:calc(100% + 8px);transform:translate(-50%,4px);white-space:nowrap;opacity:0;pointer-events:none;
+  font-family:var(--font-mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);transition:opacity .3s,transform .3s;
+}
+.bnode:hover figcaption{opacity:1;transform:translate(-50%,0)}
+.brands-note{margin-top:28px;text-align:center;font-family:var(--font-mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 
-/* ---------- Services ---------- */
+/* ---------- Reviews ---------- */
+.reviews__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:28px}
+.reviews__nav{display:flex;gap:10px}
+.round{
+  width:54px;height:54px;border-radius:50%;border:1px solid var(--line);background:var(--surface-strong);color:var(--fg);cursor:pointer;
+  display:grid;place-items:center;transition:background .3s,color .3s,border-color .3s;
+}
+.round:hover{background:var(--fg);color:var(--paper);border-color:var(--fg)}
+.round svg{width:20px;height:20px}
+.reviews__track{
+  display:grid;grid-auto-flow:column;grid-auto-columns:minmax(min(100%,520px),1fr);gap:24px;margin-top:clamp(44px,5vw,64px);
+  overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:8px;
+}
+.reviews__track::-webkit-scrollbar{display:none}
+.review{
+  scroll-snap-align:start;display:grid;grid-template-rows:auto 1fr auto;gap:26px;min-width:0;
+  padding:clamp(30px,3.4vw,48px);border-radius:var(--radius);background:var(--surface-strong);border:1px solid var(--line);
+  box-shadow:0 40px 80px -60px rgba(3,16,30,.5);
+}
+.review__mark{font-family:var(--font-display);font-weight:900;font-size:5rem;line-height:.6;color:var(--orange);height:.5em}
+.review blockquote{margin:0;font-family:var(--font-display);font-weight:600;font-size:clamp(1.15rem,1.6vw,1.4rem);line-height:1.5;letter-spacing:-.01em}
+.review footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:22px;border-top:1px solid var(--line)}
+.review cite{font-style:normal;display:grid;gap:2px}
+.review cite b{font-family:var(--font-display);font-size:1.02rem}
+.review cite span{color:var(--muted);font-size:.92rem}
+.review i{display:block;flex:none;width:var(--w);height:var(--h);background:var(--fg);opacity:.85;-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat}
+.review--ph blockquote{color:var(--muted)}
+
+/* ---------- Services ---------- *//* ---------- Services ---------- */
 .services{border-top:1px solid var(--line)}
 .service{
   display:grid;grid-template-columns:64px minmax(0,1fr);gap:28px;align-items:start;
@@ -343,73 +394,6 @@ section{position:relative}
 .name__word span{display:inline-block;will-change:transform,opacity}
 .name__sentence{font-family:var(--font-display);font-weight:700;font-size:clamp(1.2rem,2.3vw,1.9rem);line-height:1.3;max-width:40rem;text-wrap:balance}
 
-/* ---------- Products ---------- */
-.products__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:36px}
-.filters{display:flex;flex-wrap:wrap;gap:8px}
-.filter{
-  padding:11px 20px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);
-  font-weight:600;font-size:.92rem;cursor:pointer;transition:background .3s,color .3s,border-color .3s;
-}
-.filter:hover{border-color:var(--fg)}
-.filter[aria-pressed="true"]{background:var(--fg);color:var(--paper);border-color:var(--fg)}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,2.4vw,32px);margin-top:clamp(48px,5vw,72px)}
-.product{
-  display:grid;gap:0;text-align:left;padding:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
-  background:var(--surface-strong);color:var(--fg);cursor:pointer;min-width:0;
-  box-shadow:0 30px 60px -45px rgba(3,16,30,.45);
-  transition:transform .5s var(--ease),box-shadow .5s var(--ease),border-color .4s;
-}
-.product:hover{transform:translateY(-6px);box-shadow:0 40px 80px -40px rgba(7,140,255,.45);border-color:rgba(7,140,255,.35)}
-.product[hidden]{display:none}
-.shot{
-  position:relative;aspect-ratio:1;overflow:hidden;
-  background:radial-gradient(70% 60% at 50% 40%,#ffffff 0%,#eef5fd 70%,#e3eefb 100%);
-}
-.shot::after{content:"";position:absolute;left:18%;right:18%;bottom:11%;height:6%;border-radius:50%;background:radial-gradient(closest-side,rgba(3,16,30,.18),transparent);pointer-events:none}
-.shot img{position:absolute;inset:6%;width:88%;height:88%;object-fit:contain;z-index:1;transition:transform .8s var(--ease)}
-.product:hover .shot img{transform:scale(1.05)}
-.shot__ph{position:absolute;inset:0;display:none;place-content:center;justify-items:center;gap:8px;padding:24px;text-align:center;color:var(--ink)}
-.shot.no-img img{display:none}
-.shot.no-img .shot__ph{display:grid}
-.shot__ph b{font-family:var(--font-display);font-weight:800;font-size:clamp(1.5rem,2.4vw,2.1rem);letter-spacing:-.02em;line-height:1.05}
-.shot__ph span{font-weight:600;color:#4d6079}
-.product__info{display:grid;gap:6px;padding:24px 26px 26px;border-top:1px solid var(--line)}
-.product__area{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
-.product__name{font-family:var(--font-display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em;line-height:1.15}
-.product__sub{color:var(--muted);font-weight:600}
-.product__more{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-weight:700;font-size:.92rem;color:var(--blue)}
-.product__more svg{width:18px;height:18px;transition:transform .35s var(--ease)}
-.product:hover .product__more svg{transform:translateX(4px)}
-.note{margin-top:40px;font-size:.88rem;color:var(--muted)}
-
-/* Product detail (in-page) */
-.detail{
-  width:min(1120px,calc(100% - 32px));max-width:none;max-height:calc(100dvh - 48px);padding:0;border:0;border-radius:28px;overflow:hidden;
-  background:#ffffff;color:var(--ink);box-shadow:0 60px 140px -40px rgba(3,16,30,.6);
-}
-.detail::backdrop{background:rgba(3,16,30,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.detail[open]{animation:dIn .5s var(--ease)}
-@keyframes dIn{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:none}}
-.detail__grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);max-height:calc(100dvh - 48px);overflow:auto}
-.detail .shot{aspect-ratio:auto;min-height:min(640px,70vh);cursor:zoom-in}
-.detail .shot img{transition:transform .3s ease-out}
-.detail .shot.is-zoom img{transform:scale(2.2);cursor:zoom-out}
-.detail__info{display:grid;align-content:center;gap:22px;padding:clamp(28px,4vw,56px)}
-.detail__info h3{font-size:clamp(2rem,3.4vw,3rem);font-weight:800;line-height:1.02}
-.specs{display:grid;border-top:1px solid rgba(11,27,48,.11);margin:0}
-.specs div{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid rgba(11,27,48,.11)}
-.specs dt{font-family:var(--font-mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:#4d6079;padding-top:3px}
-.specs dd{margin:0;font-weight:600}
-.detail__actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.detail__close,.detail__nav button{
-  width:46px;height:46px;border-radius:50%;border:1px solid rgba(11,27,48,.12);background:#fff;color:var(--ink);cursor:pointer;
-  display:grid;place-items:center;transition:background .3s,color .3s;
-}
-.detail__close:hover,.detail__nav button:hover{background:var(--ink);color:#fff}
-.detail__close svg,.detail__nav svg{width:18px;height:18px}
-.detail__close{position:absolute;top:16px;right:16px;z-index:3}
-.detail__nav{display:flex;gap:8px;margin-left:auto}
-
 /* ---------- Contact ---------- */
 .contact__grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(48px,7vw,120px);align-items:start}
 .contact h2{font-size:clamp(3.2rem,7vw,6.6rem);line-height:.95;font-weight:900;letter-spacing:-.05em}
@@ -428,7 +412,7 @@ section{position:relative}
 .form__status{font-size:.92rem;color:var(--muted)}
 
 /* ---------- Footer ---------- */
-.site-footer{padding-block:clamp(80px,9vw,120px) 44px;background:linear-gradient(180deg,rgba(3,16,30,0),rgba(3,16,30,.85) 35%);color:#eaf3ff}
+.site-footer{padding-block:clamp(56px,6vw,90px) 44px;background:linear-gradient(180deg,rgba(3,16,30,0),rgba(3,16,30,.85) 35%);color:#eaf3ff}
 .footer__grid{display:grid;grid-template-columns:auto 1fr auto;gap:48px;align-items:center}
 .footer__logo{width:128px}
 .footer__nav{display:flex;flex-wrap:wrap;gap:10px 30px;justify-content:center}
@@ -436,8 +420,8 @@ section{position:relative}
 .footer__nav a:hover{color:#fff}
 .site-footer .btn--ghost{color:#eaf3ff;border-color:rgba(160,200,255,.25);background:rgba(8,26,50,.6)}
 .footer__big{
-  margin-top:56px;font-family:var(--font-display);font-weight:900;font-size:clamp(3rem,15vw,14rem);line-height:.85;letter-spacing:-.06em;
-  color:transparent;-webkit-text-stroke:1.5px var(--orange);opacity:.85;text-align:center;
+  margin-top:56px;font-family:var(--font-display);font-weight:900;font-size:clamp(3rem,15vw,14rem);line-height:.85;letter-spacing:-.045em;
+  color:var(--orange);text-align:center;
 }
 .footer__legal{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:48px;font-family:var(--font-mono);font-size:.74rem;letter-spacing:.08em;color:#9fb3cd}
 
@@ -459,12 +443,14 @@ section{position:relative}
   .in-hero .nav__links{justify-self:center}
   .split{grid-template-columns:1fr}
   .split__aside{position:static}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .contact__grid{grid-template-columns:1fr}
   .footer__grid{grid-template-columns:1fr;justify-items:center;text-align:center}
 }
 @media (max-width:860px){
-  .brands{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .constellation{height:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .constellation__lines,.core{display:none}
+  .bnode{position:relative;transform:none!important;padding:22px 14px}
+  .bnode figcaption{display:none}
   .hero{padding-top:120px}
   .hero__grid{grid-template-columns:1fr}
   .orb{width:min(76vw,380px);order:-1}
@@ -473,18 +459,14 @@ section{position:relative}
   .pillar,.pillar + .pillar{padding:20px 0;border-left:0;border-bottom:1px solid var(--line)}
   .scroll-cue{display:none}
   .duo{grid-template-columns:1fr}
-  .detail__grid{grid-template-columns:1fr}
-  .detail .shot{min-height:0;aspect-ratio:1}
 }
 @media (max-width:640px){
   body{font-size:16px}
   .nav__logo-box,.is-scrolled .nav__logo-box{width:46px;height:46px}
   .nav__links a{padding:9px 12px;font-size:.84rem}
   .xp__frame{aspect-ratio:4/5}
-  .grid{grid-template-columns:1fr}
   .form{grid-template-columns:1fr}
   .service{grid-template-columns:1fr;gap:18px}
-  .specs div{grid-template-columns:1fr;gap:4px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
@@ -532,9 +514,9 @@ section{position:relative}
     <div class="nav__links" id="navLinks">
       <a href="#nosotros">Quiénes somos</a>
       <a href="#marcas">Marcas</a>
+      <a href="#resenas">Reseñas</a>
       <a href="#servicios">Qué hacemos</a>
       <a href="#experiencia">Experiencia 3D</a>
-      <a href="#productos">Productos</a>
       <a href="#contacto">Contacto</a>
     </div>
     <div class="nav__end">
@@ -561,7 +543,7 @@ section{position:relative}
           <a class="btn btn--primary magnetic" href="#nosotros">Conócenos
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a class="btn btn--ghost magnetic" href="#productos">Ver productos</a>
+          <a class="btn btn--ghost magnetic" href="#marcas">Ver marcas</a>
         </div>
       </div>
       <div class="orb" id="heroOrb">
@@ -620,13 +602,35 @@ section{position:relative}
   </section>
 
   <!-- MARCAS -->
-  <section class="section" id="marcas" data-theme="light" data-globe="0.1 0.5 0.3 0.1 0.25" data-globe-m="0.5 0.5 0.5 0.3 0.1">
+  <section class="section" id="marcas" data-theme="dark" data-globe="0.5 0.5 0.5 0.6 0" data-globe-m="0.5 0.5 0.5 0.6 0.15">
     <div class="wrap">
-      <div class="head" data-reveal>
+      <div class="head head--center" data-reveal>
         <span class="label">Marcas</span>
         <h2 class="h-xl">Marcas con las que hemos trabajado</h2>
+        <p class="lede">Una red de laboratorios y marcas que confían en nuestra forma de hacer comunicación.</p>
       </div>
-      <div class="brands" id="brandGrid"></div>
+      <div class="constellation" id="constellation">
+        <svg class="constellation__lines" id="cLines" aria-hidden="true"></svg>
+        <div class="core"><img src="assets/logo-artilugio-dark.webp" alt="Artilugio"></div>
+      </div>
+      <p class="brands-note">Pasa el cursor sobre una marca</p>
+    </div>
+  </section>
+
+  <!-- RESEÑAS -->
+  <section class="section" id="resenas" data-theme="light" data-globe="0.92 0.2 0.22 0 0.35" data-globe-m="0.9 0.1 0.2 0 0.2">
+    <div class="wrap">
+      <div class="reviews__head" data-reveal>
+        <div class="head">
+          <span class="label">Reseñas</span>
+          <h2 class="h-xl">Lo que dicen de nosotros</h2>
+        </div>
+        <div class="reviews__nav">
+          <button class="round" type="button" id="revPrev" aria-label="Reseña anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+          <button class="round" type="button" id="revNext" aria-label="Reseña siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </div>
+      </div>
+      <div class="reviews__track" id="reviewTrack"></div>
     </div>
   </section>
 
@@ -698,7 +702,7 @@ section{position:relative}
   </section>
 
   <!-- ARTILUGIO (el nombre) -->
-  <section class="name" id="artilugio" data-theme="light" data-globe="0.5 0.5 0.42 0.05 0.3" data-globe-m="0.5 0.5 0.45 0.05 0.2">
+  <section class="name" id="artilugio" data-theme="light" data-globe="0.5 0.5 0.5 0.9 0.14" data-globe-m="0.5 0.5 0.5 0.9 0.1">
     <div class="name__sticky">
       <div class="wrap name__inner">
         <img class="name__logo" src="assets/logo-artilugio.svg" alt="Logotipo de Artilugio">
@@ -708,28 +712,6 @@ section{position:relative}
         <!-- Pega aquí el párrafo original del sitio sobre el origen griego del nombre. -->
         <p class="name__sentence" id="nameSentence">Podemos decir que Artilugio es el <span class="accent">Arte de hacer comunicación con estrategia</span>.</p>
       </div>
-    </div>
-  </section>
-
-  <!-- PRODUCTOS (Progalénica) -->
-  <section class="section" id="productos" data-theme="light" data-globe="0.5 0.5 0.5 0.7 0.12" data-globe-m="0.5 0.5 0.6 0.7 0.1">
-    <div class="wrap">
-      <div class="products__head" data-reveal>
-        <div class="head">
-          <span class="label">Progalénica</span>
-          <h2 class="h-xl">Nuestros productos</h2>
-          <p class="lede">Conoce los productos disponibles en Progalénica. Selecciona uno para ver su detalle.</p>
-        </div>
-        <div class="filters" role="group" aria-label="Filtrar por área">
-          <button class="filter" type="button" data-area="todos" aria-pressed="true">Todos</button>
-          <button class="filter" type="button" data-area="Oncología" aria-pressed="false">Oncología</button>
-          <button class="filter" type="button" data-area="Nefrología" aria-pressed="false">Nefrología</button>
-          <button class="filter" type="button" data-area="Neurociencias" aria-pressed="false">Neurociencias</button>
-          <button class="filter" type="button" data-area="Urología" aria-pressed="false">Urología</button>
-        </div>
-      </div>
-      <div class="grid" id="productGrid"></div>
-      <p class="note">La información de los productos es de referencia. Consulta a tu médico.</p>
     </div>
   </section>
 
@@ -765,10 +747,10 @@ section{position:relative}
       <nav class="footer__nav" aria-label="Pie de página">
         <a href="#nosotros">Quiénes somos</a>
         <a href="#marcas">Marcas</a>
+        <a href="#resenas">Reseñas</a>
         <a href="#servicios">Qué hacemos</a>
         <a href="#experiencia">Experiencia 3D</a>
         <a href="#artilugio">Artilugio</a>
-        <a href="#productos">Productos</a>
         <a href="#contacto">Contacto</a>
       </nav>
       <a class="btn btn--ghost btn--sm magnetic" href="#inicio">Volver arriba ↑</a>
@@ -780,37 +762,6 @@ section{position:relative}
     </div>
   </div>
 </footer>
-
-<!-- Product detail, opened in-page -->
-<dialog class="detail" id="detail" aria-labelledby="dName">
-  <button class="detail__close" type="button" id="dClose" aria-label="Cerrar">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-  </button>
-  <div class="detail__grid">
-    <div class="shot" id="dShot">
-      <img id="dImg" alt="" decoding="async">
-      <div class="shot__ph"><b id="dPhName"></b><span id="dPhSub"></span></div>
-    </div>
-    <div class="detail__info">
-      <span class="product__area" id="dArea"></span>
-      <h3 id="dName"></h3>
-      <dl class="specs">
-        <div><dt>Sustancia activa</dt><dd id="dSub"></dd></div>
-        <div><dt>Concentración</dt><dd id="dDose"></dd></div>
-        <div><dt>Presentación</dt><dd id="dPres"></dd></div>
-      </dl>
-      <div class="detail__actions">
-        <button class="btn btn--primary" type="button" id="dAsk">Solicitar información
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </button>
-        <div class="detail__nav">
-          <button type="button" id="dPrev" aria-label="Producto anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
-          <button type="button" id="dNext" aria-label="Producto siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-        </div>
-      </div>
-    </div>
-  </div>
-</dialog>
 
 <script>
 (() => {
@@ -1027,7 +978,7 @@ section{position:relative}
     addEventListener('pointermove', e => { tx = e.clientX; ty = e.clientY; }, { passive: true });
     const loop = () => { cx = lerp(cx, tx, .22); cy = lerp(cy, ty, .22); cur.style.transform = `translate(${cx}px,${cy}px)`; requestAnimationFrame(loop); };
     loop();
-    document.addEventListener('pointerover', e => cur.classList.toggle('is-hover', !!e.target.closest('a,button,.product,input,textarea,.service')));
+    document.addEventListener('pointerover', e => cur.classList.toggle('is-hover', !!e.target.closest('a,button,.bnode,input,textarea,.service')));
     $$('.magnetic').forEach(b => {
       b.addEventListener('pointermove', e => {
         const r = b.getBoundingClientRect();
@@ -1113,101 +1064,100 @@ section{position:relative}
     xp.addEventListener('pointerleave', () => setActive(false));
   }
 
-  /* ---------- Brands ---------- */
-  // Logos go in assets/marcas/ (SVG or transparent PNG). Add one entry per brand: { name: 'Marca', file: 'marca.svg' }.
-  const BRANDS = [];
-  const brandGrid = $('#brandGrid');
-  if (BRANDS.length) {
-    brandGrid.innerHTML = BRANDS.map(b => `<div class="brand" data-reveal><img src="assets/marcas/${b.file}" alt="${b.name}" loading="lazy" decoding="async"></div>`).join('');
-  } else if (isPreview) {
-    brandGrid.innerHTML = Array.from({ length: 8 }, () => '<div class="brand brand--ph">Logo de marca</div>').join('');
-  } else {
-    $('#marcas').hidden = true;
-    $$('a[href="#marcas"]').forEach(a => { a.hidden = true; });
-  }
-
-  /* ---------- Products (Progalénica), shown in-page ---------- */
-  // Product shots: assets/productos/<id>.webp (2000 px) and <id>-1000.webp. See README.
-  const PRODUCTS = [
-    { id: 'rifosar', name: 'RIFOSAR®', sub: 'Sevelámero', dose: '800 mg', pres: 'Caja con 180 tabletas', area: 'Nefrología' },
-    { id: 'rifosar-pos', name: 'RIFOSAR-POS', sub: 'Sevelámero', dose: '2.4 g', pres: 'Caja con 60 sobres', area: 'Nefrología' },
-    { id: 'bilumiv', name: 'BILUMIV®', sub: 'Bicalutamida', dose: '50 mg', pres: 'Caja con 28 tabletas', area: 'Oncología' },
-    { id: 'lezomiv', name: 'LEZOMIV®', sub: 'Ácido zoledrónico', dose: '4 mg/5 mL', pres: 'Solución inyectable', area: 'Oncología' },
-    { id: 'fexilev', name: 'FEXILEV®', sub: 'Gefitinib', dose: '250 mg', pres: 'Caja con 30 tabletas', area: 'Oncología' },
-    { id: 'carenev', name: 'CARENEV', sub: 'Sunitinib', dose: '12.5 mg', pres: 'Caja con 28', area: 'Oncología' },
-    { id: 'cravicem', name: 'CRAVICEM', sub: 'Escitalopram', dose: '10 mg', pres: 'Caja con 28 tabletas', area: 'Neurociencias' },
-    { id: 'matinev', name: 'MATINEV', sub: 'Memantina', dose: '20 mg', pres: 'Caja con 28 tabletas', area: 'Neurociencias' },
-    { id: 'tamablan-pf', name: 'TAMABLAN PF®', sub: 'Tamsulosina', dose: '0.4 mg', pres: 'Caja con 30 tabletas', area: 'Urología' }
+  /* ---------- Brands: constellation ---------- */
+  // Logos: assets/marcas/<id>.svg (single-color vectors, tinted with CSS). ar = width / height.
+  const BRANDS = [
+    { id: 'novartis', name: 'Novartis', ar: 5.37 }, { id: 'takeda', name: 'Takeda', ar: 2.81 },
+    { id: 'gilead', name: 'Gilead', ar: 1.37 }, { id: 'ferring', name: 'Ferring Pharmaceuticals', ar: 2.09 },
+    { id: 'grunenthal', name: 'Grünenthal', ar: 1.9 }, { id: 'biomarin', name: 'BioMarin', ar: 5.79 },
+    { id: 'ucb', name: 'UCB', ar: 0.99 }, { id: 'besins', name: 'Besins Healthcare', ar: 2.42 },
+    { id: 'exeltis', name: 'Exeltis', ar: 2.51 }, { id: 'synthon', name: 'Synthon', ar: 1.74 },
+    { id: 'hetero', name: 'Hetero', ar: 1.19 }, { id: 'chinoin', name: 'Chinoin', ar: 1.21 },
+    { id: 'armstrong', name: 'Armstrong', ar: 3.46 }, { id: 'ifa-celtics', name: 'IFA Celtics', ar: 1.37 },
+    { id: 'psicofarma', name: 'Psicofarma', ar: 2.67 }, { id: 'amacesa', name: 'AMACESA', ar: 3.04 }
   ];
-  const imgSet = (p) => ({ src: `assets/productos/${p.id}.webp`, srcset: `assets/productos/${p.id}-1000.webp 1000w, assets/productos/${p.id}.webp 2000w` });
-  const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
-  const gridEl = $('#productGrid');
-  gridEl.innerHTML = PRODUCTS.map((p, i) => {
-    const im = imgSet(p);
-    return `<button class="product" type="button" data-i="${i}" data-area="${p.area}" aria-label="Ver detalle de ${p.name}" data-reveal>
-      <div class="shot">
-        <img src="${im.src}" srcset="${im.srcset}" sizes="(max-width:640px) 92vw, (max-width:1080px) 46vw, 420px" alt="${p.name} ${p.sub} ${p.dose}" loading="lazy" decoding="async">
-        <div class="shot__ph"><b>${p.name}</b><span>${p.sub} ${p.dose}</span></div>
-      </div>
-      <div class="product__info">
-        <span class="product__area">${p.area}</span>
-        <span class="product__name">${p.name}</span>
-        <span class="product__sub">${p.sub} ${p.dose} · ${p.pres}</span>
-        <span class="product__more">Ver detalle ${arrow}</span>
-      </div>
-    </button>`;
-  }).join('');
-  $$('.shot img', gridEl).forEach(img => {
-    const shot = img.closest('.shot');
-    img.addEventListener('error', () => shot.classList.add('no-img'));
-    img.addEventListener('load', () => shot.classList.toggle('no-img', !img.naturalWidth));
-    if (img.complete && !img.naturalWidth) shot.classList.add('no-img');
+  const BRAND_BY_ID = Object.fromEntries(BRANDS.map(b => [b.id, b]));
+  // Same visual weight for every logo: equal area, capped width.
+  const logoBox = (ar, area, maxW) => { let w = Math.sqrt(area * ar), h = w / ar; if (w > maxW) { w = maxW; h = w / ar; } return `--w:${w.toFixed(1)}px;--h:${h.toFixed(1)}px`; };
+  const cBox = $('#constellation'); const cLines = $('#cLines'); const SVGNS = 'http://www.w3.org/2000/svg';
+  const bnodes = BRANDS.map((b, i) => {
+    const el = document.createElement('figure'); el.className = 'bnode';
+    el.innerHTML = `<i style="--logo:url('assets/marcas/${b.id}.svg');${logoBox(b.ar, 3600, 128)}" role="img" aria-label="${b.name}"></i><figcaption>${b.name}</figcaption>`;
+    cBox.appendChild(el);
+    return { el, i, ring: i < 6 ? 0 : 1, bx: 0, by: 0, x: 0, y: 0, ph: Math.random() * 6.28, w: 0, h: 0 };
   });
-
-  // Filters
-  const filters = $$('.filter');
-  filters.forEach(f => f.addEventListener('click', () => {
-    filters.forEach(x => x.setAttribute('aria-pressed', x === f));
-    const a = f.dataset.area;
-    $$('.product', gridEl).forEach(card => { card.hidden = a !== 'todos' && card.dataset.area !== a; });
-    measure();
-  }));
-
-  // Detail dialog
-  const dlg = $('#detail'); const dShot = $('#dShot'); const dImg = $('#dImg');
-  let cur = 0;
-  const fill = (i) => {
-    cur = (i + PRODUCTS.length) % PRODUCTS.length; const p = PRODUCTS[cur]; const im = imgSet(p);
-    dShot.classList.remove('no-img', 'is-zoom');
-    dImg.srcset = im.srcset; dImg.sizes = '(max-width:860px) 100vw, 620px'; dImg.src = im.src; dImg.alt = `${p.name} ${p.sub} ${p.dose}`;
-    $('#dPhName').textContent = p.name; $('#dPhSub').textContent = `${p.sub} ${p.dose}`;
-    $('#dArea').textContent = p.area; $('#dName').textContent = p.name;
-    $('#dSub').textContent = p.sub; $('#dDose').textContent = p.dose; $('#dPres').textContent = p.pres;
+  const edges = [];
+  const addEdge = (a, b) => { if (!edges.some(e => (e.a === a && e.b === b) || (e.a === b && e.b === a))) edges.push({ a, b, el: null }); };
+  // -1 is the Artilugio core. Inner ring links to the core and to its neighbors; the outer ring links to the nearest inner nodes.
+  for (let i = 0; i < 6; i++) { addEdge(-1, i); addEdge(i, (i + 1) % 6); }
+  for (let k = 0; k < 10; k++) { const i = 6 + k; addEdge(i, 6 + (k + 1) % 10); addEdge(i, Math.round(k * .6) % 6); if (k % 2) addEdge(i, (Math.round(k * .6) + 1) % 6); }
+  edges.forEach(e => { e.el = document.createElementNS(SVGNS, 'line'); cLines.appendChild(e.el); });
+  const pulses = Array.from({ length: 9 }, (_, i) => {
+    const c = document.createElementNS(SVGNS, 'circle'); c.setAttribute('r', i % 3 ? 2.6 : 3.4); if (i % 3 === 0) c.classList.add('b'); cLines.appendChild(c);
+    return { c, e: edges[(i * 7) % edges.length], t: Math.random(), sp: .25 + Math.random() * .35, dir: 1 };
+  });
+  const cMobile = matchMedia('(max-width: 860px)');
+  let cW = 0, cH = 0, cVisible = false, cPtr = { x: 0, y: 0 };
+  const layoutC = () => {
+    if (cMobile.matches) return;
+    cW = cBox.clientWidth; cH = cBox.clientHeight;
+    bnodes.forEach(n => {
+      const inner = n.ring === 0; const k = inner ? n.i : n.i - 6; const cnt = inner ? 6 : 10;
+      const a = (k / cnt) * Math.PI * 2 + (inner ? .52 : .1);
+      const rx = (inner ? .25 : .435) * cW, ry = (inner ? .29 : .41) * cH;
+      n.bx = cW / 2 + Math.cos(a) * rx; n.by = cH / 2 + Math.sin(a) * ry;
+      n.w = n.el.offsetWidth; n.h = n.el.offsetHeight;
+    });
   };
-  dImg.addEventListener('error', () => dShot.classList.add('no-img'));
-  dImg.addEventListener('load', () => dShot.classList.toggle('no-img', !dImg.naturalWidth));
-  const openDetail = (i) => { fill(i); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); };
-  const closeDetail = () => { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); };
-  gridEl.addEventListener('click', e => { const c = e.target.closest('.product'); if (c) openDetail(+c.dataset.i); });
-  $('#dClose').addEventListener('click', closeDetail);
-  $('#dPrev').addEventListener('click', () => fill(cur - 1));
-  $('#dNext').addEventListener('click', () => fill(cur + 1));
-  dlg.addEventListener('click', e => { if (e.target === dlg) closeDetail(); });
-  dlg.addEventListener('keydown', e => { if (e.key === 'ArrowRight') fill(cur + 1); if (e.key === 'ArrowLeft') fill(cur - 1); });
-  // Zoom follows the cursor for a close look at the packaging.
-  dShot.addEventListener('click', () => { if (!dShot.classList.contains('no-img')) dShot.classList.toggle('is-zoom'); });
-  dShot.addEventListener('pointermove', e => {
-    const r = dShot.getBoundingClientRect();
-    dImg.style.transformOrigin = `${(e.clientX - r.left) / r.width * 100}% ${(e.clientY - r.top) / r.height * 100}%`;
+  const posOf = (id) => id < 0 ? { x: cW / 2, y: cH / 2 } : bnodes[id];
+  const drawC = (now) => {
+    const t = now / 1000;
+    bnodes.forEach(n => {
+      const depth = n.ring ? 16 : 9;
+      n.x = n.bx + Math.sin(t * .6 + n.ph) * 6 + cPtr.x * depth;
+      n.y = n.by + Math.cos(t * .5 + n.ph) * 5 + cPtr.y * depth;
+      n.el.style.transform = `translate(${(n.x - n.w / 2).toFixed(1)}px,${(n.y - n.h / 2).toFixed(1)}px)`;
+    });
+    edges.forEach(e => { const a = posOf(e.a), b = posOf(e.b); e.el.setAttribute('x1', a.x); e.el.setAttribute('y1', a.y); e.el.setAttribute('x2', b.x); e.el.setAttribute('y2', b.y); });
+    pulses.forEach(p => {
+      p.t += p.sp * .016;
+      if (p.t >= 1) { // hop to an edge that touches the node we arrived at
+        const at = p.dir > 0 ? p.e.b : p.e.a; const opts = edges.filter(e => e !== p.e && (e.a === at || e.b === at));
+        p.e = opts[Math.floor(Math.random() * opts.length)] || edges[0]; p.dir = p.e.a === at ? 1 : -1; p.t = 0;
+      }
+      const a = posOf(p.e.a), b = posOf(p.e.b); const k = p.dir > 0 ? p.t : 1 - p.t;
+      p.c.setAttribute('cx', a.x + (b.x - a.x) * k); p.c.setAttribute('cy', a.y + (b.y - a.y) * k);
+    });
+  };
+  const cLoop = (now) => { if (cVisible && !cMobile.matches) drawC(reduce ? 0 : now); requestAnimationFrame(cLoop); };
+  if ('IntersectionObserver' in window) new IntersectionObserver(es => { cVisible = es[0].isIntersecting; }, { rootMargin: '200px' }).observe(cBox); else cVisible = true;
+  cBox.addEventListener('pointermove', e => { const r = cBox.getBoundingClientRect(); cPtr.x = (e.clientX - r.left) / r.width - .5; cPtr.y = (e.clientY - r.top) / r.height - .5; });
+  cBox.addEventListener('pointerleave', () => { cPtr.x = cPtr.y = 0; });
+  bnodes.forEach((n, idx) => {
+    n.el.addEventListener('pointerenter', () => edges.forEach(e => e.el.classList.toggle('is-hot', e.a === idx || e.b === idx)));
+    n.el.addEventListener('pointerleave', () => edges.forEach(e => e.el.classList.remove('is-hot')));
   });
-  dShot.addEventListener('pointerleave', () => dShot.classList.remove('is-zoom'));
-  $('#dAsk').addEventListener('click', () => {
-    const p = PRODUCTS[cur];
-    $('#f-msg').value = `Me interesa recibir información sobre ${p.name} (${p.sub} ${p.dose}).`;
-    closeDetail();
-    $('#contacto').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
-    setTimeout(() => $('#f-name').focus({ preventScroll: true }), 700);
-  });
+  addEventListener('resize', layoutC); cMobile.addEventListener?.('change', () => { layoutC(); bnodes.forEach(n => { n.el.style.transform = ''; }); });
+  addEventListener('load', layoutC); layoutC(); drawC(0); requestAnimationFrame(cLoop);
+
+  /* ---------- Reviews ---------- */
+  // Paste the reviews from the current site here: { text, name, role, brand } (brand = an id from BRANDS, optional).
+  const REVIEWS = [];
+  const track = $('#reviewTrack');
+  const reviewHTML = (r, ph) => {
+    const b = r.brand && BRAND_BY_ID[r.brand];
+    return `<article class="review${ph ? ' review--ph' : ''}" data-reveal>
+      <span class="review__mark" aria-hidden="true">“</span>
+      <blockquote>${r.text}</blockquote>
+      <footer><cite><b>${r.name}</b><span>${r.role}</span></cite>${b ? `<i style="--logo:url('assets/marcas/${b.id}.svg');${logoBox(b.ar, 1500, 110)}" role="img" aria-label="${b.name}"></i>` : ''}</footer>
+    </article>`;
+  };
+  if (REVIEWS.length) track.innerHTML = REVIEWS.map(r => reviewHTML(r)).join('');
+  else if (isPreview) track.innerHTML = [1, 2, 3].map(() => reviewHTML({ text: 'Aquí va el texto de una reseña real de un cliente, tal como aparece en el sitio actual.', name: 'Nombre del cliente', role: 'Cargo · Empresa' }, true)).join('');
+  else { $('#resenas').hidden = true; $$('a[href="#resenas"]').forEach(a => { a.hidden = true; }); }
+  const step = (d) => { const c = $('.review', track); if (c) track.scrollBy({ left: d * (c.offsetWidth + 24), behavior: reduce ? 'auto' : 'smooth' }); };
+  $('#revPrev').addEventListener('click', () => step(-1));
+  $('#revNext').addEventListener('click', () => step(1));
 
   /* ---------- Contact form ---------- */
   const form = $('#contactForm'); const status = $('#formStatus');

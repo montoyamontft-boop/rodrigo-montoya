@@ -1,31 +1,34 @@
 # Artilugio Group: sitio web interactivo
 
-Rediseño de una sola página para artilugiogroup.com.mx. Es HTML, CSS y JS estáticos, sin build: basta con subir esta carpeta al hosting.
+Rediseño de una sola página para artilugiogroup.com.mx. Es HTML, CSS y JS estáticos, sin build: basta con subir esta carpeta al hosting. Se debe servir por HTTP (no abriendo el archivo con doble clic), porque los logos de marcas se cargan como máscaras CSS.
 
 ## Qué incluye
 
-- **Paleta de marca.** Solo los colores de los backs y del logotipo (azul, cian, naranja, rojo y ámbar sobre blanco y azul marino), usados como colores sólidos, sin degradados entre ellos.
-- **Fondos que cambian al deslizar.** Los dos backs se funden según el tema de cada sección (`data-theme="light|dark"`). Se separaron en dos partes: el degradado de fondo (`assets/base-*`) y la red de nodos, que aparece sutil solo en los laterales de la página (`assets/side-*`).
-- **Hero con el logo al centro de una red 3D.** La red de nodos rodea al logotipo, reacciona al cursor y se puede arrastrar. Al bajar, la red se mueve y cambia de forma en cada sección (`data-globe="x y radio dispersión opacidad"`; `data-globe-m` es la versión móvil).
-- **Escena Spline.** Tu escena (`my.spline.design/untitled-C5FXGwdlZSOgdLZIONJ8HOCv`) se embebe en «Experiencia 3D» y se carga cuando el visitante se acerca. Hay que hacer clic en «Interactuar» para controlarla, así no atrapa el scroll.
-- **Productos integrados.** Los productos de Progalénica viven dentro de la página: cuadrícula con filtros por área y una ficha que se abre en la misma página, con zoom sobre la foto y anterior/siguiente. «Solicitar información» lleva al formulario de contacto con el producto ya escrito.
-- **Marcas.** Sección con los logotipos de las marcas con las que ha trabajado Artilugio (ver abajo).
-- **Menú siempre visible.** En pantallas angostas los enlaces se desplazan de lado en lugar de esconderse. El logo de la esquina no aparece en la primera pantalla, donde el logo ya está al centro.
+- **Paleta de marca.** Solo los colores de los backs y del logotipo (azul, cian, naranja, rojo y ámbar sobre blanco y azul marino), usados como colores sólidos.
+- **Fondos que cambian al deslizar.** Los dos backs se funden según el tema de cada sección (`data-theme="light|dark"`). El degradado de fondo está en `assets/base-*` y la red de nodos aparece sutil solo en los laterales (`assets/side-*`).
+- **Hero con el logo al centro de una red 3D** que reacciona al cursor y se puede arrastrar. Al bajar, la red cambia de forma en cada sección (`data-globe="x y radio dispersión opacidad"`; `data-globe-m` es la versión móvil).
+- **Marcas como constelación.** Los logos de las marcas forman una red conectada al logo de Artilugio, con pulsos que recorren las conexiones. Al pasar el cursor, la marca se ilumina junto con sus conexiones. En móvil se muestran en cuadrícula.
+- **Reseñas.** Carrusel de testimonios con el logo de la marca del cliente.
+- **Escena Spline** en «Experiencia 3D». Se carga cuando el visitante se acerca y se activa con «Interactuar», así no atrapa el scroll.
+- **Menú siempre visible.** En pantallas angostas los enlaces se desplazan de lado. El logo de la esquina no aparece en la primera pantalla.
 - **Todo se queda en la página.** Ningún botón ni enlace lleva a otro sitio.
 - Adaptable a móvil y compatible con `prefers-reduced-motion`.
 
-## Fotos de producto (alta calidad)
-
-Las fichas usan `assets/productos/<id>.webp` (2000 px) y `<id>-1000.webp` (1000 px). Mientras no existan, cada tarjeta muestra el nombre del producto sobre el fondo de estudio.
-
-1. Junta las fotos originales en una carpeta, nombradas con el id: `rifosar`, `rifosar-pos`, `bilumiv`, `lezomiv`, `fexilev`, `carenev`, `cravicem`, `matinev`, `tamablan-pf`. Lo ideal es PNG con fondo transparente, de 2000 px o más por lado.
-2. Ejecuta `python3 tools/optimizar_productos.py <carpeta>`. Requiere Pillow.
-
-Los datos de cada producto (nombre, sustancia, concentración, presentación y área) están en el arreglo `PRODUCTS` de `index.html`.
-
 ## Logos de marcas
 
-Coloca los logos en `assets/marcas/` (SVG o PNG con fondo transparente) y agrega una línea por marca al arreglo `BRANDS` de `index.html`, por ejemplo `{ name: 'Nombre de la marca', file: 'marca.svg' }`. Mientras el arreglo esté vacío, la sección y su enlace en el menú no se muestran.
+`assets/marcas/<id>.svg` son vectores de un solo color; la página los tiñe con CSS (blanco sobre azul marino, o el color de texto en las reseñas). Se vectorizaron a partir de la captura del sitio actual, así que son nítidos a cualquier tamaño, pero los textos muy pequeños de algunos logos (por ejemplo, los lemas de Psicofarma y Exeltis) pierden detalle. Si consigues los archivos oficiales, reemplaza el SVG con el mismo nombre. Debe ser un SVG o PNG de un solo color con fondo transparente, porque el color lo pone la página.
+
+Para agregar o quitar marcas, edita el arreglo `BRANDS` de `index.html` (`id`, `name` y `ar`, que es ancho entre alto del logo). Los primeros 6 forman el anillo interior de la constelación.
+
+## Reseñas
+
+Agrega cada reseña al arreglo `REVIEWS` de `index.html`:
+
+```js
+{ text: 'Texto de la reseña', name: 'Nombre', role: 'Cargo · Empresa', brand: 'novartis' }
+```
+
+`brand` es opcional y debe ser un `id` de `BRANDS`. Mientras el arreglo esté vacío, la sección y su enlace en el menú no se muestran.
 
 ## Logotipos de Artilugio
 
@@ -35,8 +38,8 @@ Los logos se extrajeron del PDF de backs sin modificarlos:
 
 ## Pendientes antes de publicar
 
-1. **Textos originales.** Los textos se tomaron del sitio actual tal como aparecen en los buscadores. Revisa contra el sitio en vivo, sobre todo el párrafo de «Quiénes somos» y el del origen griego del nombre (hay un comentario en la sección `#artilugio` que marca dónde va).
-2. **Fotos de producto** y **logos de marcas.** Ver las secciones anteriores.
+1. **Reseñas.** Pegar los textos reales (ver arriba).
+2. **Textos originales.** Revisa contra el sitio en vivo, sobre todo el párrafo de «Quiénes somos» y el del origen griego del nombre (hay un comentario en la sección `#artilugio` que marca dónde va).
 3. **Contacto.** Escribe el correo de destino en `data-email` del formulario `#contactForm`. El formulario abre el cliente de correo del visitante. Si prefieres envío directo, conecta el formulario a tu backend o a un servicio de formularios.
 
 ## Probar en local
