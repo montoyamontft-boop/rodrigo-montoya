@@ -1,6 +1,6 @@
 # Logo de Artilugio sobre video
 
-Pone el logotipo de Artilugio en pequeño, abajo a la derecha, sin perder calidad del video.
+Pone el logotipo de Artilugio en pequeño, arriba a la izquierda, sin perder calidad del video.
 
 ```bash
 ./agregar_logo.sh video.mp4         # misma resolución del original
