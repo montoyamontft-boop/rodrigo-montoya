@@ -6,12 +6,14 @@ Rediseño de una sola página para artilugiogroup.com.mx. Es HTML, CSS y JS est�
 
 - **Paleta de marca.** Solo los colores de los backs y del logotipo (azul, cian, naranja, rojo y ámbar sobre blanco y azul marino), usados como colores sólidos.
 - **Fondos que cambian al deslizar.** Los dos backs se funden según el tema de cada sección (`data-theme="light|dark"`). El degradado de fondo está en `assets/base-*` y la red de nodos aparece sutil solo en los laterales (`assets/side-*`).
-- **Contenido idéntico al sitio actual**, seccionado igual: Inicio (¿Quiénes somos?), Acerca de (áreas comerciales y de Marketing; Compromiso social), Servicios (Pilares estratégicos; Especialización de la prescripción al consumo; Nuestro equipo; Artilugio; Clientes) y Contacto.
+- **Contenido del sitio actual**, seccionado igual: Inicio (¿Quiénes somos?), Acerca de (áreas comerciales y de Marketing; Compromiso social), Servicios (Pilares estratégicos; Especialización de la prescripción al consumo; Experiencia 3D; Nuestro equipo; Artilugio; Clientes) y Contacto.
+- **Franja de valores** bajo el inicio (Profesionales de la salud · Pacientes · Terapias de alto valor) y franja en movimiento con los conceptos del sitio (Adopción, Retención, Estrategia médica, Programas de pacientes y los pilares).
+- **Nuestro equipo como constelación:** los 10 puestos giran en dos órbitas alrededor del logo, unidos por líneas con pulsos. Al pasar el cursor (o tocar en celular) el puesto aparece al centro y sus conexiones se encienden en naranja. En celular se muestra como lista conectada.
 - **Encabezado como el del sitio actual:** logo a la izquierda y Inicio · Acerca de · Servicios · Contacto a la derecha; el enlace de la parte donde estás se marca en azul.
 - **Inicio con el logo al centro de una red 3D** que reacciona al cursor y se puede arrastrar. Al bajar, la red cambia de forma en cada sección (`data-globe="x y radio dispersión opacidad"`; `data-globe-m` es la versión móvil).
 - **Marcas.** Cuadrícula de tarjetas con los logos en gris; al pasar el cursor, el logo se enciende en sus colores originales (en pantallas táctiles se muestran a color).
 - **Servicios: de la prescripción al consumo.** Carrusel horizontal que avanza con el scroll vertical, con la barra Prescripción → Consumo y flechas. En móvil se desliza con el dedo.
-- **Escena Spline** después de «Artilugio». Se carga cuando el visitante se acerca y se activa con «Interactuar», así no atrapa el scroll.
+- **Escena Spline** en «Experiencia 3D», después de «Especialización de la prescripción al consumo». Se carga cuando el visitante se acerca y se activa con «Interactuar», así no atrapa el scroll.
 - **Todo se queda en la página.** Ningún botón ni enlace lleva a otro sitio.
 - Adaptable a móvil y compatible con `prefers-reduced-motion`.
 
