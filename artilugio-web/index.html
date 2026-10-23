@@ -320,40 +320,18 @@ section{position:relative}
 .spec-card__n{font-family:var(--font-display);font-weight:800;font-size:clamp(2.4rem,3.4vw,3.2rem);line-height:1;color:var(--c)}
 .spec-card h3{font-size:clamp(1.25rem,1.6vw,1.5rem);font-weight:800;line-height:1.2}
 .spec-card p{padding-top:24px;color:#c7d6ea;font-size:1.06rem;line-height:1.65}
-.spec-card--ph{border-style:dashed}
-.spec-card--ph h3,.spec-card--ph p{color:#7f93ad}
 .spec__foot{display:flex;justify-content:space-between;align-items:center;gap:16px}
 .spec__btns{display:flex;gap:10px}
 .spec .round{background:rgba(8,26,50,.6);color:#eaf3ff;border-color:rgba(160,200,255,.25)}
 .spec .round:hover{background:#eaf3ff;color:var(--navy)}
 
-/* ---------- Reviews ---------- *//* ---------- Reviews ---------- */
-.reviews__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:28px}
-.reviews__nav{display:flex;gap:10px}
+/* Round icon buttons */
 .round{
   width:54px;height:54px;border-radius:50%;border:1px solid var(--line);background:var(--surface-strong);color:var(--fg);cursor:pointer;
   display:grid;place-items:center;transition:background .3s,color .3s,border-color .3s;
 }
 .round:hover{background:var(--fg);color:var(--paper);border-color:var(--fg)}
 .round svg{width:20px;height:20px}
-.reviews__track{
-  display:grid;grid-auto-flow:column;grid-auto-columns:minmax(min(100%,520px),1fr);gap:24px;margin-top:clamp(44px,5vw,64px);
-  overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:8px;
-}
-.reviews__track::-webkit-scrollbar{display:none}
-.review{
-  scroll-snap-align:start;display:grid;grid-template-rows:auto 1fr auto;gap:26px;min-width:0;
-  padding:clamp(30px,3.4vw,48px);border-radius:var(--radius);background:var(--surface-strong);border:1px solid var(--line);
-  box-shadow:0 40px 80px -60px rgba(3,16,30,.5);
-}
-.review__mark{font-family:var(--font-display);font-weight:900;font-size:5rem;line-height:.6;color:var(--orange);height:.5em}
-.review blockquote{margin:0;font-family:var(--font-display);font-weight:600;font-size:clamp(1.15rem,1.6vw,1.4rem);line-height:1.5;letter-spacing:-.01em}
-.review footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:22px;border-top:1px solid var(--line)}
-.review cite{font-style:normal;display:grid;gap:2px}
-.review cite b{font-family:var(--font-display);font-size:1.02rem}
-.review cite span{color:var(--muted);font-size:.92rem}
-.review i{display:block;flex:none;width:var(--w);height:var(--h);background:var(--fg);opacity:.85;-webkit-mask:var(--logo) center/contain no-repeat;mask:var(--logo) center/contain no-repeat}
-.review--ph blockquote{color:var(--muted)}
 
 /* ---------- Services ---------- *//* ---------- Services ---------- */
 .services{border-top:1px solid var(--line)}
@@ -533,7 +511,6 @@ section{position:relative}
     <div class="nav__links" id="navLinks">
       <a href="#nosotros">Quiénes somos</a>
       <a href="#marcas">Marcas</a>
-      <a href="#resenas">Reseñas</a>
       <a href="#servicios">Qué hacemos</a>
       <a href="#especialidades">Servicios</a>
       <a href="#experiencia">Experiencia 3D</a>
@@ -630,23 +607,6 @@ section{position:relative}
         <p class="lede">Laboratorios y marcas que confían en nuestra forma de hacer comunicación.</p>
       </div>
       <div class="logos" id="brandGrid"></div>
-    </div>
-  </section>
-
-  <!-- RESEÑAS -->
-  <section class="section" id="resenas" data-theme="light" data-globe="0.92 0.2 0.22 0 0.35" data-globe-m="0.9 0.1 0.2 0 0.2">
-    <div class="wrap">
-      <div class="reviews__head" data-reveal>
-        <div class="head">
-          <span class="label">Reseñas</span>
-          <h2 class="h-xl">Lo que dicen de nosotros</h2>
-        </div>
-        <div class="reviews__nav">
-          <button class="round" type="button" id="revPrev" aria-label="Reseña anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
-          <button class="round" type="button" id="revNext" aria-label="Reseña siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-        </div>
-      </div>
-      <div class="reviews__track" id="reviewTrack"></div>
     </div>
   </section>
 
@@ -790,7 +750,6 @@ section{position:relative}
       <nav class="footer__nav" aria-label="Pie de página">
         <a href="#nosotros">Quiénes somos</a>
         <a href="#marcas">Marcas</a>
-        <a href="#resenas">Reseñas</a>
         <a href="#servicios">Qué hacemos</a>
         <a href="#especialidades">Servicios</a>
         <a href="#experiencia">Experiencia 3D</a>
@@ -1120,25 +1079,22 @@ section{position:relative}
     { id: 'takeda', name: 'Takeda', ar: 2.81 }, { id: 'amacesa', name: 'AMACESA', ar: 3.08 },
     { id: 'psicofarma', name: 'Psicofarma', ar: 2.67 }, { id: 'ucb', name: 'UCB', ar: 1.0 }
   ];
-  const BRAND_BY_ID = Object.fromEntries(BRANDS.map(b => [b.id, b]));
   // Same visual weight for every logo: equal area, capped width.
   const logoBox = (ar, area, maxW) => { let w = Math.sqrt(area * ar), h = w / ar; if (w > maxW) { w = maxW; h = w / ar; } return `--w:${w.toFixed(1)}px;--h:${h.toFixed(1)}px`; };
   $('#brandGrid').innerHTML = BRANDS.map(b => `<div class="logo-card" data-reveal><img src="assets/marcas/${b.id}.svg" alt="${b.name}" style="${logoBox(b.ar, 5200, 210)}" loading="lazy" decoding="async"></div>`).join('');
 
   /* ---------- Specialties: horizontal track driven by vertical scroll ---------- */
-  // Cards 01–03 are pending: paste their title and text from the current site and remove `pending`.
   const SERVICES = [
-    { n: '01', title: 'Servicio 01', text: 'Pendiente: texto del servicio 01 del sitio actual.', pending: true },
-    { n: '02', title: 'Servicio 02', text: 'Pendiente: texto del servicio 02 del sitio actual.', pending: true },
-    { n: '03', title: 'Servicio 03', text: 'Pendiente: texto del servicio 03 del sitio actual.', pending: true },
-    { n: '04', title: 'Dispositivos Médicos', text: 'Posicionamiento de valor tecnológico para especialistas y tomadores de decisión.' },
-    { n: '05', title: 'Suplementos & Nutracéuticos', text: 'Comunicación basada en bienestar y evidencia científica (apegado a la LGS art 215 y 216).' },
-    { n: '06', title: 'Enfermedades Raras', text: 'Entendemos el profundo impacto que tienen a nivel humano, médico, social y de investigación científica.' }
+    { n: '01', c: 'var(--orange)', title: 'Rx & Éticos', text: 'Comunicación científica rigurosa y educación médica de alta especialidad sumado al alto impacto visual.' },
+    { n: '02', c: 'var(--cyan)', title: 'Genéricos de Marca & OTX', text: 'Estrategias para acelerar la preferencia médica y recomendación en mostrador.' },
+    { n: '03', c: 'var(--blue)', title: 'OTC & Consumo', text: 'Campañas creativas orientadas a la decisión de compra Direct-To-Consumer (DTC).' },
+    { n: '04', c: 'var(--cyan)', title: 'Dispositivos Médicos', text: 'Posicionamiento de valor tecnológico para especialistas y tomadores de decisión.' },
+    { n: '05', c: 'var(--red)', title: 'Suplementos & Nutracéuticos', text: 'Comunicación basada en bienestar y evidencia científica (apegado a la LGS art 215 y 216).' },
+    { n: '06', c: 'var(--orange)', title: 'Enfermedades Raras', text: 'Entendemos el profundo impacto que tienen a nivel humano, médico, social y de investigación científica.' }
   ];
-  const SPEC_COLORS = ['var(--cyan)', 'var(--red)', 'var(--orange)'];
   const specSec = $('#especialidades'), specTrack = $('#specTrack'), specView = $('#specView'), specBar = $('#specBar');
-  specTrack.innerHTML = SERVICES.filter(x => isPreview || !x.pending).map(x => `
-    <article class="spec-card${x.pending ? ' spec-card--ph' : ''}" style="--c:${SPEC_COLORS[(parseInt(x.n, 10) - 1) % 3]}">
+  specTrack.innerHTML = SERVICES.map(x => `
+    <article class="spec-card" style="--c:${x.c}">
       <div class="spec-card__top"><span class="spec-card__n">${x.n}</span><h3>${x.title}</h3></div>
       <p>${x.text}</p>
     </article>`).join('');
@@ -1170,25 +1126,6 @@ section{position:relative}
   addEventListener('resize', () => { specLayout(); specScroll(); });
   addEventListener('load', () => { specLayout(); specScroll(); });
   specLayout(); specScroll();
-
-  /* ---------- Reviews ---------- */
-  // Paste the reviews from the current site here: { text, name, role, brand } (brand = an id from BRANDS, optional).
-  const REVIEWS = [];
-  const track = $('#reviewTrack');
-  const reviewHTML = (r, ph) => {
-    const b = r.brand && BRAND_BY_ID[r.brand];
-    return `<article class="review${ph ? ' review--ph' : ''}" data-reveal>
-      <span class="review__mark" aria-hidden="true">“</span>
-      <blockquote>${r.text}</blockquote>
-      <footer><cite><b>${r.name}</b><span>${r.role}</span></cite>${b ? `<i style="--logo:url('assets/marcas/${b.id}.svg');${logoBox(b.ar, 1500, 110)}" role="img" aria-label="${b.name}"></i>` : ''}</footer>
-    </article>`;
-  };
-  if (REVIEWS.length) track.innerHTML = REVIEWS.map(r => reviewHTML(r)).join('');
-  else if (isPreview) track.innerHTML = [1, 2, 3].map(() => reviewHTML({ text: 'Aquí va el texto de una reseña real de un cliente, tal como aparece en el sitio actual.', name: 'Nombre del cliente', role: 'Cargo · Empresa' }, true)).join('');
-  else { $('#resenas').hidden = true; $$('a[href="#resenas"]').forEach(a => { a.hidden = true; }); }
-  const step = (d) => { const c = $('.review', track); if (c) track.scrollBy({ left: d * (c.offsetWidth + 24), behavior: reduce ? 'auto' : 'smooth' }); };
-  $('#revPrev').addEventListener('click', () => step(-1));
-  $('#revNext').addEventListener('click', () => step(1));
 
   /* ---------- Contact form ---------- */
   const form = $('#contactForm'); const status = $('#formStatus');
