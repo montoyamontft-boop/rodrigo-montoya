@@ -196,7 +196,7 @@ section{position:relative}
 .hero{min-height:100svh;display:grid;grid-template-rows:1fr auto;padding-top:clamp(130px,16vh,170px)}
 .hero__grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(30px,5vw,80px);align-items:center}
 .hero__copy{display:grid;gap:34px;min-width:0}
-.hero h1{font-size:clamp(2.6rem,5.4vw,5.6rem);line-height:1;font-weight:800;letter-spacing:-.04em}
+.hero h1{font-size:clamp(2.6rem,5.4vw,5.6rem);line-height:1;font-weight:800;letter-spacing:-.025em}
 .hero__lead{font-family:var(--font-display);font-weight:700;font-size:clamp(1.3rem,2vw,1.85rem);line-height:1.3;letter-spacing:-.015em}
 .hero__text{display:grid;gap:16px;max-width:38rem}
 .hero__text p{color:var(--muted);font-size:clamp(1.02rem,1.25vw,1.15rem)}
@@ -340,38 +340,21 @@ section{position:relative}
 .prose--plain p:first-child{font-family:var(--font-body);font-weight:400;font-size:clamp(1.05rem,1.3vw,1.18rem);color:var(--muted)}
 .sublabel{font-family:var(--font-mono);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--orange)}
 
-/* ---------- Nuestro equipo: roles orbiting the Artilugio core ---------- */
-.orbit{position:relative;margin-top:clamp(40px,5vw,64px);height:clamp(560px,50vw,720px)}
-.orbit__lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
-.orbit__lines line{stroke:rgba(160,200,255,.2);stroke-width:1;transition:stroke .3s,stroke-width .3s}
-.orbit__lines line.is-hot{stroke:var(--orange);stroke-width:1.8}
-.orbit__lines circle{fill:var(--orange)}
-.orbit__lines circle.b{fill:var(--cyan)}
-.orbit__ring{position:absolute;left:50%;top:50%;border:1px dashed rgba(160,200,255,.18);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}
-.orbit__ring--1{width:var(--r1w,50%);height:var(--r1h,56%)}
-.orbit__ring--2{width:var(--r2w,88%);height:var(--r2h,86%)}
-.orbit__core{
-  position:absolute;left:50%;top:50%;width:clamp(170px,17vw,230px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;z-index:2;
-  display:grid;place-items:center;text-align:center;padding:22px;
-  background:radial-gradient(circle,#0a2340 0%,#03101e 72%);box-shadow:0 0 0 1px rgba(160,200,255,.22),0 0 90px 14px rgba(7,140,255,.3);
-}
-.orbit__core::before,.orbit__core::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(160,200,255,.2);animation:ping 3.2s var(--ease) infinite}
-.orbit__core::after{animation-delay:1.6s}
-@keyframes ping{from{transform:scale(.9);opacity:.9}to{transform:scale(1.45);opacity:0}}
-.orbit__core img{grid-area:1/1;width:82%;transition:opacity .4s,transform .5s var(--ease)}
-.orbit__role{grid-area:1/1;font-family:var(--font-display);font-weight:800;font-size:clamp(1rem,1.4vw,1.25rem);line-height:1.2;color:#fff;opacity:0;transform:scale(.9);transition:opacity .4s,transform .5s var(--ease)}
-.orbit.is-focus .orbit__core img{opacity:0;transform:scale(.8)}
-.orbit.is-focus .orbit__role{opacity:1;transform:none}
-.orbit__nodes{position:absolute;inset:0}
-.tnode{position:absolute;left:0;top:0;z-index:3;will-change:transform}
-.tnode button{
-  display:flex;align-items:center;gap:10px;padding:12px 18px 12px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;
-  font-family:var(--font-display);font-weight:700;font-size:clamp(.86rem,1vw,.98rem);color:#eaf3ff;
-  background:rgba(8,26,50,.78);border:1px solid rgba(160,200,255,.2);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  transition:background .35s,border-color .35s,box-shadow .35s,transform .45s var(--ease);
-}
-.tnode button i{flex:none;width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 5px color-mix(in srgb,var(--c) 22%,transparent)}
-.tnode.is-hot button,.tnode button:hover,.tnode button:focus-visible{background:#0d2c52;border-color:var(--c);box-shadow:0 18px 40px -16px color-mix(in srgb,var(--c) 80%,transparent);transform:scale(1.07)}
+/* ---------- Nuestro equipo: puzzle wheel around the logo ---------- */
+.team{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(30px,5vw,80px);align-items:center}
+.team__copy{display:grid;gap:22px;align-content:center}
+.team__bar{width:150px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--cyan),var(--orange))}
+.team__now{display:flex;align-items:center;gap:14px;min-height:3.2em;font-family:var(--font-display);font-weight:800;font-size:clamp(1.3rem,2.2vw,2rem);line-height:1.15;color:var(--fg)}
+.team__now i{flex:none;width:16px;height:16px;border-radius:50%;background:var(--c,var(--blue));box-shadow:0 0 0 6px color-mix(in srgb,var(--c,var(--blue)) 22%,transparent);transition:background .4s,box-shadow .4s}
+.team__now span{transition:opacity .3s}
+.wheel{width:min(100%,680px);justify-self:center;aspect-ratio:1;max-width:100%}
+.wheel svg{width:100%;height:100%;overflow:visible}
+.piece{cursor:pointer;outline:none;transition:opacity .45s}
+.piece path,.piece circle{transition:filter .45s}
+.piece text{font-family:var(--font-display);font-weight:800;font-size:29px;fill:#fff;pointer-events:none;paint-order:stroke;stroke:rgba(0,0,0,.08);stroke-width:2px}
+.wheel.has-active .piece:not(.is-active){opacity:.45}
+.piece.is-active path,.piece.is-active circle{filter:drop-shadow(0 14px 20px rgba(3,16,30,.28)) saturate(1.15)}
+.piece:focus-visible path{stroke:#03101e;stroke-width:4}
 
 /* ---------- Services ---------- */
 .services{border-top:1px solid var(--line)}
@@ -422,7 +405,7 @@ section{position:relative}
 .name__logo{width:clamp(96px,10vw,140px)}
 .name__word{
   display:flex;justify-content:center;font-family:var(--font-display);font-weight:900;color:var(--fg);
-  font-size:clamp(3.4rem,14vw,13.5rem);line-height:.9;letter-spacing:-.05em;
+  font-size:clamp(3.4rem,14vw,13.5rem);line-height:.9;letter-spacing:-.015em;
 }
 .name__word span{display:inline-block;will-change:transform,opacity}
 .name__sentence{font-family:var(--font-display);font-weight:700;font-size:clamp(1.2rem,2.3vw,1.9rem);line-height:1.3;max-width:40rem;text-wrap:balance}
@@ -460,7 +443,7 @@ section{position:relative}
 .footer__nav a:hover{color:#fff}
 .site-footer .btn--ghost{color:#eaf3ff;border-color:rgba(160,200,255,.25);background:rgba(8,26,50,.6)}
 .footer__big{
-  margin-top:56px;font-family:var(--font-display);font-weight:900;font-size:clamp(3rem,15vw,14rem);line-height:.85;letter-spacing:-.045em;
+  margin-top:56px;font-family:var(--font-display);font-weight:900;font-size:clamp(3rem,15vw,14rem);line-height:.85;letter-spacing:-.015em;
   color:var(--orange);text-align:center;
 }
 .site-footer .round{background:rgba(8,26,50,.6);color:#eaf3ff;border-color:rgba(160,200,255,.25)}
@@ -492,13 +475,8 @@ section{position:relative}
   .pillars{grid-template-columns:1fr}
   .pillar,.pillar + .pillar{padding:20px 0;border-left:0;border-bottom:1px solid var(--line)}
   .scroll-cue{display:none}
-  .orbit{height:auto;display:grid;gap:22px;justify-items:center}
-  .orbit__lines,.orbit__ring{display:none}
-  .orbit__core{position:relative;left:auto;top:auto;transform:none;width:170px}
-  .orbit__nodes{position:relative;inset:auto;display:grid;gap:10px;width:100%;max-width:420px;padding-left:22px;border-left:2px solid rgba(160,200,255,.18)}
-  .tnode{position:relative;transform:none!important}
-  .tnode::before{content:"";position:absolute;left:-29px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--c)}
-  .tnode button{width:100%;white-space:normal;text-align:left}
+  .team{grid-template-columns:1fr}
+  .team__now{min-height:2.4em}
 }
 @media (max-width:640px){
   body{font-size:16px}
@@ -766,22 +744,15 @@ section{position:relative}
   </section>
 
   <!-- SERVICIOS: Nuestro equipo -->
-  <section class="section" id="equipo" data-nav="servicios" data-theme="dark" data-globe="0.5 0.5 0.5 0.6 0" data-globe-m="0.5 0.5 0.5 0.6 0">
-    <div class="wrap">
-      <div class="head head--center" data-reveal>
+  <section class="section" id="equipo" data-nav="servicios" data-theme="light" data-globe="0.1 0.2 0.22 0.4 0.25" data-globe-m="0.1 0.1 0.2 0.4 0.12">
+    <div class="wrap team">
+      <div class="team__copy">
         <span class="label">Servicios</span>
         <h2 class="h-xl">Nuestro equipo</h2>
+        <span class="team__bar" aria-hidden="true"></span>
+        <p class="team__now" id="teamNow" aria-live="polite"><i></i><span></span></p>
       </div>
-      <div class="orbit" id="teamOrbit">
-        <svg class="orbit__lines" id="teamLines" aria-hidden="true"></svg>
-        <div class="orbit__ring orbit__ring--1" aria-hidden="true"></div>
-        <div class="orbit__ring orbit__ring--2" aria-hidden="true"></div>
-        <div class="orbit__core" aria-live="polite">
-          <img src="assets/logo-artilugio-dark.webp" alt="Artilugio" id="teamLogo">
-          <span class="orbit__role" id="teamRole"></span>
-        </div>
-        <ul class="orbit__nodes" id="teamNodes"></ul>
-      </div>
+      <div class="wheel" id="teamWheel"></div>
     </div>
   </section>
 
@@ -1069,7 +1040,7 @@ section{position:relative}
     addEventListener('pointermove', e => { tx = e.clientX; ty = e.clientY; }, { passive: true });
     const loop = () => { cx = lerp(cx, tx, .22); cy = lerp(cy, ty, .22); cur.style.transform = `translate(${cx}px,${cy}px)`; requestAnimationFrame(loop); };
     loop();
-    document.addEventListener('pointerover', e => cur.classList.toggle('is-hover', !!e.target.closest('a,button,.logo-card,.spec-card,input,textarea,.service,.focus li')));
+    document.addEventListener('pointerover', e => cur.classList.toggle('is-hover', !!e.target.closest('a,button,.logo-card,.spec-card,input,textarea,.service,.focus li,.piece')));
     $$('.magnetic').forEach(b => {
       b.addEventListener('pointermove', e => {
         const r = b.getBoundingClientRect();
@@ -1108,82 +1079,108 @@ section{position:relative}
     });
   };
 
-  /* ---------- Nuestro equipo: roles orbit the core; hover/tap shows the role in the center ---------- */
-  const TEAM = ['Dirección Estratégica', 'Dirección de Arte', 'Dirección Comercial / Marketing', 'Copy / Redactor', 'Coordinador IA',
-    'Programa de pacientes', 'Aliado Regulatorio', 'Investigación de mercados', 'Aliado Advisory Boards', 'Programación Web y landing page'];
-  const TEAM_COLORS = ['var(--blue)', 'var(--orange)', 'var(--cyan)', 'var(--red)', 'var(--amber)'];
-  const orbit = $('#teamOrbit'), tLines = $('#teamLines'), tList = $('#teamNodes'), tRole = $('#teamRole');
-  const SVGNS = 'http://www.w3.org/2000/svg';
-  const INNER = 4; // first 4 roles on the inner ring, the rest on the outer ring
-  const tnodes = TEAM.map((name, i) => {
-    const li = document.createElement('li'); li.className = 'tnode'; li.style.setProperty('--c', TEAM_COLORS[i % 5]);
-    li.innerHTML = `<button type="button"><i></i>${name}</button>`; tList.appendChild(li);
-    const ring = i < INNER ? 0 : 1, k = ring ? i - INNER : i, cnt = ring ? TEAM.length - INNER : INNER;
-    return { li, name, i, ring, a0: (k / cnt) * Math.PI * 2 + (ring ? 0 : Math.PI / 4), x: 0, y: 0, w: 0, h: 0 };
+  /* ---------- Nuestro equipo: puzzle wheel ---------- */
+  // Clockwise from the top, as in the team artwork. Line breaks match the artwork.
+  const TEAM = [
+    ['Dirección Estratégica', ['Dirección', 'Estratégica'], '#7c55e6'],
+    ['Dirección de Arte', ['Dirección', 'de Arte'], '#1f6ff2'],
+    ['Dirección Comercial / Marketing', ['Dirección', 'Comercial /', 'Marketing'], '#10a9f0'],
+    ['Copy / Redactor', ['Copy /', 'Redactor'], '#12cbe0'],
+    ['Coordinador IA', ['Coordinador', 'IA'], '#14c9b0'],
+    ['Programa de pacientes', ['Programa', 'de pacientes'], '#1ec45c'],
+    ['Aliado Regulatorio', ['Aliado', 'Regulatorio'], '#6fd136'],
+    ['Investigación de mercados', ['Investigación', 'de mercados'], '#ffc414'],
+    ['Aliado Advisory Boards', ['Aliado', 'Advisory', 'Boards'], '#ff7a22'],
+    ['Programación Web y landing page', ['Programación', 'Web y', 'landing page'], '#f0509e']
+  ];
+  const wheel = $('#teamWheel'), now = $('#teamNow');
+  const N = TEAM.length, C = 500, RO = 480, RI = 228, RM = (RO + RI) / 2, KNOB = 25;
+  const rad = d => (d - 90) * Math.PI / 180;
+  const pt = (r, d) => [C + r * Math.cos(rad(d)), C + r * Math.sin(rad(d))];
+  const f = v => v.toFixed(1);
+  let svg = `<svg viewBox="0 0 1000 1000" role="list" aria-label="Nuestro equipo">`;
+  svg += `<circle cx="${C}" cy="${C}" r="${RO + 6}" fill="#ffffff" opacity=".7"/>`;
+  const groups = [];
+  TEAM.forEach(([name, lines, col], i) => {
+    const a0 = i * 360 / N, a1 = a0 + 360 / N, am = (a0 + a1) / 2;
+    const [x0, y0] = pt(RO, a0), [x1, y1] = pt(RO, a1), [x2, y2] = pt(RI, a1), [x3, y3] = pt(RI, a0);
+    // Puzzle tabs: each piece pushes a round knob into the piece before it (the first piece also into the second),
+    // alternating inner/outer position. Pieces are painted so every knob sits on top of its neighbor.
+    // Knob centers sit just past the seam, near the outer or inner edge so they never cover the text.
+    const kOff = r => (KNOB * .62) / r * 180 / Math.PI, kOut = RO - 40, kIn = RI + 38;
+    const kr0 = i % 2 ? kOut : kIn;
+    const knobs = [[a0 - kOff(kr0), kr0]];
+    if (i === 0) knobs.push([a1 + kOff(kOut), kOut]);
+    const [tx, ty] = pt(RM + 6, am);
+    const lh = 33, ty0 = ty - (lines.length - 1) * lh / 2 + 10;
+    groups[i] = `<g class="piece" data-i="${i}" role="listitem" tabindex="0" aria-label="${name}">
+      <path d="M${f(x0)} ${f(y0)} A${RO} ${RO} 0 0 1 ${f(x1)} ${f(y1)} L${f(x2)} ${f(y2)} A${RI} ${RI} 0 0 0 ${f(x3)} ${f(y3)}Z" fill="${col}" stroke="#ffffff" stroke-width="5" stroke-linejoin="round"/>
+      ${knobs.map(([d, r]) => { const [kx, ky] = pt(r, d); return `<circle cx="${f(kx)}" cy="${f(ky)}" r="${KNOB}" fill="${col}"/>`; }).join('')}
+      <text text-anchor="middle">${lines.map((l, k) => `<tspan x="${f(tx)}" y="${f(ty0 + k * lh)}">${l}</tspan>`).join('')}</text>
+    </g>`;
   });
-  const tEdges = [];
-  const tAdd = (a, b) => { if (!tEdges.some(e => (e.a === a && e.b === b) || (e.a === b && e.b === a))) tEdges.push({ a, b }); };
-  for (let i = 0; i < INNER; i++) { tAdd(-1, i); tAdd(i, (i + 1) % INNER); }
-  const OUT = TEAM.length - INNER;
-  for (let k = 0; k < OUT; k++) { tAdd(INNER + k, INNER + (k + 1) % OUT); tAdd(INNER + k, Math.floor(k * INNER / OUT)); }
-  tEdges.forEach(e => { e.el = document.createElementNS(SVGNS, 'line'); tLines.appendChild(e.el); });
-  const tPulses = Array.from({ length: 8 }, (_, i) => {
-    const c = document.createElementNS(SVGNS, 'circle'); c.setAttribute('r', i % 3 ? 2.6 : 3.4); if (i % 3 === 0) c.classList.add('b'); tLines.appendChild(c);
-    return { c, e: tEdges[(i * 5) % tEdges.length], t: Math.random(), sp: .3 + Math.random() * .35, dir: 1 };
-  });
-  const tMobile = matchMedia('(max-width: 860px)');
-  let tW = 0, tH = 0, tSpin = 0, tFocus = -1, tVisible = false, tLast = performance.now();
-  let tOver = false;
-  orbit.addEventListener('pointerenter', () => { tOver = true; });
-  orbit.addEventListener('pointerleave', () => { tOver = false; });
-  const tLayout = () => {
-    tW = orbit.clientWidth; tH = orbit.clientHeight;
-    tnodes.forEach(n => { n.w = n.li.offsetWidth; n.h = n.li.offsetHeight; });
-    orbit.style.setProperty('--r1w', (2 * .27 * 100) + '%'); orbit.style.setProperty('--r1h', (2 * .3 * 100) + '%');
-    orbit.style.setProperty('--r2w', (2 * .42 * 100) + '%'); orbit.style.setProperty('--r2h', (2 * .43 * 100) + '%');
+  svg += groups.slice(1).join('') + groups[0];
+  // White bumps on the inner edge, and the logo disc in the middle.
+  for (let i = 0; i < N; i++) { const [bx, by] = pt(RI + 2, i * 360 / N); svg += `<circle class="bump" cx="${f(bx)}" cy="${f(by)}" r="26" fill="#ffffff"/>`; }
+  svg += `<g class="wheel__core"><circle cx="${C}" cy="${C}" r="${RI - 8}" fill="#ffffff"/><image href="assets/logo-artilugio.svg" x="${C - 205}" y="${C - 200}" width="410" height="400" preserveAspectRatio="xMidYMid meet"/></g></svg>`;
+  wheel.innerHTML = svg;
+  const pieces = [...$$('.piece', wheel)].sort((a, b) => a.dataset.i - b.dataset.i), core = $('.wheel__core', wheel);
+  const firstBump = $('.bump', wheel);
+  let active = -1, hovering = false, wheelVisible = false, autoT = 0, assemble = reduce ? 1 : 0;
+  const showRole = (i) => {
+    now.style.setProperty('--c', TEAM[i][2]);
+    const sp = $('span', now); sp.style.opacity = 0;
+    setTimeout(() => { sp.textContent = TEAM[i][0]; sp.style.opacity = 1; }, 150);
   };
-  const tPos = id => id < 0 ? { x: tW / 2, y: tH / 2 } : tnodes[id];
-  const setFocus = (idx) => {
-    tFocus = idx; orbit.classList.toggle('is-focus', idx >= 0);
-    if (idx >= 0) tRole.textContent = TEAM[idx];
-    tnodes.forEach(n => n.li.classList.toggle('is-hot', n.i === idx));
-    tEdges.forEach(e => e.el.classList.toggle('is-hot', idx >= 0 && (e.a === idx || e.b === idx)));
+  const place = () => {
+    pieces.forEach((p, i) => {
+      const am = (i + .5) * 360 / N;
+      const k = smooth(i * .05, .55 + i * .045, assemble);           // assembles piece by piece while scrolling in
+      const pop = i === active ? 26 : 0;
+      const out = (1 - k) * 340 + pop;
+      const dx = Math.cos(rad(am)) * out, dy = Math.sin(rad(am)) * out;
+      const rot = (1 - k) * (i % 2 ? 35 : -35);
+      const sc = i === active ? 1.035 : 1;
+      p.setAttribute('transform', `translate(${f(dx)} ${f(dy)}) rotate(${f(rot)} ${C} ${C}) translate(${C} ${C}) scale(${sc}) translate(${-C} ${-C})`);
+      p.style.opacity = wheel.classList.contains('has-active') && i !== active ? '' : (.15 + .85 * k).toFixed(2);
+    });
+    const kc = smooth(.1, .7, assemble);
+    core.setAttribute('transform', `translate(${C} ${C}) scale(${(.6 + .4 * kc).toFixed(3)}) translate(${-C} ${-C})`);
+    core.style.opacity = kc.toFixed(2);
   };
-  tnodes.forEach(n => {
-    const b = $('button', n.li);
-    b.addEventListener('pointerenter', () => setFocus(n.i));
-    b.addEventListener('focus', () => setFocus(n.i));
-    b.addEventListener('click', () => setFocus(tFocus === n.i ? -1 : n.i));
-    b.addEventListener('pointerleave', () => { if (fine) setFocus(-1); });
-    b.addEventListener('blur', () => setFocus(-1));
+  const setActive = (i) => {
+    active = i; wheel.classList.toggle('has-active', i >= 0);
+    if (i >= 0) firstBump.before(pieces[i]); // the selected piece lifts above its neighbors
+    pieces.forEach((p, j) => p.classList.toggle('is-active', j === i));
+    if (i >= 0) showRole(i);
+    place();
+  };
+  pieces.forEach((p, i) => {
+    p.addEventListener('pointerenter', () => { hovering = true; setActive(i); });
+    p.addEventListener('pointerleave', () => { hovering = false; autoT = 0; });
+    p.addEventListener('click', () => { hovering = true; setActive(i); setTimeout(() => { hovering = false; autoT = 0; }, 4000); });
+    p.addEventListener('focus', () => { hovering = true; setActive(i); });
+    p.addEventListener('blur', () => { hovering = false; });
+    p.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(i); } });
   });
-  const tFrame = (now) => {
-    const dt = Math.min(.05, (now - tLast) / 1000); tLast = now;
-    if (tVisible && !tMobile.matches) {
-      if (tFocus < 0 && !reduce) tSpin += dt * (tOver ? .02 : .07); // slows down under the cursor so roles are easy to pick
-      tnodes.forEach(n => {
-        const rx = (n.ring ? .42 : .27) * tW, ry = (n.ring ? .43 : .3) * tH;
-        const a = n.a0 + tSpin; // both rings turn together, so roles never overlap
-        n.x = tW / 2 + Math.cos(a) * rx; n.y = tH / 2 + Math.sin(a) * ry;
-        n.li.style.transform = `translate(${(n.x - n.w / 2).toFixed(1)}px,${(n.y - n.h / 2).toFixed(1)}px)`;
-      });
-      tEdges.forEach(e => { const a = tPos(e.a), b = tPos(e.b); e.el.setAttribute('x1', a.x); e.el.setAttribute('y1', a.y); e.el.setAttribute('x2', b.x); e.el.setAttribute('y2', b.y); });
-      tPulses.forEach(p => {
-        p.t += p.sp * dt;
-        if (p.t >= 1) {
-          const at = p.dir > 0 ? p.e.b : p.e.a; const opts = tEdges.filter(e => e !== p.e && (e.a === at || e.b === at));
-          p.e = opts[Math.floor(Math.random() * opts.length)] || tEdges[0]; p.dir = p.e.a === at ? 1 : -1; p.t = 0;
-        }
-        const a = tPos(p.e.a), b = tPos(p.e.b), k = p.dir > 0 ? p.t : 1 - p.t;
-        p.c.setAttribute('cx', a.x + (b.x - a.x) * k); p.c.setAttribute('cy', a.y + (b.y - a.y) * k);
-      });
+  const wheelScroll = () => {
+    if (reduce) return;
+    const r = wheel.getBoundingClientRect();
+    const a = clamp((innerHeight - r.top) / (innerHeight * .75));
+    if (Math.abs(a - assemble) > .001) { assemble = a; place(); }
+  };
+  // When nobody is interacting, a spotlight walks around the wheel.
+  let wLast = performance.now();
+  const wheelLoop = (t) => {
+    const dt = Math.min(.1, (t - wLast) / 1000); wLast = t;
+    if (wheelVisible && !hovering && assemble > .98) {
+      autoT -= dt;
+      if (autoT <= 0) { autoT = 2.2; setActive((active + 1) % N); }
     }
-    requestAnimationFrame(tFrame);
+    requestAnimationFrame(wheelLoop);
   };
-  if ('IntersectionObserver' in window) new IntersectionObserver(es => { tVisible = es[0].isIntersecting; }, { rootMargin: '200px' }).observe(orbit); else tVisible = true;
-  addEventListener('resize', tLayout); addEventListener('load', tLayout);
-  tMobile.addEventListener?.('change', () => { tLayout(); tnodes.forEach(n => { n.li.style.transform = ''; }); });
-  tLayout(); requestAnimationFrame(tFrame);
+  if ('IntersectionObserver' in window) new IntersectionObserver(es => { wheelVisible = es[0].isIntersecting; }, { threshold: .35 }).observe(wheel); else wheelVisible = true;
+  showRole(0); place(); wheelScroll(); requestAnimationFrame(wheelLoop);
 
   /* ---------- "Artilugio" letters assemble while pinned ---------- */
   const nameSec = $('#artilugio'); const letters = $$('#nameWord span'); const sentence = $('#nameSentence');
@@ -1315,7 +1312,7 @@ section{position:relative}
   let ticking = false;
   addEventListener('scroll', () => {
     if (ticking) return; ticking = true;
-    requestAnimationFrame(() => { onScroll(); aboutReveal(); nameAnim(); specScroll(); ticking = false; });
+    requestAnimationFrame(() => { onScroll(); aboutReveal(); nameAnim(); specScroll(); wheelScroll(); ticking = false; });
   }, { passive: true });
   addEventListener('resize', resize);
   mobileQ.addEventListener?.('change', resize);
