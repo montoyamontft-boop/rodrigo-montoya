@@ -30,10 +30,13 @@ Los logos se extrajeron del PDF de backs sin modificarlos:
 - `logo-artilugio.svg`: versión vectorial con texto oscuro, para fondos claros.
 - `logo-artilugio-dark.webp/.png`: versión con texto blanco, para fondos oscuros.
 
+## Contacto
+
+Los mensajes del formulario se dirigen a raquel@artilugiogroup.com.mx (atributo `data-email` de `#contactForm`); el correo también aparece visible en la sección de contacto. Al enviar, el formulario abre la aplicación de correo del visitante con el mensaje listo. Si prefieres que se envíe directo sin abrir el correo, hay que conectarlo a un backend o a un servicio de formularios.
+
 ## Pendientes antes de publicar
 
 1. **Textos originales.** Revisa contra el sitio en vivo, sobre todo el párrafo de «Quiénes somos» y el del origen griego del nombre (hay un comentario en la sección `#artilugio` que marca dónde va).
-2. **Contacto.** Escribe el correo de destino en `data-email` del formulario `#contactForm`. El formulario abre el cliente de correo del visitante. Si prefieres envío directo, conecta el formulario a tu backend o a un servicio de formularios.
 
 ## Probar en local
 
