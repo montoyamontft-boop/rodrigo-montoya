@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Artilugio Group</title>
+<meta name="description" content="Artilugio Group: el Arte de hacer comunicación con estrategia. Comunicación dirigida a los profesionales de la salud para favorecer el acceso de los pacientes a terapias de alto valor.">
+<meta name="theme-color" content="#030d1a">
+<link rel="icon" type="image/svg+xml" href="assets/logo-artilugio.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,700;0,800;0,900;1,800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="preload" as="image" href="assets/back-light.webp">
+<style>
+/* Layout: a fixed "stage" (the two Artilugio backs + a scroll-driven color tint + the node globe)
+   sits behind full-bleed sections; each section declares light/dark and where the globe goes. */
+:root{
+  --navy:#030d1a;
+  --ink:#0b1b30;
+  --blue:#078cff;
+  --cyan:#23c4ef;
+  --orange:#ff6a1a;
+  --red:#ef2b1f;
+  --amber:#ffb41f;
+  --paper:#f6faff;
+
+  --font-display:"Montserrat","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --font-body:"Manrope","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+
+  --fg:var(--ink);
+  --muted:#4b5f78;
+  --line:rgba(11,27,48,.12);
+  --surface:rgba(255,255,255,.62);
+  --surface-strong:rgba(255,255,255,.9);
+  --chip:rgba(11,27,48,.06);
+  --grad:linear-gradient(100deg,var(--blue) 0%,var(--cyan) 30%,var(--amber) 62%,var(--orange) 80%,var(--red) 100%);
+
+  --gutter-l:max(16px,env(safe-area-inset-left,0px));
+  --gutter-r:max(16px,env(safe-area-inset-right,0px));
+  --wrap:1280px;
+  --radius:28px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  color-scheme:light;
+}
+body[data-theme="dark"]{
+  --fg:#eaf3ff;
+  --muted:#9db1cc;
+  --line:rgba(160,200,255,.16);
+  --surface:rgba(9,27,52,.55);
+  --surface-strong:rgba(6,20,40,.9);
+  --chip:rgba(160,200,255,.08);
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--fg);
+  font-family:var(--font-body);font-size:17px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  transition:color .7s var(--ease);
+}
+img,svg,canvas,iframe{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;letter-spacing:-.025em}
+p{margin:0}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:6px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+.label{
+  font-family:var(--font-mono);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);display:inline-flex;align-items:center;gap:.6em;transition:color .7s var(--ease);
+}
+.label::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 4px rgba(255,106,26,.18)}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- Stage (fixed backgrounds) ---------- */
+.stage{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:var(--paper)}
+.stage__back{
+  position:absolute;inset:-6vh 0 0;width:100%;height:112vh;object-fit:cover;object-position:center top;
+  transform:translate3d(0,calc(var(--p,0) * -6vh),0);
+  transition:opacity 1.1s var(--ease);will-change:opacity,transform;
+}
+.stage__back--dark{opacity:0}
+body[data-theme="dark"] .stage__back--dark{opacity:1}
+.stage__tint{
+  position:absolute;inset:0;mix-blend-mode:soft-light;opacity:.9;
+  background:
+    radial-gradient(55% 45% at 18% 28%,hsl(var(--h1,205) 95% 58% / .55),transparent 70%),
+    radial-gradient(50% 50% at 85% 70%,hsl(var(--h2,25) 95% 58% / .5),transparent 72%);
+}
+body[data-theme="dark"] .stage__tint{mix-blend-mode:screen;opacity:.32}
+#globe{position:absolute;inset:0;width:100%;height:100%}
+.stage__grain{
+  position:absolute;inset:0;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+main,.site-footer{position:relative;z-index:1}
+
+/* ---------- Progress + cursor ---------- */
+.progress{position:fixed;inset:0 0 auto;height:3px;z-index:60;pointer-events:none}
+.progress span{display:block;height:100%;width:100%;background:var(--grad);transform-origin:0 50%;transform:scaleX(var(--sp,0))}
+.cursor{position:fixed;left:0;top:0;z-index:80;pointer-events:none;display:none}
+.cursor__ring{
+  width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;
+  border:1.5px solid var(--fg);opacity:.55;transition:width .3s var(--ease),height .3s var(--ease),margin .3s var(--ease),opacity .3s,background .3s,border-color .7s;
+}
+.cursor.is-hover .cursor__ring{width:70px;height:70px;margin:-35px 0 0 -35px;opacity:.9;background:rgba(7,140,255,.12);border-color:var(--blue)}
+@media (hover:hover) and (pointer:fine){ .cursor{display:block} }
+
+/* ---------- Header ---------- */
+.site-header{
+  position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;
+  padding-top:14px;transition:transform .5s var(--ease);
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:51;background:var(--navy)}
+.nav{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.nav__logo{display:flex;align-items:center;gap:12px;text-decoration:none;flex:none}
+.nav__logo img{width:62px;height:62px;object-fit:contain;transition:opacity .5s,transform .5s var(--ease)}
+.nav__logo .logo-d{position:absolute;top:0;left:0;opacity:0}
+.nav__logo-box{position:relative;width:62px;height:62px}
+body[data-theme="dark"] .nav__logo .logo-l{opacity:0}
+body[data-theme="dark"] .nav__logo .logo-d{opacity:1}
+.nav__links{
+  display:flex;gap:4px;padding:6px;border-radius:999px;list-style:none;margin:0;
+  background:var(--surface);border:1px solid var(--line);
+  backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+  transition:background .7s,border-color .7s;
+}
+.nav__links a{
+  display:block;padding:9px 16px;border-radius:999px;text-decoration:none;font-weight:600;font-size:.92rem;
+  color:var(--fg);transition:background .3s,color .3s;
+}
+.nav__links a:hover,.nav__links a.is-active{background:var(--fg);color:var(--paper)}
+body[data-theme="dark"] .nav__links a:hover,body[data-theme="dark"] .nav__links a.is-active{color:var(--navy)}
+.nav__cta{flex:none}
+.nav__toggle{display:none}
+
+.btn{
+  --bx:0px;--by:0px;
+  display:inline-flex;align-items:center;gap:.7em;padding:15px 26px;border-radius:999px;
+  font-family:var(--font-display);font-weight:700;font-size:.98rem;text-decoration:none;cursor:pointer;
+  border:1px solid transparent;transform:translate(var(--bx),var(--by));
+  transition:transform .35s var(--ease),background .35s,color .35s,border-color .35s,box-shadow .35s;
+}
+.btn svg{width:18px;height:18px;transition:transform .35s var(--ease)}
+.btn:hover svg{transform:translateX(4px) rotate(-45deg)}
+.btn--primary{background:var(--fg);color:var(--paper);box-shadow:0 10px 30px -10px rgba(7,140,255,.6)}
+body[data-theme="dark"] .btn--primary{color:var(--navy)}
+.btn--primary:hover{background:var(--blue);color:#fff}
+.btn--ghost{border-color:var(--line);color:var(--fg);background:var(--surface);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.btn--ghost:hover{border-color:var(--fg)}
+.btn--sm{padding:11px 20px;font-size:.9rem}
+
+/* ---------- Loader ---------- */
+.loader{
+  position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:var(--navy);color:#eaf3ff;
+  transition:clip-path 1s var(--ease),visibility 0s 1s;clip-path:circle(150% at 50% 50%);
+}
+.loader.is-done{clip-path:circle(0% at 50% 50%);visibility:hidden}
+.loader__inner{display:grid;justify-items:center;gap:18px}
+.loader__logo{width:min(46vw,220px);animation:pop 1s var(--ease) both}
+.loader__count{font-family:var(--font-mono);font-size:.8rem;letter-spacing:.2em;opacity:.7}
+@keyframes pop{from{transform:scale(.7) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
+
+/* ---------- Sections ---------- */
+section{position:relative}
+.section-pad{padding-block:clamp(90px,14vw,180px)}
+.section-head{display:grid;gap:22px;max-width:62rem}
+.h-xl{font-size:clamp(2.4rem,6.2vw,5.6rem);line-height:.98;font-weight:800}
+.h-lg{font-size:clamp(2rem,4.6vw,4rem);line-height:1.02;font-weight:800}
+.lede{font-size:clamp(1.05rem,1.5vw,1.25rem);color:var(--muted);max-width:40rem;transition:color .7s}
+
+/* Hero */
+.hero{min-height:min(100svh,1000px);display:flex;align-items:center;padding-block:150px 90px}
+.hero__grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:40px;align-items:center;width:100%}
+.hero__copy{display:grid;gap:28px;min-width:0}
+.hero h1{font-size:clamp(2.7rem,6.6vw,6.4rem);line-height:.96;font-weight:800;letter-spacing:-.035em}
+.hero h1 .line{display:block;overflow:hidden;padding-bottom:.06em}
+.hero h1 .line > span{display:inline-block;transform:translateY(0);transition:transform 1.1s var(--ease)}
+.js .hero h1 .line > span{transform:translateY(110%)}
+.js.is-loaded .hero h1 .line > span{transform:none}
+.js.is-loaded .hero h1 .line:nth-child(2) > span{transition-delay:.08s}
+.js.is-loaded .hero h1 .line:nth-child(3) > span{transition-delay:.16s}
+.hero h1 em{font-style:italic;font-weight:800}
+.hero__actions{display:flex;flex-wrap:wrap;gap:12px}
+.hero__chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-size:.86rem;font-weight:600;
+  background:var(--chip);border:1px solid var(--line);transition:background .7s,border-color .7s;
+}
+.chip i{width:8px;height:8px;border-radius:50%;background:var(--c,var(--blue));box-shadow:0 0 0 3px color-mix(in srgb,var(--c,var(--blue)) 25%,transparent)}
+.hero__aside{align-self:end;justify-self:end;display:grid;gap:10px;text-align:right;font-family:var(--font-mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.scroll-cue{display:inline-flex;align-items:center;gap:12px;justify-self:end}
+.scroll-cue span{width:1.5px;height:54px;background:var(--line);position:relative;overflow:hidden}
+.scroll-cue span::after{content:"";position:absolute;inset:0;background:var(--orange);animation:cue 2s var(--ease) infinite}
+@keyframes cue{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
+
+/* Marquee */
+.marquee{padding-block:34px;border-block:1px solid var(--line);overflow:hidden;background:var(--surface);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:background .7s,border-color .7s}
+.marquee__row{display:flex;width:max-content;will-change:transform}
+.marquee__row + .marquee__row{margin-top:6px}
+.marquee__item{
+  display:flex;align-items:center;gap:.5em;padding-right:.5em;white-space:nowrap;
+  font-family:var(--font-display);font-weight:800;font-size:clamp(2rem,5.4vw,4.6rem);line-height:1.1;letter-spacing:-.03em;
+}
+.marquee__row--outline .marquee__item{color:transparent;-webkit-text-stroke:1.2px var(--fg)}
+.dot{display:inline-block;width:.32em;height:.32em;border-radius:50%;background:var(--c);box-shadow:0 0 0 .14em color-mix(in srgb,var(--c) 22%,transparent)}
+
+/* About */
+.about__grid{display:grid;gap:clamp(40px,6vw,80px)}
+.reveal-words{font-family:var(--font-display);font-weight:700;font-size:clamp(1.65rem,3.6vw,3.25rem);line-height:1.18;letter-spacing:-.02em;max-width:62rem}
+.reveal-words .w{opacity:var(--o,1);transition:opacity .25s linear}
+.reveal-words .w.hl{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.about__cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.panel{
+  position:relative;padding:clamp(24px,3vw,40px);border-radius:var(--radius);background:var(--surface);
+  border:1px solid var(--line);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  display:grid;gap:14px;align-content:start;min-width:0;transition:background .7s,border-color .7s;
+}
+.panel h3{font-size:clamp(1.3rem,2vw,1.7rem);font-weight:800}
+.panel p{color:var(--muted);transition:color .7s}
+.areas{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:6px 0 0}
+
+/* Experience (Spline) */
+.xp__frame{
+  position:relative;margin-top:clamp(36px,5vw,60px);border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;max-width:100%;
+  background:radial-gradient(80% 80% at 50% 30%,#0b2a4d,var(--navy));
+  box-shadow:0 40px 120px -40px rgba(7,140,255,.55),inset 0 0 0 1px rgba(160,200,255,.18);
+}
+.xp__frame::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:var(--grad);z-index:3;pointer-events:none;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.8;
+}
+.xp__frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none}
+.xp__frame.is-active iframe{pointer-events:auto}
+.xp__overlay{
+  position:absolute;inset:0;z-index:2;display:grid;place-items:end start;padding:clamp(18px,3vw,36px);
+  background:linear-gradient(180deg,transparent 45%,rgba(3,13,26,.75));transition:opacity .5s var(--ease);
+}
+.xp__frame.is-active .xp__overlay{opacity:0;pointer-events:none}
+.xp__overlay-inner{display:flex;flex-wrap:wrap;align-items:center;gap:14px;color:#eaf3ff}
+.xp__overlay p{font-size:.95rem;color:#b9cbe3;max-width:28rem}
+.xp__frame .btn--primary{background:#eaf3ff;color:var(--navy)}
+.xp__frame .btn--primary:hover{background:var(--blue);color:#fff}
+.xp__exit{
+  position:absolute;top:16px;right:16px;z-index:4;opacity:0;pointer-events:none;
+  background:rgba(3,13,26,.7);color:#eaf3ff;border:1px solid rgba(160,200,255,.25);
+}
+.xp__frame.is-active .xp__exit{opacity:1;pointer-events:auto}
+.xp__poster{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:24px;color:#eaf3ff}
+.preview .xp__frame iframe{display:none}
+.preview .xp__poster{display:grid}
+.preview .xp__overlay,.preview .xp__exit{display:none}
+.xp__poster canvas{position:absolute;inset:0;width:100%;height:100%}
+.xp__poster-inner{position:relative;display:grid;gap:16px;justify-items:center;max-width:30rem}
+.xp__poster-inner p{color:#b9cbe3}
+
+/* Services (bento) */
+.bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px;margin-top:clamp(40px,5vw,64px)}
+.card{
+  --mx:50%;--my:50%;--rx:0deg;--ry:0deg;
+  position:relative;grid-column:span 2;min-width:0;padding:clamp(26px,2.6vw,38px);border-radius:var(--radius);
+  background:var(--surface);border:1px solid var(--line);overflow:hidden;isolation:isolate;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  display:grid;gap:16px;align-content:start;
+  transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));transition:transform .5s var(--ease),border-color .4s,background .7s;
+}
+.card::before{
+  content:"";position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .4s;
+  background:radial-gradient(420px circle at var(--mx) var(--my),color-mix(in srgb,var(--c) 30%,transparent),transparent 60%);
+}
+.card:hover{border-color:color-mix(in srgb,var(--c) 55%,transparent)}
+.card:hover::before{opacity:1}
+.card--wide{grid-column:span 3}
+.card__icon{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c)}
+.card__icon svg{width:28px;height:28px}
+.card h3{font-size:clamp(1.35rem,2vw,1.75rem);font-weight:800;line-height:1.1}
+.card p{color:var(--muted);transition:color .7s}
+.card__tag{font-family:var(--font-mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--c)}
+.card blockquote{margin:0;font-family:var(--font-display);font-weight:700;font-size:clamp(1.2rem,2vw,1.6rem);line-height:1.25;color:var(--fg)}
+
+/* Name */
+.name{height:240vh}
+.name__sticky{position:sticky;top:0;height:100vh;height:100svh;display:grid;place-items:center;overflow:hidden}
+.name__inner{display:grid;justify-items:center;gap:clamp(18px,3vw,34px);text-align:center;width:100%}
+.name__word{
+  display:flex;justify-content:center;font-family:var(--font-display);font-weight:900;
+  font-size:clamp(3.4rem,15.5vw,15rem);line-height:.9;letter-spacing:-.05em;
+}
+.name__word span{display:inline-block;color:var(--c);will-change:transform,opacity}
+.name__sentence{font-family:var(--font-display);font-weight:700;font-size:clamp(1.2rem,2.6vw,2.1rem);line-height:1.25;max-width:44rem;text-wrap:balance}
+.name__logo{width:clamp(110px,14vw,170px)}
+
+/* Store */
+.store__head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:24px}
+.rail{
+  display:grid;grid-auto-flow:column;grid-auto-columns:clamp(250px,26vw,320px);gap:18px;
+  overflow-x:auto;scroll-snap-type:x mandatory;padding-block:clamp(36px,5vw,56px) 24px;
+  scrollbar-width:thin;scrollbar-color:var(--blue) transparent;cursor:grab;
+  padding-left:var(--gutter-l);padding-right:var(--gutter-r);
+  scroll-padding-left:var(--gutter-l);
+}
+.rail.is-drag{cursor:grabbing;scroll-snap-type:none}
+.rail.is-drag a{pointer-events:none}
+.product{
+  scroll-snap-align:start;display:grid;grid-template-rows:auto 1fr auto;gap:18px;min-height:340px;padding:26px;
+  border-radius:var(--radius);text-decoration:none;background:var(--surface);border:1px solid var(--line);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);transition:transform .45s var(--ease),border-color .4s,background .7s;
+}
+.product:hover{transform:translateY(-8px);border-color:color-mix(in srgb,var(--c) 60%,transparent)}
+.product__art{height:110px;border-radius:18px;position:relative;overflow:hidden;background:radial-gradient(120% 120% at 20% 0%,color-mix(in srgb,var(--c) 45%,transparent),transparent 60%),var(--chip)}
+.product__art canvas{position:absolute;inset:0;width:100%;height:100%}
+.product__name{font-family:var(--font-display);font-weight:800;font-size:1.55rem;letter-spacing:-.02em;line-height:1.05}
+.product__sub{color:var(--muted);font-weight:600;margin-top:6px}
+.product__pres{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.06em;color:var(--muted);margin-top:4px}
+.product__go{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:.92rem;border-top:1px solid var(--line);padding-top:14px}
+.product__go svg{width:18px;height:18px;transition:transform .35s var(--ease)}
+.product:hover .product__go svg{transform:translateX(4px) rotate(-45deg)}
+.rail-hint{font-family:var(--font-mono);font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* Contact */
+.contact__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(36px,5vw,80px);align-items:start}
+.contact h2{font-size:clamp(3.2rem,7.4vw,7.4rem);line-height:.9;font-weight:900;letter-spacing:-.05em}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.field{display:grid;gap:6px;min-width:0}
+.field--full{grid-column:1/-1}
+.field label{font-family:var(--font-mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.field input,.field textarea{
+  width:100%;font:inherit;color:var(--fg);padding:14px 16px;border-radius:16px;border:1px solid var(--line);
+  background:var(--surface-strong);transition:border-color .3s,box-shadow .3s;
+}
+.field textarea{min-height:130px;resize:vertical}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(7,140,255,.15)}
+.form__foot{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.form__status{font-size:.92rem;color:var(--muted)}
+
+/* Footer */
+.site-footer{padding-block:clamp(60px,8vw,100px) 40px;border-top:1px solid var(--line)}
+.footer__grid{display:grid;grid-template-columns:auto 1fr auto;gap:40px;align-items:center}
+.footer__logo{width:120px}
+.footer__nav{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:center;list-style:none;padding:0;margin:0}
+.footer__nav a{text-decoration:none;font-weight:600;color:var(--muted)}
+.footer__nav a:hover{color:var(--fg)}
+.footer__legal{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:48px;font-family:var(--font-mono);font-size:.76rem;letter-spacing:.08em;color:var(--muted)}
+.footer__big{
+  margin-top:40px;font-family:var(--font-display);font-weight:900;font-size:clamp(3rem,15vw,14rem);line-height:.85;letter-spacing:-.06em;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:.9;text-align:center;
+}
+
+/* Generic reveal (content is visible at rest; only below-the-fold items get animated) */
+.will-reveal{opacity:0;transform:translateY(40px)}
+.is-revealed{opacity:1;transform:none;transition:opacity 1s var(--ease),transform 1s var(--ease)}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1020px){
+  .nav__links{display:none}
+  .nav__toggle{
+    display:inline-grid;place-items:center;width:50px;height:50px;border-radius:50%;border:1px solid var(--line);
+    background:var(--surface);color:var(--fg);cursor:pointer;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  }
+  .nav__toggle svg{width:22px;height:22px}
+  .nav__cta{display:none}
+  .menu-open .nav__links{
+    display:grid;position:fixed;inset:86px var(--gutter-r) auto var(--gutter-l);padding:12px;border-radius:24px;background:var(--surface-strong);
+  }
+  .menu-open .nav__links a{padding:14px 18px;font-size:1.1rem}
+  .hero__grid{grid-template-columns:1fr}
+  .hero__aside{display:none}
+  .bento{grid-template-columns:1fr}
+  .card,.card--wide{grid-column:auto}
+  .about__cols{grid-template-columns:1fr}
+  .contact__grid{grid-template-columns:1fr}
+  .footer__grid{grid-template-columns:1fr;justify-items:center;text-align:center}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .hero{padding-block:130px 70px}
+  .xp__frame{aspect-ratio:4/5}
+  .form{grid-template-columns:1fr}
+  .nav__logo img,.nav__logo-box{width:52px;height:52px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .name{height:auto}
+  .name__sticky{position:relative;height:auto;padding-block:120px}
+}
+</style>
+</head>
+<body data-theme="light">
+
+<!-- Fixed backgrounds: the two Artilugio backs crossfade with the section theme; the tint shifts hue with scroll. -->
+<div class="stage" aria-hidden="true">
+  <picture>
+    <source srcset="assets/back-light.webp" type="image/webp">
+    <img class="stage__back stage__back--light" src="assets/back-light.jpg" alt="">
+  </picture>
+  <picture>
+    <source srcset="assets/back-dark.webp" type="image/webp">
+    <img class="stage__back stage__back--dark" src="assets/back-dark.jpg" alt="" loading="eager">
+  </picture>
+  <div class="stage__tint"></div>
+  <canvas id="globe"></canvas>
+  <div class="stage__grain"></div>
+</div>
+
+<div class="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <img class="loader__logo" src="assets/logo-artilugio-dark.webp" alt="">
+    <div class="loader__count"><span id="loaderCount">0</span>%</div>
+  </div>
+</div>
+
+<div class="progress" aria-hidden="true"><span></span></div>
+<div class="cursor" aria-hidden="true"><div class="cursor__ring"></div></div>
+
+<header class="site-header">
+  <nav class="nav wrap" aria-label="Principal">
+    <a class="nav__logo" href="#inicio" aria-label="Artilugio Group, inicio">
+      <span class="nav__logo-box">
+        <img class="logo-l" src="assets/logo-artilugio.svg" alt="Artilugio. El Arte de hacer comunicación con estrategia">
+        <img class="logo-d" src="assets/logo-artilugio-dark.webp" alt="" aria-hidden="true">
+      </span>
+    </a>
+    <ul class="nav__links" id="navLinks">
+      <li><a href="#nosotros">Quiénes somos</a></li>
+      <li><a href="#experiencia">Experiencia 3D</a></li>
+      <li><a href="#servicios">Qué hacemos</a></li>
+      <li><a href="#artilugio">Artilugio</a></li>
+      <li><a href="#progalenica">Progalénica</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <a class="btn btn--primary btn--sm nav__cta magnetic" href="#contacto">Hablemos
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Abrir menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+    </button>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" id="inicio" data-theme="light" data-globe="0.74 0.52 0.36 0 1" data-globe-m="0.5 0.3 0.42 0 0.55">
+    <div class="wrap hero__grid">
+      <div class="hero__copy">
+        <span class="label">Artilugio Group · Comunicación en salud</span>
+        <h1>
+          <span class="line"><span>El <span class="grad-text">Arte</span> de hacer</span></span>
+          <span class="line"><span>comunicación</span></span>
+          <span class="line"><span>con <em>estrategia</em></span></span>
+        </h1>
+        <p class="lede">Comunicación dirigida a los profesionales de la salud para favorecer el acceso de los pacientes a terapias de alto valor.</p>
+        <div class="hero__actions">
+          <a class="btn btn--primary magnetic" href="#nosotros">Conócenos
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--ghost magnetic" href="#progalenica">Ver Progalénica</a>
+        </div>
+        <ul class="hero__chips">
+          <li class="chip" style="--c:var(--blue)"><i></i>Profesionales de la salud</li>
+          <li class="chip" style="--c:var(--orange)"><i></i>Pacientes</li>
+          <li class="chip" style="--c:var(--red)"><i></i>Terapias de alto valor</li>
+        </ul>
+      </div>
+      <div class="hero__aside">
+        <span>Mueve el cursor · arrastra la red</span>
+        <span class="scroll-cue">Desliza <span></span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__row" data-speed="1">
+      <div class="marquee__item">Comunicación táctica <i class="dot" style="--c:var(--orange)"></i> Omnicanalidad <i class="dot" style="--c:var(--blue)"></i> Profesionales de la salud <i class="dot" style="--c:var(--red)"></i> Pacientes <i class="dot" style="--c:var(--amber)"></i></div>
+    </div>
+    <div class="marquee__row marquee__row--outline" data-speed="-1">
+      <div class="marquee__item">Distribución <i class="dot" style="--c:var(--cyan)"></i> Marketing mix <i class="dot" style="--c:var(--orange)"></i> Estrategia <i class="dot" style="--c:var(--blue)"></i> Ciencia y personas <i class="dot" style="--c:var(--red)"></i></div>
+    </div>
+  </div>
+
+  <!-- QUIÉNES SOMOS -->
+  <section class="section-pad" id="nosotros" data-theme="light" data-globe="0.82 0.5 0.5 0.18 0.35" data-globe-m="0.5 0.5 0.6 0.2 0.18">
+    <div class="wrap about__grid">
+      <span class="label">Quiénes somos</span>
+      <p class="reveal-words" id="aboutText">Somos un grupo de profesionales a los que nos apasiona hacer comunicación dirigida a los *profesionales *de *la *salud y favorecer el acceso de los pacientes a *terapias *de *alto *valor.</p>
+      <div class="about__cols">
+        <article class="panel" data-reveal>
+          <span class="card__tag" style="--c:var(--blue)">Equipo multidisciplinario</span>
+          <h3>Conectamos la ciencia con las personas.</h3>
+          <p>Un equipo multidisciplinario que lleva la información científica a quienes cuidan la salud de los pacientes.</p>
+        </article>
+        <article class="panel" data-reveal>
+          <span class="card__tag" style="--c:var(--orange)">Socio de negocio</span>
+          <h3>Co-creamos soluciones orientadas a resultados.</h3>
+          <p>Trabajamos de la mano de cada área de nuestros clientes:</p>
+          <ul class="areas">
+            <li class="chip" style="--c:var(--blue)"><i></i>Marketing</li>
+            <li class="chip" style="--c:var(--cyan)"><i></i>Regulatorio</li>
+            <li class="chip" style="--c:var(--orange)"><i></i>Comercial</li>
+            <li class="chip" style="--c:var(--red)"><i></i>Médico</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCIA 3D (Spline) -->
+  <section class="section-pad" id="experiencia" data-theme="dark" data-globe="0.5 0.5 0.5 0.6 0" data-globe-m="0.5 0.5 0.5 0.6 0">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <span class="label">Experiencia interactiva</span>
+        <h2 class="h-xl">Explora nuestro universo <span class="grad-text">en 3D</span></h2>
+        <p class="lede">Gira, arrastra y descubre. Cada nodo es un punto de contacto entre la ciencia, los profesionales de la salud y los pacientes.</p>
+      </div>
+      <div class="xp__frame" id="xpFrame" data-src="https://my.spline.design/untitled-C5FXGwdlZSOgdLZIONJ8HOCv/">
+        <iframe title="Experiencia 3D de Artilugio" loading="lazy" allow="autoplay; fullscreen" referrerpolicy="no-referrer"></iframe>
+        <div class="xp__overlay">
+          <div class="xp__overlay-inner">
+            <button class="btn btn--primary magnetic" id="xpStart" type="button">Interactuar
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+            <p>Haz clic para controlar la escena. Pulsa Esc o «Salir» para seguir desplazándote.</p>
+          </div>
+        </div>
+        <button class="btn btn--sm xp__exit" id="xpExit" type="button">Salir</button>
+        <div class="xp__poster">
+          <canvas id="posterCanvas"></canvas>
+          <div class="xp__poster-inner">
+            <h3 class="h-lg" style="font-size:clamp(1.6rem,3vw,2.4rem)">Escena 3D de Artilugio</h3>
+            <p>La escena interactiva se carga en el sitio publicado. Aquí puedes abrirla en una pestaña nueva.</p>
+            <a class="btn btn--primary" href="https://my.spline.design/untitled-C5FXGwdlZSOgdLZIONJ8HOCv/" target="_blank" rel="noopener">Abrir experiencia 3D
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUÉ HACEMOS -->
+  <section class="section-pad" id="servicios" data-theme="dark" data-globe="0.5 0.45 0.62 1 0.55" data-globe-m="0.5 0.45 0.7 1 0.3">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <span class="label">Qué hacemos</span>
+        <h2 class="h-xl">De la estrategia <br>a cada <span class="grad-text">punto de contacto</span></h2>
+      </div>
+      <div class="bento">
+        <article class="card card--wide" style="--c:var(--blue)" data-reveal>
+          <div class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><path d="M21 3l-7 7"/></svg>
+          </div>
+          <span class="card__tag">Comunicación táctica</span>
+          <h3>Construir la comunicación e implementación táctica con base a la estrategia de nuestros clientes.</h3>
+        </article>
+        <article class="card card--wide" style="--c:var(--cyan)" data-reveal>
+          <div class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.5"/><circle cx="4" cy="5" r="2"/><circle cx="20" cy="5" r="2"/><circle cx="4" cy="19" r="2"/><circle cx="20" cy="19" r="2"/><path d="M5.6 6.4l4.6 4M18.4 6.4l-4.6 4M5.6 17.6l4.6-4M18.4 17.6l-4.6-4"/></svg>
+          </div>
+          <span class="card__tag">Omnicanalidad</span>
+          <h3>Integramos los puntos de contacto con profesionales de la salud y pacientes.</h3>
+        </article>
+        <article class="card" style="--c:var(--orange)" data-reveal>
+          <div class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>
+          </div>
+          <span class="card__tag">Distribución</span>
+          <blockquote>Somos unos convencidos que la distribución debe formar parte activa del marketing mix.</blockquote>
+        </article>
+        <article class="card" style="--c:var(--amber)" data-reveal>
+          <div class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>
+          </div>
+          <span class="card__tag">Logística</span>
+          <h3>Logística y distribución como parte de la estrategia.</h3>
+        </article>
+        <article class="card" style="--c:var(--red)" data-reveal>
+          <div class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M8 11h2l1-2 2 4 1-2h2"/></svg>
+          </div>
+          <span class="card__tag">Acceso</span>
+          <h3>Favorecer el acceso de los pacientes a terapias de alto valor.</h3>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTILUGIO (el nombre) -->
+  <section class="name" id="artilugio" data-theme="light" data-globe="0.5 0.5 0.4 0.05 0.4" data-globe-m="0.5 0.5 0.45 0.05 0.25">
+    <div class="name__sticky">
+      <div class="wrap name__inner">
+        <span class="label">Nuestro nombre</span>
+        <h2 class="name__word" id="nameWord" aria-label="Artilugio">
+          <span style="--c:var(--blue)">A</span><span style="--c:var(--cyan)">r</span><span style="--c:var(--ink)">t</span><span style="--c:var(--orange)">i</span><span style="--c:var(--ink)">l</span><span style="--c:var(--red)">u</span><span style="--c:var(--amber)">g</span><span style="--c:var(--ink)">i</span><span style="--c:var(--blue)">o</span>
+        </h2>
+        <!-- Pega aquí el párrafo original del sitio sobre el origen griego del nombre. -->
+        <p class="name__sentence" id="nameSentence">Podemos decir que Artilugio es el <span class="grad-text">Arte de hacer comunicación con estrategia</span>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGALÉNICA -->
+  <section class="section-pad" id="progalenica" data-theme="dark" data-globe="0.5 0.5 0.55 0.7 0.3" data-globe-m="0.5 0.5 0.6 0.7 0.2">
+    <div class="wrap store__head" data-reveal>
+      <div class="section-head">
+        <span class="label">Tienda en línea</span>
+        <h2 class="h-xl">Progalénica</h2>
+        <p class="lede">Conoce los productos disponibles en nuestra tienda en línea.</p>
+      </div>
+      <div style="display:grid;gap:14px;justify-items:start">
+        <a class="btn btn--primary magnetic" href="https://www.artilugiogroup.com.mx/Progalenica/" target="_blank" rel="noopener">Ir a la tienda
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <span class="rail-hint">Arrastra para ver más →</span>
+      </div>
+    </div>
+    <div class="rail" id="rail"></div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="section-pad contact" id="contacto" data-theme="light" data-globe="0.8 0.3 0.26 0 0.9" data-globe-m="0.82 0.12 0.2 0 0.4">
+    <div class="wrap contact__grid">
+      <div class="section-head">
+        <span class="label">Contacto</span>
+        <h2>Hable<span class="grad-text">mos.</span></h2>
+        <p class="lede">Co-creemos soluciones orientadas a resultados para tu marca, tus profesionales de la salud y tus pacientes.</p>
+      </div>
+      <!-- El correo de destino se configura en data-email. -->
+      <form class="form panel" id="contactForm" data-email="" novalidate>
+        <div class="field"><label for="f-name">Nombre</label><input id="f-name" name="nombre" autocomplete="name" required></div>
+        <div class="field"><label for="f-company">Empresa</label><input id="f-company" name="empresa" autocomplete="organization"></div>
+        <div class="field field--full"><label for="f-email">Correo</label><input id="f-email" name="correo" type="email" autocomplete="email" required></div>
+        <div class="field field--full"><label for="f-msg">¿En qué podemos ayudarte?</label><textarea id="f-msg" name="mensaje" required></textarea></div>
+        <div class="form__foot">
+          <button class="btn btn--primary magnetic" type="submit">Enviar mensaje
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <p class="form__status" id="formStatus" role="status"></p>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" data-theme="dark" data-globe="0.5 1.1 0.5 0.4 0.4" data-globe-m="0.5 1.1 0.5 0.4 0.3">
+  <div class="wrap">
+    <div class="footer__grid">
+      <img class="footer__logo" src="assets/logo-artilugio-dark.webp" alt="Artilugio. El Arte de hacer comunicación con estrategia">
+      <ul class="footer__nav">
+        <li><a href="#nosotros">Quiénes somos</a></li>
+        <li><a href="#servicios">Qué hacemos</a></li>
+        <li><a href="#artilugio">Artilugio</a></li>
+        <li><a href="#progalenica">Progalénica</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+      <a class="btn btn--ghost btn--sm magnetic" href="#inicio">Volver arriba ↑</a>
+    </div>
+    <div class="footer__big" aria-hidden="true">Artilugio</div>
+    <div class="footer__legal">
+      <span>© <span id="year">2026</span> Artilugio Group</span>
+      <span>El Arte de hacer comunicación con estrategia</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const body = document.body;
+  root.classList.add('js');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const isPreview = root.classList.contains('preview');
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const smooth = (a, b, t) => { const x = clamp((t - a) / (b - a)); return x * x * (3 - 2 * x); };
+  const PALETTE = ['#078cff', '#23c4ef', '#ff6a1a', '#ef2b1f', '#ffb41f'];
+  $('#year').textContent = new Date().getFullYear();
+
+  /* ---------- Loader ---------- */
+  const loader = $('.loader');
+  const finishLoad = () => { loader.classList.add('is-done'); root.classList.add('is-loaded'); };
+  if (reduce) finishLoad();
+  else {
+    const count = $('#loaderCount'); const t0 = performance.now(); const dur = 1100;
+    const tick = (now) => {
+      const k = clamp((now - t0) / dur);
+      count.textContent = Math.round(k * 100);
+      if (k < 1) requestAnimationFrame(tick); else setTimeout(finishLoad, 150);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  /* ---------- Sections: theme + globe keyframes ---------- */
+  const sections = $$('main > section, .site-footer');
+  const mobileQ = matchMedia('(max-width: 760px)');
+  const readKey = (el) => {
+    const raw = (mobileQ.matches && el.dataset.globeM) || el.dataset.globe || '0.5 0.5 0.4 0 0';
+    const [x, y, r, s, a] = raw.split(/\s+/).map(Number);
+    return { x, y, r, s, a };
+  };
+  let metrics = [];
+  const measure = () => {
+    metrics = sections.map(el => {
+      const r = el.getBoundingClientRect();
+      return { el, top: r.top + scrollY, h: r.height, key: readKey(el), theme: el.dataset.theme || 'light' };
+    });
+  };
+  const navLinks = $$('.nav__links a');
+  let currentTheme = 'light', currentId = '';
+  const globeTarget = { x: .74, y: .52, r: .36, s: 0, a: 1 };
+  const stage = $('.stage');
+  const prog = $('.progress span');
+  const HUES = [205, 190, 20, 355, 40, 210, 200];
+
+  const onScroll = () => {
+    const vh = innerHeight; const mid = scrollY + vh * .5;
+    let i = metrics.findIndex(m => mid >= m.top && mid < m.top + m.h);
+    if (i < 0) i = mid < (metrics[0]?.top ?? 0) ? 0 : metrics.length - 1;
+    if (scrollY + vh >= document.documentElement.scrollHeight - 4) i = metrics.length - 1;
+    const m = metrics[i]; const next = metrics[i + 1] || m;
+    const t = clamp((mid - m.top) / m.h);
+    const b = smooth(.62, 1, t);
+    for (const k of ['x', 'y', 'r', 's', 'a']) globeTarget[k] = lerp(m.key[k], next.key[k], b);
+    if (m.theme !== currentTheme) { currentTheme = m.theme; body.dataset.theme = m.theme; }
+    if (m.el.id !== currentId) {
+      currentId = m.el.id;
+      navLinks.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + currentId));
+    }
+    const max = Math.max(1, document.documentElement.scrollHeight - vh);
+    const p = clamp(scrollY / max);
+    prog.style.setProperty('--sp', p);
+    const seg = p * (HUES.length - 1); const j = Math.min(HUES.length - 2, Math.floor(seg));
+    const h1 = lerp(HUES[j], HUES[j + 1], seg - j);
+    stage.style.setProperty('--p', p.toFixed(4));
+    stage.style.setProperty('--h1', h1.toFixed(1));
+    stage.style.setProperty('--h2', ((h1 + 180) % 360).toFixed(1));
+  };
+
+  /* ---------- Globe: a 3D network of nodes echoing the Artilugio backs ---------- */
+  const canvas = $('#globe'); const ctx = canvas.getContext('2d');
+  let W = 0, H = 0, DPR = 1;
+  const N = innerWidth < 760 ? 140 : 230;
+  const nodes = [];
+  const GA = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < N; i++) {
+    const y = 1 - (i / (N - 1)) * 2; const rad = Math.sqrt(1 - y * y); const th = GA * i;
+    const jitter = 0.92 + Math.random() * 0.16;
+    nodes.push({
+      sx: Math.cos(th) * rad * jitter, sy: y * jitter, sz: Math.sin(th) * rad * jitter,
+      dx: (Math.random() * 2 - 1) * 1.9, dy: (Math.random() * 2 - 1) * 1.15, dz: (Math.random() * 2 - 1) * 1,
+      c: PALETTE[Math.random() < .3 ? 0 : Math.random() < .45 ? 2 : Math.random() < .5 ? 3 : Math.random() < .5 ? 1 : 4],
+      size: 1.2 + Math.pow(Math.random(), 2.2) * 3.6, halo: Math.random() < .65, ph: Math.random() * 6.28,
+      px: 0, py: 0, pz: 0, ox: 0, oy: 0
+    });
+  }
+  const links = [];
+  nodes.forEach((a, i) => {
+    const d = nodes.map((b, j) => [j, (a.sx - b.sx) ** 2 + (a.sy - b.sy) ** 2 + (a.sz - b.sz) ** 2]).filter(([j]) => j !== i).sort((p, q) => p[1] - q[1]);
+    for (let k = 0; k < 3; k++) { const j = d[k][0]; if (i < j || !links.some(l => l[0] === j && l[1] === i)) links.push([i, j]); }
+  });
+  const resize = () => {
+    DPR = Math.min(devicePixelRatio || 1, 1.75);
+    W = innerWidth; H = innerHeight;
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    measure(); onScroll();
+  };
+  const g = { x: .74, y: .52, r: .36, s: 0, a: 1 };
+  let rotY = 0, rotX = -.25, spin = .18, lastScroll = scrollY, vel = 0;
+  const ptr = { x: -9999, y: -9999, nx: 0, ny: 0, inside: false };
+  let drag = null, dragVX = 0, dragVY = 0;
+  addEventListener('pointermove', e => {
+    ptr.x = e.clientX; ptr.y = e.clientY; ptr.inside = true;
+    ptr.nx = e.clientX / W * 2 - 1; ptr.ny = e.clientY / H * 2 - 1;
+    if (drag) { dragVY = (e.clientX - drag.x) * .006; dragVX = (e.clientY - drag.y) * .004; drag.x = e.clientX; drag.y = e.clientY; }
+  }, { passive: true });
+  addEventListener('pointerleave', () => { ptr.inside = false; ptr.x = ptr.y = -9999; });
+  const hero = $('#inicio');
+  hero.addEventListener('pointerdown', e => { if (e.target.closest('a,button')) return; drag = { x: e.clientX, y: e.clientY }; });
+  addEventListener('pointerup', () => { drag = null; });
+
+  let running = true;
+  document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running) requestAnimationFrame(frame); });
+  let last = performance.now();
+  function frame(now) {
+    if (!running) return;
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    const ease = 1 - Math.pow(.0015, dt);
+    for (const k in g) g[k] = lerp(g[k], globeTarget[k], ease);
+    const sv = scrollY - lastScroll; lastScroll = scrollY; vel = lerp(vel, sv, .1);
+    spin = reduce ? .04 : .16 + Math.min(1.6, Math.abs(vel) * .02);
+    rotY += spin * dt + dragVY; rotX = lerp(rotX, -.25 + ptr.ny * .35, .04) + dragVX;
+    dragVY *= .92; dragVX *= .9;
+    const yaw = rotY + ptr.nx * .25;
+    ctx.clearRect(0, 0, W, H);
+    if (g.a > .01) {
+      const cx = g.x * W, cy = g.y * H, R = g.r * Math.min(W, H) * (W < 760 ? 1.15 : 1);
+      const cyw = Math.cos(yaw), syw = Math.sin(yaw), cxr = Math.cos(rotX), sxr = Math.sin(rotX);
+      const dark = currentTheme === 'dark';
+      const t = now / 1000;
+      for (const n of nodes) {
+        let x = lerp(n.sx, n.dx * (W / Math.min(W, H)) * .9, g.s), y = lerp(n.sy, n.dy, g.s), z = lerp(n.sz, n.dz, g.s);
+        y += Math.sin(t * .8 + n.ph) * .015;
+        let x1 = x * cyw - z * syw, z1 = x * syw + z * cyw;
+        let y1 = y * cxr - z1 * sxr, z2 = y * sxr + z1 * cxr;
+        const persp = 3.2 / (3.2 - z2);
+        let px = cx + x1 * R * persp, py = cy + y1 * R * persp;
+        const ddx = px - ptr.x, ddy = py - ptr.y, d2 = ddx * ddx + ddy * ddy;
+        const push = d2 < 22000 ? (1 - d2 / 22000) : 0;
+        n.ox = lerp(n.ox, push ? ddx / Math.sqrt(d2 + 1) * push * 26 : 0, .12);
+        n.oy = lerp(n.oy, push ? ddy / Math.sqrt(d2 + 1) * push * 26 : 0, .12);
+        n.px = px + n.ox; n.py = py + n.oy; n.pz = z2; n.persp = persp; n.hot = push;
+      }
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = dark ? 'rgb(170,205,255)' : 'rgb(40,62,92)';
+      for (const [i, j] of links) {
+        const a = nodes[i], b = nodes[j];
+        const depth = ((a.pz + b.pz) * .5 + 1) * .5;
+        const len2 = (a.px - b.px) ** 2 + (a.py - b.py) ** 2;
+        const fade = g.s > .3 ? clamp(1 - len2 / (R * R * .25)) : 1;
+        const al = (dark ? .32 : .3) * (.25 + depth * .75) * g.a * fade;
+        if (al < .01) continue;
+        ctx.globalAlpha = al;
+        ctx.beginPath(); ctx.moveTo(a.px, a.py); ctx.lineTo(b.px, b.py); ctx.stroke();
+      }
+      const order = nodes.slice().sort((a, b) => a.pz - b.pz);
+      for (const n of order) {
+        const depth = (n.pz + 1) * .5;
+        const s = n.size * n.persp * (1 + n.hot * .9) * (W < 760 ? .85 : 1);
+        if (n.halo) {
+          ctx.globalAlpha = (.14 + n.hot * .2) * (.35 + depth * .65) * g.a;
+          ctx.fillStyle = n.c; ctx.beginPath(); ctx.arc(n.px, n.py, s * 3.4, 0, 6.283); ctx.fill();
+        }
+        ctx.globalAlpha = (.35 + depth * .65) * g.a;
+        ctx.fillStyle = n.c; ctx.beginPath(); ctx.arc(n.px, n.py, s, 0, 6.283); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+    requestAnimationFrame(frame);
+  }
+
+  /* ---------- Hover cursor + magnetic buttons ---------- */
+  if (fine && !reduce) {
+    const cur = $('.cursor'); let cx = -100, cy = -100, tx = -100, ty = -100;
+    addEventListener('pointermove', e => { tx = e.clientX; ty = e.clientY; }, { passive: true });
+    const loop = () => { cx = lerp(cx, tx, .22); cy = lerp(cy, ty, .22); cur.style.transform = `translate(${cx}px,${cy}px)`; requestAnimationFrame(loop); };
+    loop();
+    document.addEventListener('pointerover', e => cur.classList.toggle('is-hover', !!e.target.closest('a,button,.card,.product,input,textarea')));
+    $$('.magnetic').forEach(b => {
+      b.addEventListener('pointermove', e => {
+        const r = b.getBoundingClientRect();
+        b.style.setProperty('--bx', ((e.clientX - r.left - r.width / 2) * .25) + 'px');
+        b.style.setProperty('--by', ((e.clientY - r.top - r.height / 2) * .35) + 'px');
+      });
+      b.addEventListener('pointerleave', () => { b.style.setProperty('--bx', '0px'); b.style.setProperty('--by', '0px'); });
+    });
+    $$('.card').forEach(c => {
+      c.addEventListener('pointermove', e => {
+        const r = c.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        c.style.setProperty('--mx', x * 100 + '%'); c.style.setProperty('--my', y * 100 + '%');
+        c.style.setProperty('--ry', ((x - .5) * 6) + 'deg'); c.style.setProperty('--rx', ((.5 - y) * 6) + 'deg');
+      });
+      c.addEventListener('pointerleave', () => { c.style.setProperty('--rx', '0deg'); c.style.setProperty('--ry', '0deg'); });
+    });
+  }
+
+  /* ---------- Reveal-on-scroll (only for what starts below the fold) ---------- */
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => entries.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.add('is-revealed'); io.unobserve(en.target); }
+    }), { rootMargin: '0px 0px -10% 0px' });
+    $$('[data-reveal]').forEach((el, i) => {
+      if (el.getBoundingClientRect().top > innerHeight) {
+        el.classList.add('will-reveal'); el.style.transitionDelay = (i % 3) * 80 + 'ms'; io.observe(el);
+      }
+    });
+  }
+
+  /* ---------- "Quiénes somos" word-by-word reveal ---------- */
+  const about = $('#aboutText');
+  about.innerHTML = about.textContent.trim().split(/\s+/).map(w => {
+    const hl = w.startsWith('*'); return `<span class="w${hl ? ' hl' : ''}">${hl ? w.slice(1) : w}</span>`;
+  }).join(' ');
+  const words = $$('.w', about);
+  const aboutReveal = () => {
+    if (reduce) return;
+    const r = about.getBoundingClientRect(); const vh = innerHeight;
+    const p = clamp((vh * .85 - r.top) / (r.height + vh * .35));
+    const lit = p * words.length * 1.15;
+    words.forEach((w, i) => w.style.setProperty('--o', (.2 + .8 * clamp(lit - i)).toFixed(2)));
+  };
+
+  /* ---------- "Artilugio" letters assemble while the section is pinned ---------- */
+  const nameSec = $('#artilugio'); const letters = $$('#nameWord span'); const sentence = $('#nameSentence');
+  const scatter = letters.map(() => ({ x: (Math.random() * 2 - 1) * 46, y: (Math.random() * 2 - 1) * 38, r: (Math.random() * 2 - 1) * 70, s: .4 + Math.random() * .5 }));
+  const nameAnim = () => {
+    if (reduce) return;
+    const r = nameSec.getBoundingClientRect(); const span = r.height - innerHeight;
+    const p = clamp(-r.top / Math.max(1, span));
+    letters.forEach((l, i) => {
+      const k = smooth(.0 + i * .03, .5 + i * .03, p); const sc = scatter[i];
+      l.style.transform = `translate(${(1 - k) * sc.x}vw,${(1 - k) * sc.y}vh) rotate(${(1 - k) * sc.r}deg) scale(${lerp(sc.s, 1, k)})`;
+      l.style.opacity = (.15 + .85 * k).toFixed(2);
+    });
+    const k2 = smooth(.55, .8, p);
+    sentence.style.opacity = (.12 + .88 * k2).toFixed(2);
+    sentence.style.transform = `translateY(${(1 - k2) * 30}px)`;
+  };
+
+  /* ---------- Marquee driven by time + scroll velocity ---------- */
+  const rows = $$('.marquee__row').map(row => {
+    const item = row.firstElementChild;
+    for (let i = 0; i < 3; i++) row.appendChild(item.cloneNode(true));
+    return { row, item, x: 0, dir: Number(row.dataset.speed) };
+  });
+  let mq = performance.now();
+  const marquee = (now) => {
+    const dt = Math.min(.05, (now - mq) / 1000); mq = now;
+    rows.forEach(r => {
+      const w = r.item.offsetWidth || 1;
+      r.x -= r.dir * (reduce ? 0 : (60 + Math.min(900, Math.abs(vel) * 40))) * dt;
+      r.x = ((r.x % w) + w) % w;
+      r.row.style.transform = `translate3d(${-r.x}px,0,0)`;
+    });
+    requestAnimationFrame(marquee);
+  };
+  requestAnimationFrame(marquee);
+
+  /* ---------- Spline scene: lazy load + click to interact ---------- */
+  const xp = $('#xpFrame');
+  if (!isPreview) {
+    const iframe = $('iframe', xp);
+    const load = () => { if (!iframe.src) iframe.src = xp.dataset.src; };
+    if ('IntersectionObserver' in window) {
+      const io2 = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { load(); io2.disconnect(); } }, { rootMargin: '400px' });
+      io2.observe(xp);
+    } else load();
+    const setActive = on => xp.classList.toggle('is-active', on);
+    $('#xpStart').addEventListener('click', () => { load(); setActive(true); });
+    $('#xpExit').addEventListener('click', () => setActive(false));
+    addEventListener('keydown', e => { if (e.key === 'Escape') setActive(false); });
+    xp.addEventListener('pointerleave', () => setActive(false));
+  } else {
+    // Preview build: draw a still of the node globe as the poster.
+    const pc = $('#posterCanvas'); const pctx = pc.getContext('2d');
+    const draw = () => {
+      const r = pc.getBoundingClientRect(); pc.width = r.width * DPR; pc.height = r.height * DPR;
+      pctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      const cx = r.width / 2, cy = r.height / 2, R = Math.min(r.width, r.height) * .42;
+      const pts = nodes.map(n => ({ x: cx + n.sx * R, y: cy + n.sy * R, z: n.sz, c: n.c, s: n.size }));
+      pctx.strokeStyle = 'rgb(170,205,255)';
+      links.forEach(([i, j]) => { pctx.globalAlpha = .12; pctx.beginPath(); pctx.moveTo(pts[i].x, pts[i].y); pctx.lineTo(pts[j].x, pts[j].y); pctx.stroke(); });
+      pts.forEach(p => { pctx.globalAlpha = .25 + (p.z + 1) * .2; pctx.fillStyle = p.c; pctx.beginPath(); pctx.arc(p.x, p.y, p.s, 0, 6.283); pctx.fill(); });
+    };
+    requestAnimationFrame(draw);
+  }
+
+  /* ---------- Progalénica products ---------- */
+  const BASE = 'https://www.artilugiogroup.com.mx/Progalenica/producto/';
+  const PRODUCTS = [
+    ['RIFOSAR®', 'Sevelámero 800 mg', '', 'rifosar-sevelamero-800-mg/', 2],
+    ['RIFOSAR-POS', 'Sevelámero 2.4 g', '60 sobres', 'rifosar-pos-sevelamero-2-4-g-60-sobres/', 4],
+    ['BILUMIV®', 'Bicalutamida 50 mg', '', 'bilumiv-bicalutamida-50-mg/', 0],
+    ['LEZOMIV®', 'Ácido zoledrónico 4 mg/5 mL', '', 'lezomiv-acido-zoledronico-4mg-5ml/', 1],
+    ['CRAVICEM', 'Escitalopram 10 mg', '28 tabletas', 'cravicem-10-mg-escitalopram-28-tabletas/', 3],
+    ['FEXILEV®', 'Gefitinib 250 mg', '', 'fexilev-gefitinib-250-mg/', 2],
+    ['MATINEV', 'Memantina 20 mg', '28 tabletas', 'matinev-memantina-20-mg-28-tabletas/', 0],
+    ['TAMABLAN PF®', 'Tamsulosina 0.4 mg', '', 'tamablan-pf-tamsulosina-0-4-mg/', 4],
+    ['CARENEV', 'Sunitinib 12.5 mg', '28 tabletas', 'carenev-sunitinib-12-5-mg-28-tabs/', 3]
+  ];
+  const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  const rail = $('#rail');
+  rail.innerHTML = PRODUCTS.map(([name, sub, pres, slug, ci]) => `
+    <a class="product" href="${BASE + slug}" target="_blank" rel="noopener" style="--c:${PALETTE[ci]}">
+      <div class="product__art"><canvas data-c="${PALETTE[ci]}"></canvas></div>
+      <div><div class="product__name">${name}</div><div class="product__sub">${sub}</div>${pres ? `<div class="product__pres">${pres}</div>` : ''}</div>
+      <div class="product__go">Ver producto ${arrow}</div>
+    </a>`).join('');
+  // Small node clusters on each product card, in the same language as the backs.
+  $$('.product__art canvas', rail).forEach((c, idx) => {
+    const r = c.getBoundingClientRect(); const w = r.width || 280, h = r.height || 110;
+    c.width = w * DPR; c.height = h * DPR; const x = c.getContext('2d'); x.setTransform(DPR, 0, 0, DPR, 0, 0);
+    let seed = idx * 9301 + 49297; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+    const pts = Array.from({ length: 14 }, () => ({ x: 20 + rnd() * (w - 40), y: 16 + rnd() * (h - 32), s: 1.5 + rnd() * 3.5, c: rnd() < .5 ? c.dataset.c : PALETTE[Math.floor(rnd() * 5)] }));
+    x.strokeStyle = 'rgba(160,200,255,.45)'; x.lineWidth = 1;
+    pts.forEach((p, i) => { const q = pts[(i + 1 + Math.floor(rnd() * 3)) % pts.length]; x.beginPath(); x.moveTo(p.x, p.y); x.lineTo(q.x, q.y); x.stroke(); });
+    pts.forEach(p => { x.globalAlpha = .2; x.fillStyle = p.c; x.beginPath(); x.arc(p.x, p.y, p.s * 3, 0, 6.283); x.fill(); x.globalAlpha = 1; x.beginPath(); x.arc(p.x, p.y, p.s, 0, 6.283); x.fill(); });
+  });
+  // Drag to scroll on desktop.
+  let rd = null;
+  rail.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; rd = { x: e.clientX, sl: rail.scrollLeft, moved: false }; });
+  addEventListener('pointermove', e => {
+    if (!rd) return; const dx = e.clientX - rd.x;
+    if (Math.abs(dx) > 5) { rd.moved = true; rail.classList.add('is-drag'); }
+    rail.scrollLeft = rd.sl - dx;
+  });
+  addEventListener('pointerup', () => { if (rd) setTimeout(() => rail.classList.remove('is-drag'), 0); rd = null; });
+
+  /* ---------- Contact form ---------- */
+  const form = $('#contactForm'); const status = $('#formStatus');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!form.checkValidity()) { status.textContent = 'Completa tu nombre, un correo válido y tu mensaje.'; form.reportValidity(); return; }
+    const to = form.dataset.email;
+    if (isPreview || !to) { status.textContent = 'Vista previa: el formulario se conectará al correo de Artilugio en el sitio publicado.'; return; }
+    const d = new FormData(form);
+    const subject = encodeURIComponent('Contacto desde el sitio web: ' + d.get('nombre'));
+    const bodyTxt = encodeURIComponent(`Nombre: ${d.get('nombre')}\nEmpresa: ${d.get('empresa')}\nCorreo: ${d.get('correo')}\n\n${d.get('mensaje')}`);
+    location.href = `mailto:${to}?subject=${subject}&body=${bodyTxt}`;
+    status.textContent = 'Se abrió tu aplicación de correo con el mensaje listo para enviar.';
+  });
+
+  /* ---------- Mobile menu ---------- */
+  const toggle = $('#navToggle');
+  toggle.addEventListener('click', () => {
+    const open = !body.classList.contains('menu-open');
+    body.classList.toggle('menu-open', open); toggle.setAttribute('aria-expanded', open);
+  });
+  navLinks.forEach(a => a.addEventListener('click', () => { body.classList.remove('menu-open'); toggle.setAttribute('aria-expanded', false); }));
+
+  /* ---------- Wire up ---------- */
+  let ticking = false;
+  addEventListener('scroll', () => {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => { onScroll(); aboutReveal(); nameAnim(); ticking = false; });
+  }, { passive: true });
+  addEventListener('resize', resize);
+  mobileQ.addEventListener?.('change', resize);
+  addEventListener('load', resize);
+  resize(); aboutReveal(); nameAnim();
+  for (const k in g) g[k] = globeTarget[k];
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
