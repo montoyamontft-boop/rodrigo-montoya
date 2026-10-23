@@ -1136,7 +1136,7 @@ section{position:relative}
     e.preventDefault();
     if (!form.checkValidity()) { status.textContent = 'Completa tu nombre, un correo válido y tu mensaje.'; form.reportValidity(); return; }
     const to = form.dataset.email;
-    if (isPreview || !to) { status.textContent = 'Vista previa: el formulario se conectará al correo de Artilugio en el sitio publicado.'; return; }
+    if (isPreview || !to) { status.textContent = `Para enviar tu mensaje, escríbenos a ${to || 'nuestro correo'}.`; return; }
     const d = new FormData(form);
     const subject = encodeURIComponent('Contacto desde el sitio web: ' + d.get('nombre'));
     const bodyTxt = encodeURIComponent(`Nombre: ${d.get('nombre')}\nEmpresa: ${d.get('empresa')}\nCorreo: ${d.get('correo')}\n\n${d.get('mensaje')}`);
