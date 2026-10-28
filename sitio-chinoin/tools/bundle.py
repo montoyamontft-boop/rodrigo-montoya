@@ -6,6 +6,7 @@ Incrusta CSS, JS y el logo; el Portal Médico se abre como capa dentro de la mis
 import base64
 import json
 import pathlib
+import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -15,13 +16,23 @@ def read(p):
     return (ROOT / p).read_text(encoding='utf-8')
 
 
-logo = 'data:image/png;base64,' + base64.b64encode((ROOT / 'assets/chinoin-logo.png').read_bytes()).decode()
 css = read('css/styles.css')
+MIME = {'.png': 'image/png', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg'}
+
+
+def data_uris(text):
+    """Sustituye cada ruta assets/… por la imagen incrustada."""
+    def sub(m):
+        path = ROOT / m.group(0)
+        if not path.exists():
+            return m.group(0)
+        return f'data:{MIME[path.suffix]};base64,' + base64.b64encode(path.read_bytes()).decode()
+    return re.sub(r'assets/[A-Za-z0-9_./-]+\.(?:png|webp|svg|jpg)', sub, text)
 
 
 def inline(page):
     page = page.replace('<link rel="stylesheet" href="css/styles.css">', f'<style>\n{css}\n</style>')
-    return page.replace('assets/chinoin-logo.png', logo)
+    return data_uris(page)
 
 
 # Portal Médico: los enlaces de regreso navegan la página contenedora.
@@ -29,7 +40,8 @@ portal = inline(read('portal-medico.html'))
 portal = portal.replace('href="index.html"', 'href="#/" onclick="parent.location.hash=\'#/\';return false"')
 
 index = inline(read('index.html'))
-scripts = '<script src="js/data.js"></script>\n  <script src="js/app.js"></script>'
+scripts = ('<script src="js/data.js"></script>\n  <script src="js/catalogo.js"></script>\n'
+           '  <script src="js/fichas.js"></script>\n  <script src="js/app.js"></script>')
 overlay = f'''<script>
   (() => {{
     // Abre el Portal Médico como capa a pantalla completa.
@@ -55,8 +67,12 @@ overlay = f'''<script>
   }})();
   </script>'''
 app = read('js/app.js').replace("'portal-medico.html'", "'#/portal-medico'").replace('href="portal-medico.html"', 'href="#/portal-medico"')
-data = read('js/data.js').replace("'portal-medico.html'", "'#/portal-medico'")
-index = index.replace(scripts, f'<script>\n{data}\n</script>\n  <script>\n{app}\n</script>\n  {overlay}')
+data = data_uris(read('js/data.js').replace("'portal-medico.html'", "'#/portal-medico'"))
+catalogo = data_uris(read('js/catalogo.js'))
+fichas = read('js/fichas.js')
+app = data_uris(app)
+js = '\n'.join(f'<script>\n{x}\n</script>' for x in (data, catalogo, fichas, app))
+index = index.replace(scripts, f'{js}\n  {overlay}')
 
 out = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else 'chinoin-preview.html')
 out.write_text(index, encoding='utf-8')
