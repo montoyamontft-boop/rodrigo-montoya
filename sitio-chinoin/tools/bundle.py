@@ -67,7 +67,7 @@ overlay = f'''<script>
   (() => {{
     // Abre el Portal Médico como capa a pantalla completa.
     const frame = document.createElement('iframe');
-    frame.title = 'Portal Médico';
+    frame.setAttribute('aria-label', 'Portal Médico');
     frame.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:0;z-index:200;background:#fff;display:none';
     frame.srcdoc = {json.dumps(portal).replace('</', '<\\/')};
     document.body.appendChild(frame);

@@ -1416,3 +1416,30 @@ main { overflow-x: clip; }
   .bs-band { font-size: 12.5px; }
   .bs-heart { font-size: 21px; }
 }
+
+/* Círculo dorado dibujado en HTML (texto nítido a cualquier tamaño) */
+.gc { --gc-purple: #4b2885; --gc-yellow: #f2c40f; --gc-orange: #f05a22; position: relative; width: min(100%, 520px); aspect-ratio: 1; container-type: inline-size; border-radius: 50%; background: radial-gradient(circle at 35% 25%, #5d35a0, var(--gc-purple) 60%, #3a1d6b); color: #fff; font-family: 'Oswald', 'Poppins', sans-serif; box-shadow: 0 40px 80px -30px rgba(50, 29, 112, .55), inset 0 0 0 1px rgba(255, 255, 255, .08); }
+.gc h3, .gc p { margin: 0; }
+.gc b { font-weight: 700; text-transform: uppercase; }
+.gc-que { position: absolute; top: 5%; left: 18%; right: 11%; display: flex; align-items: center; gap: 2.6cqw; }
+.gc-que h3 { flex: none; text-align: right; color: var(--gc-orange); font-size: 6.4cqw; font-weight: 700; line-height: .95; text-transform: uppercase; }
+.gc-que p { font-size: 2.9cqw; font-weight: 500; line-height: 1.2; max-width: 24ch; }
+.gc-ring { position: absolute; left: 10%; top: 18%; width: 80%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 40% 30%, #ffd84a, var(--gc-yellow) 60%, #e0ae00); color: var(--gc-purple); box-shadow: 0 -10px 40px rgba(0, 0, 0, .18); }
+.gc-como { position: absolute; top: 7%; left: 0; right: 0; text-align: center; font-size: 6.2cqw; font-weight: 700; line-height: 1; text-transform: uppercase; }
+.gc-como svg { width: 6.4cqw; vertical-align: -.1em; color: #2b1550; }
+.gc-pilar { position: absolute; width: 22%; font-size: 2.55cqw; line-height: 1.2; color: #3a2063; transition: transform .4s var(--ease-out); }
+.gc-pilar svg { display: block; height: 6.4cqw; width: auto; margin-bottom: .8cqw; }
+.gc-pilar b { display: block; font-size: 1.12em; color: var(--gc-purple); }
+.gc-pilar:hover { transform: scale(1.08); }
+.gc-gente { left: 10%; top: 24%; } .gc-gente svg { color: #e31c79; }
+.gc-social { left: 74%; top: 38%; width: 21%; } .gc-social svg { color: #3aa635; }
+.gc-productos { left: 61%; top: 65%; width: 21%; } .gc-productos svg { color: var(--gc-orange); margin-left: auto; }
+.gc-tecnologia { left: 34%; top: 78%; width: 24%; } .gc-tecnologia svg { color: #2b1550; }
+.gc-calidad { left: 8%; top: 54%; } .gc-calidad svg { color: #12636b; }
+.gc-core { position: absolute; left: 30%; top: 33%; width: 40%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 40% 30%, #5d35a0, var(--gc-purple) 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.6cqw; padding: 4cqw; text-align: center; color: #fff; box-shadow: 0 16px 40px -10px rgba(40, 10, 90, .6); }
+.gc-core h3 { color: var(--gc-orange); font-size: 4cqw; font-weight: 700; line-height: 1; text-transform: uppercase; }
+.gc-core p { font-size: 2.7cqw; font-weight: 500; line-height: 1.25; }
+.gc-pilar { opacity: 0; translate: 0 12px; transition: opacity .6s var(--ease-out) calc(var(--i) * .12s + .3s), translate .7s var(--ease-out) calc(var(--i) * .12s + .3s), transform .4s var(--ease-out); }
+.golden-img.in .gc-pilar { opacity: 1; translate: none; }
+.gc svg { fill: currentColor; stroke: none; }
+.gc-tecnologia svg, .gc-como svg { fill: none; stroke: currentColor; stroke-width: 3; }

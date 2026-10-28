@@ -41,18 +41,29 @@
     .pm-note { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; padding: 10px 16px 10px 10px; border-radius: 999px; background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .2); font-weight: 500; font-size: 14px; backdrop-filter: blur(8px); }
     .pm-note i { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--orange); font-style: normal; }
     .pm-visual { position: relative; align-self: end; }
-    .pm-visual > img { width: 100%; max-width: 620px; display: block; margin-left: auto; filter: drop-shadow(0 40px 60px rgba(0, 0, 0, .45)); animation: stageIn 1.2s var(--ease-out); }
+    .stage { position: relative; width: min(100%, 560px); aspect-ratio: 7 / 8; margin-left: auto; animation: stageIn 1.2s var(--ease-out); }
+    .stage > * { position: absolute; }
+    .st-glow { inset: 10% 0 0; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 107, 53, .45), transparent); filter: blur(30px); }
+    .st-disc { left: 15%; right: 15%; top: 24%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #ff9a5c, var(--orange) 52%, #b8360c); box-shadow: inset -20px -30px 60px rgba(80, 10, 0, .35); }
+    .st-ring { left: 3%; right: 3%; top: 8%; bottom: -4%; border-radius: 50%; border: 3px solid rgba(255, 120, 70, .85); rotate: -10deg; animation: ringSway 9s var(--ease) infinite alternate; }
+    @keyframes ringSway { to { rotate: 6deg; } }
+    .st-tile { width: 17%; aspect-ratio: 4 / 5; display: grid; place-items: center; border-radius: 22px; border: 2px solid rgba(255, 255, 255, .85); background: linear-gradient(160deg, rgba(255, 255, 255, .22), rgba(124, 58, 237, .25)); backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(180, 140, 255, .45); animation: float 6s var(--ease) infinite alternate; }
+    .st-tile svg { width: 64%; height: auto; fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .st-tile.t1 { left: 6%; top: 24%; }
+    .st-tile.t2 { right: 5%; top: 18%; animation-delay: -3s; }
+    .st-orb { right: 6%; top: 68%; width: 11%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #e7a3ff, #8b3cf7 45%, #3b0fa8); box-shadow: 0 0 40px rgba(170, 90, 255, .7); animation: float 7s var(--ease) infinite alternate -1s; }
+    .stage img { left: 50%; bottom: 0; translate: -50% 0; height: 88%; width: auto; max-width: none; -webkit-mask-image: linear-gradient(180deg, #000 80%, transparent 99%); mask-image: linear-gradient(180deg, #000 80%, transparent 99%); filter: drop-shadow(0 30px 50px rgba(10, 0, 40, .45)); }
     .chip { position: absolute; display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px 12px 12px; border-radius: 18px; background: rgba(255, 255, 255, .95); color: var(--pm-2); font-weight: 600; font-size: 14px; box-shadow: 0 24px 50px -20px rgba(0, 0, 0, .55); animation: float 5s var(--ease) infinite alternate; }
     .chip i { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg, var(--orange), #ff8a4c); color: #fff; font-style: normal; font-size: 18px; }
-    .chip.c1 { left: 0; top: 18%; }
-    .chip.c2 { right: -2%; top: 46%; animation-delay: -2s; }
-    .chip.c3 { left: 8%; bottom: 14%; animation-delay: -3.5s; }
+    .chip.c1 { left: 0; top: 2%; }
+    .chip.c2 { right: -2%; top: 52%; animation-delay: -2s; }
+    .chip.c3 { left: -2%; bottom: 16%; animation-delay: -3.5s; }
     .pm-stats { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 60px; border-top: 1px solid rgba(255, 255, 255, .15); }
     .pm-stats div { padding: 26px 22px 34px; border-left: 1px solid rgba(255, 255, 255, .12); }
     .pm-stats div:first-child { border-left: 0; padding-left: 0; }
     .pm-stats b { display: block; font-size: clamp(34px, 3.6vw, 54px); font-weight: 500; letter-spacing: -.05em; line-height: 1; }
     .pm-stats span { display: block; margin-top: 8px; font-size: 14px; color: rgba(255, 255, 255, .7); }
-    @media (max-width: 900px) { .pm-hero-grid { grid-template-columns: 1fr; } .pm-visual > img { max-width: 420px; margin: 0 auto; } .pm-stats { grid-template-columns: 1fr 1fr; } .pm-stats div:nth-child(3) { border-left: 0; padding-left: 0; } }
+    @media (max-width: 900px) { .pm-hero-grid { grid-template-columns: 1fr; } .stage { width: min(100%, 440px); margin: 0 auto; } .pm-stats { grid-template-columns: 1fr 1fr; } .pm-stats div:nth-child(3) { border-left: 0; padding-left: 0; } }
 
     .marquee-legal { background: var(--pm-1); color: rgba(255, 255, 255, .7); overflow: hidden; padding: 14px 0; font-size: 13.5px; }
     .marquee-legal .t { display: flex; gap: 40px; width: max-content; animation: marquee 50s linear infinite; }
@@ -71,7 +82,7 @@
     .spec .go { position: absolute; top: 14px; right: 14px; width: 42px; height: 42px; border-radius: 50%; background: #fff; color: var(--orange); display: grid; place-items: center; opacity: 0; transform: scale(.6) rotate(-45deg); transition: .45s var(--ease); }
     .spec:hover .go { opacity: 1; transform: rotate(-45deg); }
     @media (max-width: 900px) { .spec-grid { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 520px) { .spec h3 { left: 14px; right: 12px; bottom: 14px; font-size: 16px; hyphens: auto; overflow-wrap: anywhere; } .spec .n { left: 14px; top: 14px; } .chip { font-size: 12px; padding: 8px 12px 8px 8px; gap: 8px; border-radius: 14px; } .chip i { width: 28px; height: 28px; border-radius: 9px; font-size: 14px; } .chip.c1 { top: 8%; left: -2%; } .chip.c2 { right: -3%; top: 52%; } .chip.c3 { left: 0; bottom: 6%; } }
+    @media (max-width: 520px) { .spec h3 { left: 14px; right: 12px; bottom: 14px; font-size: 16px; hyphens: auto; overflow-wrap: anywhere; } .spec .n { left: 14px; top: 14px; } .chip { font-size: 12px; padding: 8px 12px 8px 8px; gap: 8px; border-radius: 14px; } .chip i { width: 28px; height: 28px; border-radius: 9px; font-size: 14px; } .chip.c1 { top: 2%; left: 0; } .chip.c2 { right: 0; top: 54%; } .chip.c3 { left: 0; bottom: 10%; } .pm-visual { margin-top: 24px; } }
 
     /* ¿Qué encontrará? filas alternadas */
     .feat { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 6vw, 90px); align-items: center; padding: clamp(30px, 5vw, 60px) 0; }
@@ -134,7 +145,7 @@
     .dlg-art { position: relative; overflow: hidden; isolation: isolate; color: #fff; padding: 34px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 260px; background: radial-gradient(80% 80% at 60% 40%, var(--pm-3), var(--pm-2) 50%, var(--pm-1)); }
     .dlg-art.photo { background: center / cover no-repeat; }
     .dlg-art.photo::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, transparent 40%, rgba(26, 11, 69, .85)); }
-    .dlg-art .doc { position: absolute; inset: 10% -10% auto auto; width: 90%; z-index: -1; opacity: .95; }
+    .dlg-art .doc { position: absolute; right: -4%; bottom: 0; width: 78%; z-index: -1; -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent); mask-image: linear-gradient(180deg, #000 60%, transparent); }
     .dlg-art h2 { margin: 0; font-weight: 500; font-size: clamp(32px, 3.4vw, 48px); letter-spacing: -.04em; line-height: .95; }
     .dlg-art h2 em { font-family: var(--serif); font-weight: 400; color: var(--pm-glow); }
     .dlg-body { padding: clamp(26px, 4vw, 46px); overflow-y: auto; max-height: calc(100svh - 24px); position: relative; }
@@ -196,7 +207,15 @@
             <span class="pm-note"><i>✚</i>Regístrese y obtenga acceso a contenido exclusivo para profesionales de la salud.</span>
           </div>
           <div class="pm-visual">
-            <img src="assets/img/portal/home-portal-doctor.webp" alt="Médico consultando el Portal Médico" width="1000" height="800">
+            <div class="stage">
+              <span class="st-glow" aria-hidden="true"></span>
+              <span class="st-disc" aria-hidden="true"></span>
+              <span class="st-ring" aria-hidden="true"></span>
+              <span class="st-tile t1" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="15" r="7"/><path d="M11 42v-6c0-7 6-11 13-11s13 4 13 11v6"/><path d="M18 27l6 8 6-8M17 31v5a3 3 0 0 0 6 0"/><path d="M31 33h4M33 31v4"/></svg></span>
+              <span class="st-tile t2" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 39S8 30 8 18a8 8 0 0 1 16-2 8 8 0 0 1 16 2c0 12-16 21-16 21z"/><path d="M8 24h9l3-6 4 11 3-7 2 2h11"/></svg></span>
+              <span class="st-orb" aria-hidden="true"></span>
+              <img src="assets/img/portal/medico-portal.webp" alt="Médico de Conexión Chinoin" width="944" height="1253">
+            </div>
             <span class="chip c1"><i>▶</i>Cursos y programas de actualización</span>
             <span class="chip c2"><i>✚</i>Casos clínicos y literatura científica</span>
             <span class="chip c3"><i>◎</i>Eventos académicos y webinars</span>
@@ -291,7 +310,7 @@
   <!-- Acceso: textos de la pantalla de inicio de sesión del Portal Médico -->
   <dialog class="pm-dialog" id="acceso" aria-labelledby="acceso-title">
     <div class="dlg-art">
-      <img class="doc" src="assets/img/portal/home-portal-doctor.webp" alt="">
+      <img class="doc" src="assets/img/portal/medico-portal.webp" alt="">
       <h2>Portal <em>Médico</em></h2>
     </div>
     <div class="dlg-body">

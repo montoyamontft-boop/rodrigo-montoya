@@ -166,7 +166,19 @@ window.CHINOIN = {
     ],
     circulo: {
       title: 'El círculo dorado Chinoin®',
-      img: 'assets/img/circulo-dorado-chinoin-374x340.webp',
+      // Textos del diagrama del círculo dorado, tal cual aparecen en la imagen original
+      diagrama: {
+        que: { t: '¿Qué hacemos?', p: 'Brindamos soluciones terapéuticas con precio justo' },
+        como: '¿Cómo lo hacemos?',
+        para: { t: '¿Para qué lo hacemos?', p: 'Para ofrecer bienestar mejorando la calidad de vida de la sociedad' },
+        pilares: [
+          { id: 'gente', t: 'A través de nuestra <b>gente</b>' },
+          { id: 'social', t: 'Siendo <b>socialmente responsables</b>' },
+          { id: 'productos', t: 'Con <b>productos</b> importantes en el mercado' },
+          { id: 'tecnologia', t: 'A través de alta <b>tecnología</b>' },
+          { id: 'calidad', t: 'Altos estándares de <b>calidad</b>' }
+        ]
+      },
       p: [
         'Nuestra razón de ser “Ofrecer soluciones que mejoren la calidad de vida de la sociedad”. ha sido la guía para formar lo que hoy conocemos como “El Círculo Dorado de Chinoin®”, el cual esta integrado por nuestros 5 pilares que son el reflejo de los principios y valores que vivimos como empresa.',
         'El Círculo Dorado de Chinoin® forma parte de nuestra cultura y ADN, lo que nos impulsa día a día a brindar soluciones terapéuticas con precio justo para cada uno de nuestros clientes de las diferentes líneas humana y veterinaria con las que contamos.'

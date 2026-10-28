@@ -275,6 +275,29 @@
     return `<${tag} class="slide bslide bs-${s.id}${i ? '' : ' is-active'}">${inner}</a>`;
   }
 
+  // Círculo dorado: el diagrama original era una imagen pequeña; se dibuja con su mismo texto para que sea nítido.
+  const GC_ICON = {
+    bulb: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M24 4v4M8 10l3 3M40 10l-3 3M4 24h4M40 24h4"/><path d="M17 33c-3-2-6-6-6-11a13 13 0 0 1 26 0c0 5-3 9-6 11z" fill="currentColor"/><path d="M18 38h12M20 43h8"/></svg>',
+    gente: '<svg viewBox="0 0 64 48" fill="currentColor"><circle cx="14" cy="8" r="6"/><circle cx="32" cy="8" r="6"/><circle cx="50" cy="8" r="6"/><path d="M5 18h18v16h-4v12h-10v-12h-4zM23 18h18v16h-4v12h-10v-12h-4zM41 18h18v16h-4v12h-10v-12h-4z"/></svg>',
+    social: '<svg viewBox="0 0 64 48" fill="currentColor"><path d="M30 46C14 44 6 30 14 14c8 6 22 10 22 22 0 4-2 8-6 10z"/><path d="M34 44c-2-16 6-32 26-40 2 18-6 34-26 40z"/><path d="M34 44C40 30 48 20 56 10" stroke="#f2c40f" stroke-width="2.5" fill="none"/></svg>',
+    productos: '<svg viewBox="0 0 64 48" fill="currentColor"><rect x="4" y="12" width="34" height="16" rx="8" transform="rotate(-35 21 20)"/><circle cx="46" cy="30" r="12"/><path d="M38 38l16-16" stroke="#f2c40f" stroke-width="3"/></svg>',
+    tecnologia: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 46V32l-6-6V14M20 46V20M28 46V20M36 46V32l6-6V14"/><circle cx="6" cy="10" r="3.5"/><circle cx="20" cy="16" r="3.5"/><circle cx="28" cy="16" r="3.5"/><circle cx="42" cy="10" r="3.5"/></svg>',
+    calidad: '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="currentColor"/><path d="M14 25l7 7 13-15" fill="none" stroke="#f2c40f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  };
+  function goldenCircle(d) {
+    const [q1, ...q2] = d.que.t.split(' ');
+    const [c1, ...c2] = d.como.split(' ');
+    return `
+      <div class="gc" role="img" aria-label="${d.que.t} ${d.que.p}. ${d.como} ${d.pilares.map((x) => x.t.replace(/<[^>]+>/g, '')).join(', ')}. ${d.para.t} ${d.para.p}.">
+        <div class="gc-que"><h3>${q1}<br>${q2.join(' ')}</h3><p>${d.que.p}</p></div>
+        <div class="gc-ring">
+          <h3 class="gc-como">${c1} ${GC_ICON.bulb}<br>${c2.join(' ')}</h3>
+          ${d.pilares.map((x, i) => `<p class="gc-pilar gc-${x.id}" style="--i:${i}">${GC_ICON[x.id]}<span>${x.t}</span></p>`).join('')}
+          <div class="gc-core"><h3>${d.para.t.replace('qué ', 'qué<br>')}</h3><p>${d.para.p}</p></div>
+        </div>
+      </div>`;
+  }
+
   function viewHome() {
     const H = D.home;
     const units = D.unidades.items;
@@ -464,7 +487,7 @@
 
       <section class="section golden">
         <div class="wrap golden-grid">
-          <div class="golden-img reveal"><span class="golden-halo" aria-hidden="true"></span>${img(H.circulo.img, 'circulo-dorado-chinoin', 'float')}</div>
+          <div class="golden-img reveal"><span class="golden-halo" aria-hidden="true"></span>${goldenCircle(H.circulo.diagrama)}</div>
           <div>
             <span class="kicker reveal">Nuestra razón de ser</span>
             <h2 class="h-section reveal">El círculo <em>dorado</em> Chinoin®</h2>

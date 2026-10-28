@@ -48,6 +48,8 @@ python3 tools/veterinaria.py <carpeta_html_veterinaria> lista_imagenes.txt > js/
 - **Banners recreados en HTML** (Great Place to Work, Conexión Chinoin y 100 años): los originales eran imágenes
   con el texto incrustado y poca resolución; aquí el texto es el mismo, palabra por palabra, pero se dibuja nítido
   a cualquier tamaño. En móvil cambian a formato vertical para que se lean grandes.
+- **Círculo dorado** dibujado en HTML con los textos y pilares de la imagen original (que medía 374×340 px y se
+  veía borrosa).
 - **Línea del tiempo interactiva**: la infografía original (1912–2025) se reconstruyó con sus 20 hitos transcritos
   tal cual y los emblemas recortados a resolución completa; se recorre con el scroll o con los botones de año.
 
@@ -56,6 +58,8 @@ python3 tools/veterinaria.py <carpeta_html_veterinaria> lista_imagenes.txt > js/
 - `tools/mejorar_imagenes.py` aumenta la resolución con superresolución EDSR (x2/x4) y un afinado ligero. Se usó en
   el anillo de experiencia, el círculo dorado, el mapa de América, las imágenes de "industria limpia", el logo de
   100 años, el logo de Conexión Chinoin, las 8 imágenes de especialidades del Portal Médico y la médica del Portal.
+- El médico del inicio del Portal Médico es una foto de stock en alta resolución recortada con `rembg`; los iconos,
+  el aro y el círculo naranja que lo acompañan se dibujan en CSS/SVG para que no pierdan nitidez.
 - Las fotos de instalaciones de Tecnología medían 390×260 px y no mejoraban lo suficiente; se reemplazaron por
   fotos de stock en alta resolución (la del almacén es la original). También son de stock las fotos de
   laboratorio y médicos de la portada (`assets/img/stock/`).
