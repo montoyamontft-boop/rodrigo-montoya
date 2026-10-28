@@ -470,12 +470,45 @@
     revealObs = new IntersectionObserver((entries) => entries.forEach((e) => {
       if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
     }), { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    $$('.reveal', root).forEach((el) => revealObs.observe(el));
+    splitWords(root);
+    $$('.reveal, .split', root).forEach((el) => revealObs.observe(el));
 
     $$('form[data-demo]', root).forEach((f) => f.addEventListener('submit', (e) => {
       e.preventDefault();
       alert('Maqueta: el envío se conectará al mismo destino que usa chinoin.com.');
     }));
+  }
+
+  // Divide los títulos en palabras para revelarlas una por una.
+  function splitWords(root) {
+    $$('.h-section, .page-hero .h-display', root).forEach((h) => {
+      if (h.dataset.split) return;
+      h.dataset.split = '1';
+      let i = 0;
+      const wrap = (node) => {
+        const w = document.createElement('span');
+        w.className = 'wm';
+        const inner = document.createElement('span');
+        inner.className = 'w';
+        inner.style.setProperty('--w', i++);
+        w.appendChild(inner);
+        return [w, inner];
+      };
+      [...h.childNodes].forEach((n) => {
+        if (n.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach((part) => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+            const [w, inner] = wrap(); inner.textContent = part; frag.appendChild(w);
+          });
+          n.replaceWith(frag);
+        } else if (n.nodeType === 1 && n.tagName !== 'BR') {
+          const [w, inner] = wrap(); n.replaceWith(w); inner.appendChild(n);
+        }
+      });
+      if (!h.closest('.reveal')) h.classList.add('split');
+    });
   }
 
   function heroParallax() {
@@ -509,17 +542,63 @@
     });
   }
 
+  // Etiqueta del cursor según lo que hay debajo
+  const CURSOR_LABELS = [
+    ['.cat-card, .product-card, .unit, .about-card, .contact-card, .mega-feature', 'Ver'],
+    ['.marquee a', 'Ir']
+  ];
+
   function globalFx() {
-    // Brillo que sigue al cursor
+    // Brillo y cursor personalizado que siguen al puntero con inercia
     const glow = $('.cursor-glow');
-    let gx = -999, gy = -999, tx = gx, ty = gy;
-    addEventListener('pointermove', (e) => { tx = e.clientX; ty = e.clientY; }, { passive: true });
+    const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    document.body.insertAdjacentHTML('beforeend', '<div class="cursor" aria-hidden="true"><span class="cursor-ring"><b></b></span><span class="cursor-dot"></span></div><div class="progress" aria-hidden="true"></div>');
+    const cursor = $('.cursor');
+    const ring = $('.cursor-ring');
+    const dot = $('.cursor-dot');
+    let gx = -999, gy = -999, rx = gx, ry = gy, tx = gx, ty = gy;
+    if (fine && !reduceMotion) document.documentElement.classList.add('has-cursor');
+    addEventListener('pointermove', (e) => {
+      tx = e.clientX; ty = e.clientY;
+      dot.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+      const t = e.target.closest ? e.target : null;
+      const hit = t && CURSOR_LABELS.find(([sel]) => t.closest(sel));
+      cursor.classList.toggle('is-label', !!hit);
+      cursor.classList.toggle('is-link', !hit && !!(t && t.closest('a, button, summary, label')));
+      cursor.classList.toggle('on-dark', !!(t && t.closest('.hero, .page-hero, .units, .site-footer, .portal-card, .marquee, .about-card')));
+      if (hit) $('b', ring).textContent = hit[1];
+    }, { passive: true });
+    document.addEventListener('pointerdown', () => cursor.classList.add('is-down'));
+    document.addEventListener('pointerup', () => cursor.classList.remove('is-down'));
+    document.documentElement.addEventListener('pointerleave', () => cursor.classList.add('is-hidden'));
+    document.documentElement.addEventListener('pointerenter', () => cursor.classList.remove('is-hidden'));
     const loop = () => {
-      gx += (tx - gx) * 0.12; gy += (ty - gy) * 0.12;
+      gx += (tx - gx) * 0.08; gy += (ty - gy) * 0.08;
+      rx += (tx - rx) * 0.2; ry += (ty - ry) * 0.2;
       glow.style.transform = `translate3d(${gx}px, ${gy}px, 0)`;
+      ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
       requestAnimationFrame(loop);
     };
     if (!reduceMotion) loop();
+
+    // Inclinación 3D de las tarjetas
+    const TILT = '.about-card, .contact-card, .stat-card, .product-card, .portal-card';
+    let tilted = null;
+    document.addEventListener('pointermove', (e) => {
+      if (reduceMotion || !fine) return;
+      const card = e.target.closest && e.target.closest(TILT);
+      if (tilted && tilted !== card) { tilted.style.transform = ''; tilted.classList.remove('is-tilt'); }
+      tilted = card;
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      const k = card.classList.contains('portal-card') ? 4 : 9;
+      card.classList.add('is-tilt');
+      card.style.transform = `perspective(1000px) rotateX(${-y * k}deg) rotateY(${x * k}deg) translateY(-6px)`;
+      card.style.setProperty('--gx', `${(x + 0.5) * 100}%`);
+      card.style.setProperty('--gy', `${(y + 0.5) * 100}%`);
+    }, { passive: true });
 
     // Foco de luz dentro de las tarjetas de categoría
     document.addEventListener('pointermove', (e) => {
@@ -544,13 +623,66 @@
 
     // Header que se oculta al bajar y reaparece al subir; parallax del texto gigante
     const header = $('.site-header');
-    let lastY = scrollY;
-    addEventListener('scroll', () => {
+    const progress = $('.progress');
+    let lastY = scrollY, velocity = 0, ticking = false;
+    const onScroll = () => {
+      ticking = false;
       const y = scrollY;
-      header.classList.toggle('is-hidden', y > 200 && y > lastY && !$('.nav-item.is-open'));
+      velocity = y - lastY;
+      header.classList.toggle('is-hidden', y > 200 && velocity > 0 && !$('.nav-item.is-open'));
+      header.classList.toggle('is-scrolled', y > 40);
       lastY = y;
-      if (!reduceMotion) $$('[data-parallax]').forEach((el) => { el.style.transform = `translate3d(${y * +el.dataset.parallax}px,0,0)`; });
-    }, { passive: true });
+      const max = document.documentElement.scrollHeight - innerHeight;
+      progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+      if (reduceMotion) return;
+      $$('[data-parallax]').forEach((el) => { el.style.transform = `translate3d(${y * +el.dataset.parallax}px,0,0)`; });
+
+      // La portada se abre al bajar: la escena se aleja y el texto se desvanece
+      const hero = $('.hero, .page-hero');
+      if (hero) {
+        const h = hero.offsetHeight;
+        const p = Math.min(1, Math.max(0, y / h));
+        const scene = $('.hero-scene', hero);
+        const copy = $('.hero-inner, .page-hero > .wrap', hero);
+        if (scene) scene.style.transform = `translate3d(0, ${y * 0.3}px, 0) scale(${1 + p * 0.18})`;
+        if (copy) { copy.style.transform = `translate3d(0, ${y * -0.08}px, 0)`; copy.style.opacity = String(Math.max(0, 1 - p * 2)); }
+      }
+
+      // El marquee acelera con la velocidad del scroll
+      const track = $('.marquee-track');
+      const anim = track && track.getAnimations && track.getAnimations()[0];
+      if (anim) {
+        anim.playbackRate = Math.min(6, 1 + Math.abs(velocity) * 0.12) * (velocity < 0 ? -1 : 1);
+        clearTimeout(onScroll.t);
+        onScroll.t = setTimeout(() => { anim.playbackRate = 1; }, 160);
+      }
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  }
+
+  // Pantalla de carga con el logo original
+  function preloader() {
+    if (reduceMotion) { document.documentElement.classList.add('loaded'); return; }
+    document.body.insertAdjacentHTML('afterbegin', `
+      <div class="preloader" aria-hidden="true">
+        <div class="pl-inner">
+          <img src="${$('.brand img').getAttribute('src')}" alt="">
+          <span class="pl-bar"><i></i></span>
+          <span class="pl-count">0</span>
+        </div>
+      </div>`);
+    const pl = $('.preloader');
+    const count = $('.pl-count', pl);
+    const t0 = performance.now();
+    const tick = (t) => {
+      const k = Math.min(1, (t - t0) / 1100);
+      count.textContent = Math.round(k * 100);
+      if (k < 1) return requestAnimationFrame(tick);
+      pl.classList.add('done');
+      document.documentElement.classList.add('loaded');
+      setTimeout(() => pl.remove(), 1100);
+    };
+    requestAnimationFrame(tick);
   }
 
   /* ---------- Arranque ---------- */
@@ -558,6 +690,7 @@
   renderNav();
   renderMobile();
   renderFooter();
+  preloader();
   globalFx();
   addEventListener('hashchange', route);
   route();
