@@ -241,21 +241,59 @@
   /* ============================================================
      Portada
      ============================================================ */
+  function bannerSlide(s, i) {
+    const tag = s.href ? `a href="${s.href}"` : `a href="${s.route}"`;
+    let inner = '';
+    if (s.id === 'gptw') {
+      inner = `
+        <div class="bs-photo kb">${img(s.photo, 'Planta CHINOIN en Aguascalientes', '', i ? '' : 'loading="eager"')}</div>
+        <div class="bs-fade light"></div>
+        <div class="bs-content">
+          <img class="bs-badge" src="${s.badge}" alt="${s.badgeAlt}">
+          <h2 class="bs-title dark">${s.title}</h2>
+        </div>`;
+    } else if (s.id === 'conexion') {
+      inner = `
+        <div class="bs-bg conexion"><i class="plus p1"></i><i class="plus p2"></i><i class="plus p3"></i><svg class="pulse" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0 60 H700 l20 -40 l20 80 l20 -100 l20 110 l20 -50 H1200"/></svg></div>
+        <div class="bs-photo cut">${img(s.photo, 'Médicos Conexión Chinoin')}</div>
+        <div class="bs-content">
+          <img class="bs-logo" src="${s.logo}" alt="Conexión CHINOIN">
+          <h2 class="bs-title">${s.title}</h2>
+          <p class="bs-tag">${s.tag}</p>
+        </div>`;
+    } else {
+      inner = `
+        <div class="bs-bg cien" style="background-image:url('${s.bg}')"></div>
+        <div class="bs-photo cut">${img(s.photo, 'Nuestra gente')}</div>
+        <div class="bs-content">
+          <p class="bs-neon">${s.big}</p>
+          <h2 class="bs-title">${s.title}</h2>
+          <p class="bs-band">${s.band}</p>
+          <p class="bs-heart">${s.tag}</p>
+        </div>`;
+    }
+    return `<${tag} class="slide bslide bs-${s.id}${i ? '' : ' is-active'}">${inner}</a>`;
+  }
+
   function viewHome() {
     const H = D.home;
     const units = D.unidades.items;
     const featured = ['antiflu-des-capsulas', 'troferit-jarabe', 'neoseverin-tabletas', 'topron-capsulas', 'anara-tabletas', 'gelan-plus-gel', 'scabisan-shampoo', 'feel-360-tabletas', 'gotinal-mar-defense', 'benei-g-capsulas', 'flexakocs-capsulas', 'alin-depot']
       .map(findProduct).filter(Boolean);
+    const orbit = featured.slice(0, 8);
     const pads = PADECIMIENTOS.map((p) => `<a href="#/${p.id}">${p.label}</a>`).join('');
+    const tiendas = [...new Set(Object.values(MARCAS).flatMap((m) => m.comprar.map((t) => t.tienda)))];
+    const vetCount = (window.CHINOIN_VET && window.CHINOIN_VET.productos.length) || 0;
+    const people = ['assets/img/chinoin-1.webp', 'assets/img/stock/lab-equipo.webp', 'assets/img/chinoin-4.webp', 'assets/img/stock/cientifica.webp', 'assets/img/chinoin-2.webp', 'assets/img/stock/lab-microscopio.webp', 'assets/img/chinoin-5.webp', 'assets/img/stock/lab-pipeta.webp', 'assets/img/chinoin-3.webp'];
 
     return `
-      <section class="hero">
+      <section class="hero hero-v2">
         <div class="hero-bg"></div>
-        ${heroScene(true)}
+        ${heroScene(false)}
         <div class="hero-grain"></div>
         <div class="wrap hero-inner">
           <div class="hero-copy">
-            <span class="kicker">CHINOIN® · 100 años</span>
+            <span class="kicker">CHINOIN® · 100 años · Experiencia que da vida</span>
             <h1 class="h-display">
               <span class="line"><span>Farmacéutica</span></span>
               <span class="line"><span><em>Mexicana</em></span></span>
@@ -265,10 +303,18 @@
               <a class="btn magnetic" href="#/catalogo">Catálogo de productos <span class="arrow">${ICON.arrow}</span></a>
               <a class="btn ghost magnetic" href="portal-medico.html">Portal Médico</a>
             </div>
+            <div class="hero-mini">
+              <div><b data-count="100">100</b><span>años de historia</span></div>
+              <div><b data-count="3">3</b><span>plantas</span></div>
+              <div><b data-count="8">8</b><span>países</span></div>
+            </div>
           </div>
-          <div class="hero-side">
-            <div class="stat-card solid"><div class="num"><span data-count="100">100</span></div><div class="lbl"><span>años de historia</span></div></div>
-            <div class="stat-card"><div class="num"><span data-count="3">3</span></div><div class="lbl"><span>plantas: CDMX, Aguascalientes y Colombia</span></div></div>
+          <div class="orbit" data-orbit aria-label="Productos destacados">
+            <div class="orbit-glow"></div>
+            <div class="orbit-ring" style="--n:${orbit.length}">
+              ${orbit.map((p, i) => `<a class="orbit-item" href="#/producto/${p.id}" style="--i:${i}" title="${esc(p.name)}">${img(p.img, p.name, '', 'loading="eager"')}</a>`).join('')}
+            </div>
+            <div class="orbit-floor"></div>
           </div>
         </div>
         <div class="hero-giant" aria-hidden="true" data-parallax="-0.12">100 años</div>
@@ -280,20 +326,32 @@
 
       <section class="banners" id="banners">
         <div class="wrap">
-          <div class="slider reveal" data-slider>
-            <div class="slides">${H.banners.map((b, i) => `<${b.route ? `a href="${b.route}"` : 'div'} class="slide${i ? '' : ' is-active'}">${img(b.img, b.alt, '', i ? '' : 'loading="eager"')}</${b.route ? 'a' : 'div'}>`).join('')}</div>
+          <div class="slider bslider reveal" data-slider>
+            <div class="slides">${H.slides.map(bannerSlide).join('')}</div>
             <div class="slider-ui">
               <button class="sl-prev" aria-label="Anterior">${ICON.back}</button>
-              <div class="sl-dots">${H.banners.map((_, i) => `<button aria-label="Banner ${i + 1}"${i ? '' : ' aria-current="true"'}><i></i></button>`).join('')}</div>
+              <div class="sl-dots">${H.slides.map((_, i) => `<button aria-label="Banner ${i + 1}"${i ? '' : ' aria-current="true"'}><i></i></button>`).join('')}</div>
               <button class="sl-next" aria-label="Siguiente">${ICON.arrow}</button>
             </div>
           </div>
         </div>
       </section>
 
+      <section class="stats-band">
+        <div class="wrap stats-grid">
+          <div class="stat reveal"><b><span data-count="100">100</span></b><span>años de historia, eficacia, confianza y plenitud para tu familia</span></div>
+          <div class="stat reveal" style="--d:.06s"><b><span data-count="3">3</span></b><span>plantas: Ciudad de México, Aguascalientes y Colombia</span></div>
+          <div class="stat reveal" style="--d:.12s"><b><span data-count="8">8</span></b><span>países en Centro y Sudamérica con presencia comercial</span></div>
+          <div class="stat reveal" style="--d:.18s"><b><span data-count="${CAT.length + vetCount}">${CAT.length + vetCount}</span></b><span>productos para la salud humana y animal</span></div>
+          <div class="stat reveal" style="--d:.24s"><b><span data-count="1700">1,700</span></b><span>megawatts-hora al mes en la planta de Aguascalientes</span></div>
+          <div class="stat reveal" style="--d:.3s"><b><span data-count="80">80</span>%</b><span>menos huella de carbono al usar gas natural</span></div>
+        </div>
+      </section>
+
       <section class="section qa">
         <div class="wrap qa-grid">
           <div class="qa-visual reveal">
+            <div class="qa-photo">${img('assets/img/stock/lab-microscopio.webp', 'Investigación farmacéutica')}</div>
             <div class="qa-ring">${img(H.experienciaImg, 'chinoin-experiencia')}</div>
           </div>
           <div>
@@ -325,6 +383,11 @@
         </div>
       </section>
 
+      <div class="slogan-band" aria-hidden="true">
+        <div class="sb-row" data-parallax="-0.25"><span>Experiencia que da vida</span><span class="o">Experiencia que da vida</span><span>Experiencia que da vida</span><span class="o">Experiencia que da vida</span></div>
+        <div class="sb-row rev" data-parallax="0.18"><span class="o">100 años</span><span>Farmacéutica Mexicana</span><span class="o">100 años</span><span>Farmacéutica Mexicana</span></div>
+      </div>
+
       <section class="section shelf" id="productos">
         <div class="wrap">
           <div class="section-head">
@@ -339,6 +402,45 @@
           <div class="quick-cats">
             ${D.megaGroups.map((g) => `<a class="quick-cat reveal" href="${g.route}"><span class="icon-bubble">${ICON[g.icon]}</span><span>${g.label}</span>${ICON.arrow}</a>`).join('')}
           </div>
+          ${tiendas.length ? `
+          <div class="stores reveal">
+            <div class="stores-copy"><span class="kicker">Dónde comprar</span><p>Nuestros productos de venta libre están en las principales farmacias y tiendas del país.</p></div>
+            <div class="stores-marquee"><div class="stores-track">${[...tiendas, ...tiendas].map((t) => `<span>${esc(t)}</span>`).join('')}</div></div>
+          </div>` : ''}
+        </div>
+      </section>
+
+      <section class="timeline" data-timeline style="--n:${H.timeline.length}">
+        <div class="tl-sticky">
+          <div class="tl-bg" aria-hidden="true"><span data-tl-bigyear>1912</span></div>
+          <div class="wrap tl-head">
+            <div><span class="kicker">Desde 1912</span><h2 class="h-section">${H.historia.title.replace('historia', '<em>historia</em>')}</h2></div>
+            <a class="btn magnetic" href="#/libro-100">Libro 100 años <span class="arrow">${ICON.arrow}</span></a>
+          </div>
+          <div class="tl-viewport">
+            <div class="tl-track" data-tl-track>
+              ${H.timeline.map((e, i) => `
+                <article class="tl-card" data-tl-card style="--i:${i}">
+                  <div class="tl-hex">${img(e.img, `Emblema ${e.y}`)}</div>
+                  <span class="tl-year">${e.y}</span>
+                  <p>${e.t}</p>
+                </article>`).join('')}
+            </div>
+          </div>
+          <div class="wrap tl-rail">
+            <div class="tl-progress"><i data-tl-bar></i></div>
+            <div class="tl-years">${H.timeline.map((e, i) => `<button type="button" data-tl-jump="${i}">${e.y}</button>`).join('')}</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section people">
+        <div class="wrap people-head">
+          <div class="reveal"><span class="kicker">El corazón de esta historia</span><h2 class="h-section">Pero, sobre todo, <em>nuestra gente</em></h2></div>
+          <p class="lead reveal">De historias, retos y aprendizajes que nos han definido.</p>
+        </div>
+        <div class="people-cols" data-people>
+          ${[0, 1, 2].map((c) => `<div class="pcol" data-speed="${[0.08, -0.06, 0.12][c]}">${people.filter((_, k) => k % 3 === c).map((src) => `<button type="button" class="pimg" data-lightbox="${src}">${img(src, 'CHINOIN')}</button>`).join('')}</div>`).join('')}
         </div>
       </section>
 
@@ -356,23 +458,6 @@
               <div><b data-count="8">8</b><span>países en Centro y Sudamérica</span></div>
               <div><b data-count="100">100</b><span>años de experiencia</span></div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section history">
-        <div class="wrap history-grid">
-          <div class="history-copy">
-            <span class="kicker reveal">Desde 1925</span>
-            <h2 class="h-section reveal">${H.historia.title.replace('historia', '<em>historia</em>')}</h2>
-            <p class="lead reveal">${D.libro100.p}</p>
-            <div class="reveal" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
-              <a class="btn magnetic" href="#/libro-100">Libro 100 años <span class="arrow">${ICON.arrow}</span></a>
-              <button class="btn ghost-dark" type="button" data-lightbox="${H.historia.img}">Ver línea del tiempo completa</button>
-            </div>
-          </div>
-          <div class="history-scroll reveal" data-autoscroll>
-            ${img(H.historia.img, 'infografia-timeline')}
           </div>
         </div>
       </section>
@@ -407,20 +492,21 @@
 
       <section class="portal-band">
         <div class="wrap">
-          <div class="portal-card reveal">
+          <div class="portal-card v2 reveal">
             <div>
-              <span class="kicker">Portal Médico</span>
-              <h2 class="h-section">Portal <em>Médico</em></h2>
-              <p>La página que estás intentando visualizar solo está disponible para usuarios registrados.</p>
+              <img class="pc-conexion" src="assets/img/hq/conexion-logo.webp" alt="Conexión CHINOIN">
+              <h2 class="h-section">El conocimiento que fortalece sus <em>decisiones clínicas</em></h2>
+              <p>Acceda a cursos, conferencias, literatura científica, casos clínicos y recursos especializados desarrollados para apoyar la toma de decisiones clínicas en las principales áreas terapéuticas.</p>
               <div style="display:flex;gap:12px;flex-wrap:wrap">
-                <a class="btn light magnetic" href="portal-medico.html#acceso">Iniciar sesión <span class="arrow">${ICON.arrow}</span></a>
+                <a class="btn light magnetic" href="portal-medico.html">Portal Médico <span class="arrow">${ICON.arrow}</span></a>
                 <a class="btn ghost magnetic" href="#/biblioteca-virtual">Biblioteca virtual</a>
               </div>
             </div>
-            <div class="portal-visual" aria-hidden="true">
-              ${disc('float', 'width:220px;height:220px;left:10%;top:10%;--dur:8s')}
-              ${disc('glass float', 'width:170px;height:170px;left:45%;top:35%;--dur:6s;--dy:20px')}
-              ${capsule('width:200px;height:72px;left:30%;top:0;rotate:22deg')}
+            <div class="pcv-photo">
+              ${img('assets/img/stock/medicos-pantalla.webp', 'Profesionales de la salud')}
+              <span class="pcv-chip c1">${ICON.book} Cursos y programas de actualización</span>
+              <span class="pcv-chip c2">${ICON.file} Casos clínicos y literatura científica</span>
+              <span class="pcv-chip c3">${ICON.play} Eventos académicos y webinars</span>
             </div>
           </div>
         </div>
@@ -456,13 +542,70 @@
         label.textContent = D.home.pilares.items[n].label;
         label.classList.remove('pop'); void label.offsetWidth; label.classList.add('pop');
       };
-      const play = () => { clearInterval(timer); if (!reduceMotion) timer = setInterval(() => set((i + 1) % items.length), 2200); };
+      const play = () => { clearInterval(timer); if (!reduceMotion) timer = setInterval(() => { if (!wheel.isConnected) return clearInterval(timer); set((i + 1) % items.length); }, 2200); };
       items.forEach((x, k) => {
         x.addEventListener('mouseenter', () => { clearInterval(timer); set(k); });
         x.addEventListener('focus', () => { clearInterval(timer); set(k); });
       });
       wheel.addEventListener('mouseleave', play);
       play();
+    }
+
+    // Órbita de productos: se inclina con el mouse
+    const orbit = $('[data-orbit]');
+    if (orbit && !reduceMotion) {
+      const ring = $('.orbit-ring', orbit);
+      orbit.addEventListener('pointermove', (e) => {
+        const r = orbit.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        ring.style.setProperty('--tx', `${-y * 16}deg`); ring.style.setProperty('--tz', `${x * 10}deg`);
+      });
+      orbit.addEventListener('pointerleave', () => { ring.style.removeProperty('--tx'); ring.style.removeProperty('--tz'); });
+    }
+
+    // Línea del tiempo: el scroll vertical la recorre en horizontal
+    const tl = $('[data-timeline]');
+    if (tl) {
+      const track = $('[data-tl-track]', tl), cards = $$('[data-tl-card]', tl), bar = $('[data-tl-bar]', tl);
+      const years = $$('[data-tl-jump]', tl), big = $('[data-tl-bigyear]', tl);
+      const pinned = () => matchMedia('(min-width: 861px)').matches && !reduceMotion;
+      const update = () => {
+        if (!tl.isConnected) return removeEventListener('scroll', onS);
+        const r = tl.getBoundingClientRect();
+        const total = tl.offsetHeight - innerHeight;
+        const p = Math.min(1, Math.max(0, -r.top / Math.max(1, total)));
+        const max = track.scrollWidth - track.parentElement.clientWidth;
+        if (pinned()) track.style.transform = `translate3d(${-p * max}px,0,0)`; else track.style.transform = '';
+        bar.style.transform = `scaleX(${p})`;
+        const idx = Math.min(cards.length - 1, Math.round(p * (cards.length - 1)));
+        cards.forEach((c, k) => c.classList.toggle('is-active', k === idx));
+        years.forEach((y, k) => y.toggleAttribute('aria-current', k === idx));
+        if (big.textContent !== String(D.home.timeline[idx].y)) big.textContent = D.home.timeline[idx].y;
+      };
+      let raf = 0;
+      const onS = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; update(); }); };
+      addEventListener('scroll', onS, { passive: true });
+      addEventListener('resize', onS);
+      years.forEach((y, k) => y.addEventListener('click', () => {
+        if (!pinned()) { cards[k].scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+        const total = tl.offsetHeight - innerHeight;
+        scrollTo({ top: tl.offsetTop + total * (k / (cards.length - 1)), behavior: 'smooth' });
+      }));
+      update();
+    }
+
+    // Columnas de fotos con parallax
+    const peopleBox = $('[data-people]');
+    if (peopleBox && !reduceMotion) {
+      const cols = $$('.pcol', peopleBox);
+      const onP = () => {
+        if (!peopleBox.isConnected) return removeEventListener('scroll', onP);
+        const r = peopleBox.getBoundingClientRect();
+        const c = (r.top + r.height / 2 - innerHeight / 2);
+        cols.forEach((col) => { col.style.transform = `translate3d(0, ${c * +col.dataset.speed}px, 0)`; });
+      };
+      addEventListener('scroll', onP, { passive: true });
+      onP();
     }
   }
 
@@ -1503,11 +1646,11 @@
       if (!e.isIntersecting) return;
       obs.unobserve(e.target);
       const el = e.target, end = +el.dataset.count;
-      if (reduceMotion) { el.textContent = end; return; }
+      if (reduceMotion) { el.textContent = end.toLocaleString('es-MX'); return; }
       const t0 = performance.now();
       const step = (t) => {
         const k = Math.min(1, (t - t0) / 1600);
-        el.textContent = Math.round(end * (1 - Math.pow(1 - k, 3)));
+        el.textContent = Math.round(end * (1 - Math.pow(1 - k, 3))).toLocaleString('es-MX');
         if (k < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);

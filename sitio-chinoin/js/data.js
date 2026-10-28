@@ -116,6 +116,54 @@ window.CHINOIN = {
       img: 'assets/img/chinoin-en-america.webp'
     },
     historia: { title: 'Nuestra historia', img: 'assets/img/infografia-timeline.webp' },
+    // Línea del tiempo transcrita de la infografía original (infografia-timeline.png).
+    // <b> = énfasis morado, <em> = énfasis naranja, como en la infografía.
+    timeline: [
+      { y: 1912, img: 'assets/img/historia/hex-1912.webp', t: 'Todo inicia en el año 1912 cuando Chinoin <b>fue fundada en Hungría</b> como fábrica de productos farmacéuticos.' },
+      { y: 1925, img: 'assets/img/historia/hex-1925.webp', t: 'Inicia sus <b>operaciones en México</b> como <em>Chinoin</em> fabrica de productos <em>Químicos y Farmacéuticos</em> con productos terminados de <b>Hungría.</b>' },
+      { y: 1932, img: 'assets/img/historia/hex-1932.webp', t: 'Se constituye <b>Productos Farmacéuticos S. A. de C.V.</b> Hoy conocida como <em>Chinoin</em> empresa <b>100% Mexicana</b> e inicia la fabricación nacional de medicamentos en la planta <em>Ciudad de México.</em>' },
+      { y: 1942, img: 'assets/img/historia/hex-1942.webp', t: '<em>CHINOIN</em> a consecuencia de la <b>segunda guerra mundial</b> se separa de la matriz en <b>Hungría,</b> <em>comenzando el desarrollo de formulas propias</em> e iniciando la exportación a países de Centroamérica.' },
+      { y: 1950, img: 'assets/img/historia/hex-1950.webp', t: 'Se cuenta ya con <em>17 productos</em> principalmente: <b>analgésicos, antitusígenos y antiinfecciosos.</b>' },
+      { y: 1960, img: 'assets/img/historia/hex-1960.webp', t: '<em>CHINOIN</em> inicia el desarrolllo y comercialización de <b>productos para el mercado de</b> <em>Salud Animal</em>.' },
+      { y: 1971, img: 'assets/img/historia/hex-1971.webp', t: '<em>CHINOIN</em> hace convenio con <b>Janssen Pharma</b> para importar y distribuir productos veterinarios en México.' },
+      { y: 1987, img: 'assets/img/historia/hex-1987.webp', t: 'Se construye la <b>planta farmoquímica</b> en el estado de <em>Aguascalientes.</em>' },
+      { y: 1988, img: 'assets/img/historia/hex-1988.webp', t: 'Cambia la estrategia comercial. La nueva fuerza de ventas fue integrada por personas con <b>20 años de experiencia</b> mínimo en el ramo farmacéutico, convirtiéndose en la fuerza de ventas <b>más productiva de la industria.</b>' },
+      { y: 2000, img: 'assets/img/historia/hex-2000.webp', t: 'Se inaugura la planta en <b>Aguacalientes</b> iniciando operaciones con el <em>área sólidos y líquidos orales.</em>' },
+      { y: 2004, img: 'assets/img/historia/hex-2004.webp', t: 'Comienza la construcción de la <em>segunda fase de la planta farmacéutica en Aguascalientes</em> teniendo expansión en inyectables, cremas y líquidos tópicos, desarrollo Galénico, desarrollo Analítico, así como las oficinas administrativas.<br><br>La <b>PROFEPA</b> nos certifica como <em>industria Limpia</em>' },
+      { y: 2010, img: 'assets/img/historia/hex-2010.webp', t: 'Remodelación de oficinas planta México e inauguración del <b>nuevo corporativo en Ciudad de México.</b>' },
+      { y: 2014, img: 'assets/img/historia/hex-2014.webp', t: 'Se construye el <em>Almacén Robotizado de alta</em> estiba con <b>tecnología de Stöcklin.</b>' },
+      { y: 2015, img: 'assets/img/historia/hex-2015.webp', t: 'Inicia operaciones el equipo <em>CONSIGMA,</em> proviene del termino proceso continuo “con” mientras que sigma hace referencia a la metodología <em>6-SIGMA</em>, empleada en la mejora de procesos, es un sistema cerrado de granulación continua con capacidades de 500 gramos hasta toneladas, <em>único en América latina.</em><br><br>Entra en función la <b>planta de trigeneración de energía</b> cuyo proceso consiste en la <b>autogeneración de energía: eléctrica, vapor industrial y agua helada</b> a partir de la combustión de gas natural en nuestra planta de Aguascalientes.' },
+      { y: 2017, img: 'assets/img/historia/hex-2017.webp', t: 'Se inaugura un nuevo <em>Laboratorio microbiólogico</em> para ampliar nuestras operaciones de calidad. Se establecen los nuevos valores y cultura de la compañía, así como nuestro slogan <b>“Experiencia que da vida”.</b>' },
+      { y: 2018, img: 'assets/img/historia/hex-2018.webp', t: 'Se adquiere <b>Farmacol</b> en Colombia naciendo <em>Chinoin Farmacol</em> es ese país.' },
+      { y: 2019, img: 'assets/img/historia/hex-2019.webp', t: '<em>Chinoin</em> es <em>reconocida</em> como <b>empresa socialmente responsable.</b>' },
+      { y: 2020, img: 'assets/img/historia/hex-2020.webp', t: 'La PROFEPA nos otorga el certificado de industria limpia Nivel 2 por el cumplimiento <b>legal y normativo, así como demostrar mejoras</b> en agua, residuos peligrosos, no peligrosos y de manejo especial, emisiones a la atmósfera, suelo, ruido, riesgo ambiental, <em>aprovechamiento de los recursos naturales y sistemas de gestión ambiental.</em>' },
+      { y: 2024, img: 'assets/img/historia/hex-2024.webp', t: 'AntifluDes <b>cumple 50 años</b> siendo el principal antigripal de triple acción.' },
+      { y: 2025, img: 'assets/img/historia/hex-2025.webp', t: 'Chinoin® <em>cumple 100 años</em> de atención a la salud de los mexicanos.' }
+    ],
+    // Banners de la portada original, recreados con texto real (mismos textos y fotos, en alta resolución)
+    slides: [
+      {
+        id: 'gptw', route: '#/unete-al-equipo',
+        badge: 'assets/img/hq/gptw-badge.webp', badgeAlt: 'Los Mejores Lugares para Trabajar · Great Place To Work · México 2026',
+        photo: 'assets/img/hq/planta-aerea.webp',
+        title: 'Las personas están en el centro de todo lo que hacemos.'
+      },
+      {
+        id: 'conexion', href: 'portal-medico.html',
+        logo: 'assets/img/hq/conexion-logo.webp',
+        photo: 'assets/img/hq/conexion-medicos.webp',
+        title: 'Toda la <b>información médica</b> especializada que necesita, de forma rápida, práctica a <em>un clic de distancia.</em>',
+        tag: 'Conectando con lo <em>que importa</em>'
+      },
+      {
+        id: 'cien', route: '#/libro-100',
+        photo: 'assets/img/hq/cien-gente.webp', bg: 'assets/img/chinoin-4.webp',
+        big: '100 años',
+        title: 'De historias, retos y aprendizajes que nos han definido.',
+        band: 'Pero, sobre todo, nuestra gente',
+        tag: 'El corazón de esta historia'
+      }
+    ],
     circulo: {
       title: 'El círculo dorado Chinoin®',
       img: 'assets/img/circulo-dorado-chinoin-374x340.webp',
@@ -179,14 +227,15 @@ window.CHINOIN = {
         'Equipadas con tecnología de punta y los procesos más avanzados en automatización, entre los cuales destaca nuestro almacén totalmente automatizado, ya que no cuenta con operador a bordo.'
       ],
       items: ['Contención de Producto', 'Tranferencia de Gravedad', 'Almacenaje', 'Limpieza y esterilización en Sitio', 'Mezclado en contenedores'],
+      // Fotos de alta resolución (Unsplash) en lugar de las originales de 390×260 px; el almacén es foto original.
       gallery: [
-        { src: 'assets/img/instalaciones-11-390x260.webp', alt: 'tecnología farmacéutica' },
-        { src: 'assets/img/instalaciones-13-390x260.webp', alt: 'tecnología farmacéutica' },
-        { src: 'assets/img/instalaciones-15-390x260.webp', alt: 'farmaceutica mexicana' },
-        { src: 'assets/img/instalaciones-18-390x260.webp', alt: 'tecnología farmacéutica' },
-        { src: 'assets/img/instalaciones-17-390x260.webp', alt: 'Instalaciones' },
-        { src: 'assets/img/instalaciones-16-390x260.webp', alt: 'Instalaciones' },
-        { src: 'assets/img/almacen-chinoin-video.webp', alt: 'almacen-chinoin-video', video: 'https://www.youtube.com/watch?v=J_RZoEkLuq4&t=11s' }
+        { src: 'assets/img/almacen-chinoin-video.webp', alt: 'almacen-chinoin-video', video: 'https://www.youtube.com/watch?v=J_RZoEkLuq4&t=11s' },
+        { src: 'assets/img/stock/lab-corredor.webp', alt: 'Laboratorio de control de calidad' },
+        { src: 'assets/img/stock/lab-equipo.webp', alt: 'Equipo de laboratorio' },
+        { src: 'assets/img/stock/lab-viales.webp', alt: 'Inyectables' },
+        { src: 'assets/img/stock/lab-pipeta.webp', alt: 'Análisis de laboratorio' },
+        { src: 'assets/img/stock/blisters-2.webp', alt: 'Tabletas y cápsulas' },
+        { src: 'assets/img/stock/lab-mujer.webp', alt: 'Laboratorio' }
       ]
     },
     equipamiento: {

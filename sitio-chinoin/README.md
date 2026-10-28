@@ -41,6 +41,25 @@ python3 tools/fichas.py   <carpeta_html> > js/fichas.js
 python3 tools/veterinaria.py <carpeta_html_veterinaria> lista_imagenes.txt > js/veterinaria.js
 ```
 
+## Portada
+
+- **Órbita de productos** en el hero, contadores animados (100 años, 3 plantas, 8 países, productos, 1,700 MWh, 80 %)
+  y franja de tiendas tomada de los sitios de marca.
+- **Banners recreados en HTML** (Great Place to Work, Conexión Chinoin y 100 años): los originales eran imágenes
+  con el texto incrustado y poca resolución; aquí el texto es el mismo, palabra por palabra, pero se dibuja nítido
+  a cualquier tamaño. En móvil cambian a formato vertical para que se lean grandes.
+- **Línea del tiempo interactiva**: la infografía original (1912–2025) se reconstruyó con sus 20 hitos transcritos
+  tal cual y los emblemas recortados a resolución completa; se recorre con el scroll o con los botones de año.
+
+## Imágenes en alta calidad
+
+- `tools/mejorar_imagenes.py` aumenta la resolución con superresolución EDSR (x2/x4) y un afinado ligero. Se usó en
+  el anillo de experiencia, el círculo dorado, el mapa de América, las imágenes de "industria limpia", el logo de
+  100 años, el logo de Conexión Chinoin, las 8 imágenes de especialidades del Portal Médico y la médica del Portal.
+- Las fotos de instalaciones de Tecnología medían 390×260 px y no mejoraban lo suficiente; se reemplazaron por
+  fotos de stock en alta resolución (la del almacén es la original). También son de stock las fotos de
+  laboratorio y médicos de la portada (`assets/img/stock/`).
+
 ## Portal Médico
 
 `portal-medico.html` reproduce la portada pública de emc.chinoin.com (Conexión Chinoin): plataforma de
@@ -100,4 +119,6 @@ dónde mandaba el botón "Ver más" del catálogo original:
 
 ## Créditos de fotos
 
-Las fotos de mascotas de la portada de Veterinaria son de [Unsplash](https://unsplash.com) (licencia Unsplash, uso libre).
+Las fotos de mascotas de la portada de Veterinaria y las de `assets/img/stock/` (laboratorio, médicos, tabletas) son de
+[Unsplash](https://unsplash.com) (licencia Unsplash, uso libre). Antes de publicar conviene sustituirlas por fotos
+propias de CHINOIN si las hay.
