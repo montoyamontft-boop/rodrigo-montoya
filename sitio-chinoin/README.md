@@ -51,3 +51,12 @@ avisos de "Contenido pendiente" y tarjetas en gris. Para completarlos solo hay q
 
 Los formularios (Farmacovigilancia, Únete al equipo, Portal Médico) son de muestra: hay que conectarlos al
 mismo destino que usa el sitio original.
+
+## Vista previa en un solo archivo
+
+```bash
+python3 sitio-chinoin/tools/bundle.py chinoin-preview.html
+```
+
+Genera un HTML autocontenido (CSS, JS y logo incrustados; el Portal Médico se abre como capa) que se
+puede abrir con doble clic o compartir sin servidor.
