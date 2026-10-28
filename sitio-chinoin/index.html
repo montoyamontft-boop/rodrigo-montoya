@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CHINOIN</title>
+  <meta name="description" content="CHINOIN · Laboratorio farmacéutico mexicano.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="cursor-glow" aria-hidden="true"></div>
+
+  <header class="site-header" id="top">
+    <div class="nav-shell">
+      <a class="brand" href="#/" aria-label="CHINOIN, inicio">
+        <img src="assets/chinoin-logo.png" alt="CHINOIN®" width="1577" height="224">
+      </a>
+      <nav class="main-nav" aria-label="Principal"></nav>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
+        <span></span><span></span>
+      </button>
+    </div>
+    <div class="mega-layer" aria-hidden="true"></div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" hidden></div>
+
+  <main id="view" tabindex="-1"></main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div class="footer-brand">
+        <img src="assets/chinoin-logo.png" alt="CHINOIN®" width="1577" height="224">
+        <p class="footer-tag">Laboratorio farmacéutico mexicano <em>desde 1925</em>.</p>
+      </div>
+      <div class="footer-cols"></div>
+    </div>
+    <div class="wrap footer-base">
+      <span>© <span data-year></span> CHINOIN. Todos los derechos reservados.</span>
+      <a href="#top" class="to-top">Volver arriba <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
