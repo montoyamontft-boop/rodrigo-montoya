@@ -1212,3 +1212,14 @@ main { overflow-x: clip; }
 .vet-pres figure { margin: 0; width: 240px; padding: 18px; border-radius: 22px; background: #fff; border: 1px solid var(--line); text-align: center; }
 .vet-pres img { width: 100%; aspect-ratio: 1; object-fit: contain; }
 .vet-pres figcaption { margin-top: 10px; font-weight: 600; }
+
+/* ---------- Dónde comprar (sitios de marca) ---------- */
+.pc-badge.buy { color: #12805c; }
+.buy-box.buy-shop { gap: 10px; }
+.shops { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; width: 100%; margin-top: 4px; }
+.shop { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 14px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); font-weight: 600; font-size: 14.5px; transition: background .3s, color .3s, border-color .3s, transform .3s var(--ease); }
+.shop svg { color: var(--orange); flex: none; transition: color .3s; }
+.shop:hover { background: var(--orange); color: #fff; border-color: var(--orange); transform: translateY(-2px); }
+.shop:hover svg { color: #fff; }
+.shop-more { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; margin-top: 8px; }
+.source-note { margin: 16px 0 0; font-size: 14px; color: var(--ink-2); }

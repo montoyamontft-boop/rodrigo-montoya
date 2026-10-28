@@ -56,11 +56,13 @@ def inline(page):
 
 # Portal Médico: los enlaces de regreso navegan la página contenedora.
 portal = inline(read('portal-medico.html'))
-portal = portal.replace('href="index.html"', 'href="#/" onclick="parent.location.hash=\'#/\';return false"')
+portal = re.sub(r'href="index\.html(#/[^"]*)?"',
+                lambda m: f'href="#" onclick="parent.location.hash=\'{m.group(1) or "#/"}\';return false"', portal)
 
 index = inline(read('index.html'))
 scripts = ('<script src="js/data.js"></script>\n  <script src="js/catalogo.js"></script>\n'
-           '  <script src="js/fichas.js"></script>\n  <script src="js/veterinaria.js"></script>\n  <script src="js/app.js"></script>')
+           '  <script src="js/fichas.js"></script>\n  <script src="js/veterinaria.js"></script>\n'
+           '  <script src="js/marcas.js"></script>\n  <script src="js/app.js"></script>')
 overlay = f'''<script>
   (() => {{
     // Abre el Portal Médico como capa a pantalla completa.
@@ -85,13 +87,14 @@ overlay = f'''<script>
     if (sync()) history.replaceState(null, '', last);
   }})();
   </script>'''
-app = read('js/app.js').replace("'portal-medico.html'", "'#/portal-medico'").replace('href="portal-medico.html"', 'href="#/portal-medico"')
+app = read('js/app.js').replace("'portal-medico.html'", "'#/portal-medico'").replace('href="portal-medico.html#acceso"', 'href="#/portal-medico"').replace('href="portal-medico.html"', 'href="#/portal-medico"')
 data = data_uris(read('js/data.js').replace("'portal-medico.html'", "'#/portal-medico'"))
 catalogo = data_uris(read('js/catalogo.js'))
 vet = data_uris(read('js/veterinaria.js'))
+marcas = data_uris(read('js/marcas.js'))
 fichas = read('js/fichas.js')
 app = data_uris(app)
-js = '\n'.join(f'<script>\n{x}\n</script>' for x in (data, catalogo, fichas, vet, app))
+js = '\n'.join(f'<script>\n{x}\n</script>' for x in (data, catalogo, fichas, vet, marcas, app))
 index = index.replace(scripts, f'{js}\n  {overlay}')
 
 out = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else 'chinoin-preview.html')

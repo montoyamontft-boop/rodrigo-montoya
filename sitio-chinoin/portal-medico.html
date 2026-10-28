@@ -3,122 +3,309 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Portal Médico · CHINOIN</title>
+  <title>Portal Médico · Conexión Chinoin</title>
+  <link rel="icon" href="assets/chinoin-simbolo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <style>
-    body { min-height: 100svh; display: grid; grid-template-columns: 1.05fr 1fr; background: #fff; }
-    .login-art {
-      position: relative; overflow: hidden; isolation: isolate; color: #fff;
-      padding: 40px clamp(28px, 4vw, 60px); display: flex; flex-direction: column; justify-content: space-between;
-      background: var(--night);
-    }
-    .login-art .hero-bg { background: radial-gradient(80% 80% at 60% 55%, rgba(255, 138, 76, .95), rgba(239, 84, 34, .85) 30%, rgba(184, 40, 11, .6) 55%, transparent 82%), var(--night); }
-    .login-art .back { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; color: rgba(255, 255, 255, .85); align-self: flex-start; padding: 10px 18px 10px 12px; border-radius: 999px; border: 1px solid var(--glass-line); backdrop-filter: blur(10px); transition: background .3s; }
-    .login-art .back:hover { background: rgba(255, 255, 255, .12); }
-    .login-art .back svg { transform: rotate(180deg); }
-    .login-art h2 { margin: 0; font-weight: 500; font-size: clamp(40px, 4.6vw, 76px); letter-spacing: -.045em; line-height: .95; }
-    .login-art h2 em { font-family: var(--serif); font-weight: 400; }
-    .login-art p { margin: 18px 0 0; max-width: 38ch; color: rgba(255, 255, 255, .8); }
+    /* Textos y estructura de emc.chinoin.com (Conexión Chinoin) */
+    body { background: #fff; }
+    .pm-bar { position: sticky; top: 0; z-index: 40; background: rgba(255, 255, 255, .88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); }
+    .pm-bar .wrap { display: flex; align-items: center; gap: 18px; height: 74px; }
+    .pm-bar .conexion { height: 40px; width: auto; }
+    .pm-bar .back { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14.5px; color: var(--ink-2); }
+    .pm-bar .back:hover { color: var(--orange); }
+    .pm-bar .back svg { transform: rotate(180deg); }
+    .pm-bar .btn { min-height: 46px; font-size: 15px; padding: 6px 6px 6px 20px; }
+    .pm-bar .btn.ghost-dark { padding-right: 20px; }
+    @media (max-width: 720px) { .pm-bar .back span, .pm-bar .btn.ghost-dark { display: none; } }
 
-    .login-panel { display: flex; flex-direction: column; justify-content: center; padding: 48px clamp(24px, 6vw, 96px); }
-    .login-panel .logo { width: min(100%, 340px); height: auto; margin-bottom: clamp(36px, 6vh, 64px); animation: viewIn .8s var(--ease-out); }
-    .login-panel h1 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(44px, 4.6vw, 64px); letter-spacing: -.02em; line-height: 1; color: var(--ink); }
-    .login-panel .intro { margin: 16px 0 34px; color: var(--ink-2); max-width: 46ch; }
-    .login-form { display: grid; gap: 20px; max-width: 520px; }
+    .pm-hero { position: relative; overflow: hidden; isolation: isolate; padding: clamp(50px, 7vw, 100px) 0; background: radial-gradient(60% 80% at 85% 40%, var(--peach), transparent 70%), radial-gradient(40% 60% at 10% 90%, rgba(50, 29, 112, .08), transparent 70%), #fff; }
+    .pm-hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center; }
+    .pm-hero h1 { color: var(--ink); margin: 18px 0 0; font-size: clamp(42px, 5.6vw, 84px); }
+    .pm-hero h1 em { color: var(--purple); }
+    .pm-hero p.lead { margin: 22px 0 30px; }
+    .pm-hero .kicker { color: var(--purple); }
+    .pm-hero-img { position: relative; }
+    .pm-hero-img img { width: 100%; animation: stageIn 1.1s var(--ease-out); }
+    .pm-note { display: inline-flex; align-items: center; gap: 10px; margin-top: 22px; padding: 10px 16px; border-radius: 999px; background: var(--peach); color: var(--ember); font-weight: 600; font-size: 14px; }
+    @media (max-width: 860px) { .pm-hero-grid { grid-template-columns: 1fr; } .pm-hero-img { max-width: 420px; } }
+
+    .spec-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .spec { position: relative; display: block; border-radius: 26px; overflow: hidden; aspect-ratio: 1; color: #fff; isolation: isolate; text-align: left; }
+    .spec img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 1s var(--ease); }
+    .spec::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, transparent 35%, rgba(28, 15, 69, .9)); transition: background .5s; }
+    .spec:hover img { transform: scale(1.1); }
+    .spec:hover::after { background: linear-gradient(180deg, rgba(239, 84, 34, .15), rgba(184, 40, 11, .9)); }
+    .spec h3 { position: absolute; left: 20px; right: 20px; bottom: 18px; margin: 0; font-size: clamp(18px, 1.8vw, 24px); font-weight: 600; letter-spacing: -.02em; }
+    .spec .lm-go { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 50%; background: #fff; color: var(--orange); display: grid; place-items: center; opacity: 0; transform: scale(.6) rotate(-45deg); transition: .4s var(--ease); }
+    .spec:hover .lm-go { opacity: 1; transform: rotate(-45deg); }
+    @media (max-width: 860px) { .spec-grid { grid-template-columns: 1fr 1fr; } }
+
+    .find-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .find { border-radius: 26px; overflow: hidden; background: #fff; border: 1px solid var(--line); transition: transform .5s var(--ease), box-shadow .5s; }
+    .find:hover { transform: translateY(-6px); box-shadow: 0 30px 60px -30px rgba(28, 15, 69, .45); }
+    .find img { width: 100%; aspect-ratio: 73 / 50; object-fit: cover; }
+    .find div { padding: 22px; }
+    .find h3 { margin: 0 0 8px; font-size: 21px; letter-spacing: -.02em; }
+    .find p { margin: 0; color: var(--ink-2); }
+    @media (max-width: 860px) { .find-grid { grid-template-columns: 1fr; } }
+
+    .pm-band { padding: clamp(60px, 8vw, 110px) 0; }
+    .pm-band-card { display: grid; grid-template-columns: 1.1fr .9fr; gap: 30px; align-items: center; border-radius: 34px; padding: clamp(30px, 5vw, 70px); color: #fff; background: radial-gradient(80% 120% at 90% 20%, #5b3bb0, var(--purple) 45%, var(--purple-deep)); overflow: hidden; }
+    .pm-band-card p { color: rgba(255, 255, 255, .8); max-width: 50ch; }
+    .pm-band-card img { width: 100%; max-width: 380px; justify-self: center; margin-bottom: calc(-1 * clamp(30px, 5vw, 70px)); }
+    @media (max-width: 860px) { .pm-band-card { grid-template-columns: 1fr; } }
+
+    .pm-foot { padding: 30px 0 40px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--ink-2); }
+    .pm-foot a { color: var(--orange); text-decoration: underline; }
+
+    /* Ventanas de acceso y registro */
+    dialog.pm-dialog { width: min(100% - 24px, 980px); max-height: calc(100svh - 24px); padding: 0; border: 0; border-radius: 30px; overflow: hidden; box-shadow: 0 40px 120px -30px rgba(13, 9, 16, .6); }
+    dialog.pm-dialog::backdrop { background: rgba(13, 9, 16, .55); backdrop-filter: blur(6px); }
+    dialog.pm-dialog[open] { animation: viewIn .45s var(--ease-out); display: grid; grid-template-columns: .9fr 1.1fr; }
+    .dlg-art { position: relative; overflow: hidden; isolation: isolate; color: #fff; padding: 34px; display: flex; flex-direction: column; justify-content: flex-end; background: var(--night); min-height: 260px; }
+    .dlg-art .hero-bg { background: radial-gradient(80% 80% at 60% 55%, rgba(255, 138, 76, .95), rgba(239, 84, 34, .85) 30%, rgba(184, 40, 11, .6) 55%, transparent 82%), var(--night); }
+    .dlg-art.photo { background: center / cover no-repeat; }
+    .dlg-art.photo::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, transparent 40%, rgba(28, 15, 69, .85)); }
+    .dlg-art h2 { margin: 0; font-weight: 500; font-size: clamp(32px, 3.4vw, 48px); letter-spacing: -.04em; line-height: .95; }
+    .dlg-art h2 em { font-family: var(--serif); font-weight: 400; }
+    .dlg-body { padding: clamp(26px, 4vw, 46px); overflow-y: auto; max-height: calc(100svh - 24px); position: relative; }
+    .dlg-body h1 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(38px, 4vw, 54px); letter-spacing: -.02em; line-height: 1; }
+    .dlg-body .intro { margin: 12px 0 26px; color: var(--ink-2); }
+    .dlg-close { position: absolute; top: 16px; right: 16px; width: 42px; height: 42px; border-radius: 50%; background: var(--paper); display: grid; place-items: center; font-size: 18px; z-index: 2; }
+    .dlg-close:hover { background: var(--peach); }
+    .login-form { display: grid; gap: 18px; }
     .pw { position: relative; }
     .pw input { padding-right: 96px; }
     .pw button { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); padding: 8px 12px; border-radius: 8px; font-weight: 700; font-size: 14px; color: var(--purple); }
-    .pw button:hover { background: var(--peach); }
     .row-between { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 15px; }
     .check { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
-    .check input { appearance: none; width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #CFC7C2; display: grid; place-items: center; transition: background .2s, border-color .2s; margin: 0; }
+    .check input { appearance: none; width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #CFC7C2; display: grid; place-items: center; margin: 0; transition: background .2s, border-color .2s; flex: none; }
     .check input:checked { background: var(--orange); border-color: var(--orange); }
     .check input:checked::after { content: ''; width: 10px; height: 6px; border: 2.4px solid #fff; border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px, -1px); }
     .forgot { font-weight: 700; color: var(--purple); }
-    .forgot:hover { color: var(--orange); }
-    .login-form .btn { justify-content: space-between; width: 100%; margin-top: 6px; }
-    .help { margin-top: 26px; font-size: 15px; color: var(--ink-2); }
-    .help a { color: var(--orange); text-decoration: underline; text-underline-offset: 3px; }
-    .stagger > * { animation: viewIn .8s var(--ease-out) both; }
-    .stagger > *:nth-child(2) { animation-delay: .06s; } .stagger > *:nth-child(3) { animation-delay: .12s; }
-    .stagger > *:nth-child(4) { animation-delay: .18s; } .stagger > *:nth-child(5) { animation-delay: .24s; }
-    @media (max-width: 900px) {
-      body { grid-template-columns: 1fr; }
-      .login-art { min-height: 280px; order: 2; }
-    }
+    .login-form .btn { justify-content: space-between; width: 100%; }
+    .help { margin-top: 20px; font-size: 15px; color: var(--ink-2); }
+    .help a, .help button { color: var(--orange); text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+    .chips-check { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chips-check label { position: relative; }
+    .chips-check input { position: absolute; opacity: 0; }
+    .chips-check span { display: inline-block; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line); font-size: 14px; font-weight: 500; background: var(--paper); cursor: pointer; transition: .25s; }
+    .chips-check input:checked + span { background: var(--purple); color: #fff; border-color: var(--purple); }
+    .chips-check input:focus-visible + span { outline: 2px solid var(--orange); outline-offset: 2px; }
+    .field small { display: block; margin-top: 6px; color: var(--ink-2); font-size: 13px; }
+    .field label b { font-weight: 600; color: var(--ink-2); }
+    .done { padding: 30px 0; font-size: 22px; font-weight: 600; color: var(--purple); }
+    @media (max-width: 760px) { dialog.pm-dialog[open] { grid-template-columns: 1fr; } .dlg-art { min-height: 140px; padding: 22px; } }
   </style>
 </head>
 <body>
-  <aside class="login-art" aria-hidden="false">
-    <div class="hero-bg"></div>
-    <div class="hero-grain"></div>
-    <div class="hero-scene" aria-hidden="true">
-      <div class="layer" data-depth="18">
-        <span class="disc float" style="width:min(30vw,360px);height:min(30vw,360px);left:30%;top:18%;--dur:10s"></span>
-        <span class="disc glass float" style="width:180px;height:180px;left:62%;top:46%;--dur:7s;--dy:22px"></span>
-      </div>
-      <div class="layer" data-depth="40">
-        <span class="capsule" style="width:200px;height:72px;left:12%;top:58%;rotate:-28deg"></span>
-        <span class="disc glass float" style="width:80px;height:80px;left:22%;top:20%;--dur:5s"></span>
-      </div>
+  <header class="pm-bar">
+    <div class="wrap">
+      <a href="#" aria-label="Conexión Chinoin"><img class="conexion" src="assets/img/portal/conexion-chinoin.webp" alt="Conexión Chinoin" width="210" height="53"></a>
+      <a class="back" href="index.html"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>Volver a chinoin.com</span></a>
+      <button class="btn ghost-dark" type="button" data-open="registro">Regístrese</button>
+      <button class="btn" type="button" data-open="acceso">Acceso <span class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
     </div>
-    <a class="back" href="index.html"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Volver a chinoin.com</a>
-    <div>
+  </header>
+
+  <main>
+    <section class="pm-hero">
+      <div class="wrap pm-hero-grid">
+        <div>
+          <span class="kicker">Plataforma de educación médica continua</span>
+          <h1 class="h-display">El conocimiento que fortalece sus <em>decisiones clínicas</em></h1>
+          <p class="lead">Acceda a cursos, conferencias, literatura científica, casos clínicos y recursos especializados desarrollados para apoyar la toma de decisiones clínicas en las principales áreas terapéuticas.</p>
+          <div class="hero-ctas">
+            <button class="btn magnetic big" type="button" data-open="acceso">Acceso <span class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+            <button class="btn ghost-dark magnetic big" type="button" data-open="registro">Regístrese</button>
+          </div>
+          <span class="pm-note">Regístrese y obtenga acceso a contenido exclusivo para profesionales de la salud.</span>
+        </div>
+        <div class="pm-hero-img"><img src="assets/img/portal/home-portal-doctor.webp" alt="home-portal-doctor" width="1000" height="800"></div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:clamp(40px,6vw,80px)">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="reveal"><span class="kicker">Especialidades</span><h2 class="h-section">Explore contenido por <em>especialidad</em></h2></div>
+          <p class="lead reveal" style="max-width:52ch">Seleccione el área terapéutica de su interés y acceda a contenido científico actualizado y recursos clínicos desarrollados para apoyar su práctica médica.</p>
+        </div>
+        <div class="spec-grid" id="specs"></div>
+      </div>
+    </section>
+
+    <section class="section" style="background:var(--paper)">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="reveal"><span class="kicker">Conexión Chinoin</span><h2 class="h-section">¿Qué encontrará en <em>Conexión Chinoin?</em></h2></div>
+          <p class="lead reveal" style="max-width:52ch">Acceda a un ecosistema de educación médica continua con recursos científicos desarrollados para apoyar su actualización profesional y fortalecer la toma de decisiones clínicas.</p>
+        </div>
+        <div class="find-grid">
+          <article class="find reveal"><img src="assets/img/portal/curso-medico.webp" alt="curso-medico" loading="lazy"><div><h3>Cursos y programas de actualización</h3><p>Fortalezca sus conocimientos mediante cursos desarrollados por especialistas y contenidos diseñados para la práctica clínica.</p></div></article>
+          <article class="find reveal" style="--d:.08s"><img src="assets/img/portal/casos-clinicos-1.webp" alt="casos-clinicos" loading="lazy"><div><h3>Casos clínicos y literatura científica</h3><p>Consulte artículos, revisiones de literatura y casos clínicos basados en evidencia para respaldar sus decisiones clínicas.</p></div></article>
+          <article class="find reveal" style="--d:.16s"><img src="assets/img/portal/eventos-medicos.webp" alt="eventos-medicos" loading="lazy"><div><h3>Eventos académicos y webinars</h3><p>Participe en sesiones con líderes de opinión y manténgase actualizado sobre los avances más relevantes de cada especialidad.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="pm-band">
+      <div class="wrap">
+        <div class="pm-band-card reveal">
+          <div>
+            <span class="kicker" style="color:#FFD3BF">Disponible 24/7</span>
+            <h2 class="h-section">Educación médica continua, disponible cuando la <em>necesite</em></h2>
+            <p class="lead">Acceda a contenido científico desde cualquier dispositivo y manténgase actualizado con una plataforma diseñada para acompañar su práctica clínica.</p>
+            <button class="btn light magnetic big" type="button" data-open="registro">Registro al Portal Médico <span class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+          </div>
+          <img src="assets/img/portal/home-portal-dra.webp" alt="home.portal-dra" loading="lazy">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pm-foot">
+    <div class="wrap">
+      Chinoin® 2026. Todos los derechos reservados. Contenido exclusivo para profesionales de la salud. Número Veeva: TEDA-MX-00009.
+      Portal emc chinoin medicamentos digital No. SSA: 2501022002C00438. Portal emc chinoin médicos digital No. SSA: 2501022002C00439.
+      Consulte nuestro <a href="https://emc.chinoin.com/aviso-de-privacidad-" target="_blank" rel="noopener">aviso de privacidad</a>.
+    </div>
+  </footer>
+
+  <!-- Acceso: textos de la pantalla de inicio de sesión del Portal Médico -->
+  <dialog class="pm-dialog" id="acceso" aria-labelledby="acceso-title">
+    <div class="dlg-art">
+      <div class="hero-bg"></div>
+      <div class="hero-scene" aria-hidden="true">
+        <span class="disc float" style="width:200px;height:200px;left:30%;top:10%;--dur:9s"></span>
+        <span class="disc glass float" style="width:120px;height:120px;left:60%;top:40%;--dur:6s;--dy:20px"></span>
+        <span class="capsule" style="width:150px;height:54px;left:8%;top:52%;rotate:-28deg"></span>
+      </div>
       <h2>Portal <em>Médico</em></h2>
     </div>
-  </aside>
-
-  <main class="login-panel">
-    <a href="index.html"><img class="logo" src="assets/chinoin-logo.png" alt="CHINOIN®" width="900" height="176"></a>
-    <div class="stagger">
-      <h1>Iniciar sesión</h1>
+    <div class="dlg-body">
+      <button class="dlg-close" type="button" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <img src="assets/chinoin-logo.png" alt="CHINOIN®" width="900" height="176" style="width:200px;height:auto;margin-bottom:26px">
+      <h1 id="acceso-title">Iniciar sesión</h1>
       <p class="intro">La página que estás intentando visualizar solo está disponible para usuarios registrados.</p>
-      <form class="login-form" id="login" novalidate>
-        <div class="field">
-          <label for="email">Correo*</label>
-          <input id="email" type="email" placeholder="Correo" autocomplete="username" required>
-        </div>
-        <div class="field">
-          <label for="password">Contraseña*</label>
-          <div class="pw">
-            <input id="password" type="password" placeholder="Contraseña" autocomplete="current-password" required>
-            <button type="button" aria-controls="password" aria-pressed="false">Mostrar</button>
-          </div>
+      <form class="login-form" data-demo novalidate>
+        <div class="field"><label for="email">Correo*</label><input id="email" type="email" placeholder="Correo" autocomplete="username" required></div>
+        <div class="field"><label for="password">Contraseña*</label>
+          <div class="pw"><input id="password" type="password" placeholder="Contraseña" autocomplete="current-password" required><button type="button" data-pw aria-controls="password" aria-pressed="false">Mostrar</button></div>
         </div>
         <div class="row-between">
           <label class="check"><input type="checkbox" checked> Recordarme</label>
-          <a class="forgot" href="#">¿Has olvidado la contraseña?</a>
+          <a class="forgot" href="https://emc.chinoin.com/_hcms/mem/reset/request" target="_blank" rel="noopener">¿Has olvidado la contraseña?</a>
         </div>
-        <button class="btn" type="submit">Iniciar sesión <span class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+        <button class="btn big" type="submit">Iniciar sesión <span class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
       </form>
-      <p class="help">¿Tienes problemas? <a href="#">Ponte en contacto con el administrador del sitio</a></p>
+      <p class="help">¿No tienes una cuenta? <button type="button" data-open="registro">Regístrate aquí.</button></p>
+      <p class="help" style="margin-top:6px">¿Tienes problemas? <a href="index.html#/contacto">Ponte en contacto con el administrador del sitio</a></p>
     </div>
-  </main>
+  </dialog>
+
+  <!-- Registro: campos del formulario "Registro al portal médico" de emc.chinoin.com -->
+  <dialog class="pm-dialog" id="registro" aria-labelledby="registro-title">
+    <div class="dlg-art photo" style="background-image:url('assets/img/portal/portal-medico-chinoin-bienvenida-registro-copia.webp')"></div>
+    <div class="dlg-body">
+      <button class="dlg-close" type="button" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <h1 id="registro-title">Cree su cuenta en Conexión Chinoin</h1>
+      <p class="intro">Acceda a una plataforma exclusiva para profesionales de la salud que reúne cursos de Educación Médica Continua, literatura científica, casos clínicos, eventos académicos y recursos especializados para apoyar su actualización clínica.</p>
+      <form class="form-grid" data-demo data-registro novalidate>
+        <div class="field full"><label for="r-email">Correo electrónico<span class="req">*</span></label><input id="r-email" type="email" required></div>
+        <div class="field full"><label for="r-name">Nombre Completo <b>(Como aparece en su cédula profesional)</b><span class="req">*</span></label><input id="r-name" type="text" required></div>
+        <div class="field"><label for="r-cedula">Cédula Profesional<span class="req">*</span></label><input id="r-cedula" type="text" required></div>
+        <div class="field"><label for="r-esp">Especialidad<span class="req">*</span></label><select id="r-esp" required data-options="especialidades"></select></div>
+        <div class="field full"><label>Portafolio de intéres (puedes seleccionar hasta 3)</label><div class="chips-check" data-checks></div><small data-count-checks>0 de 3 seleccionados</small></div>
+        <div class="field"><label for="r-estado">Estado de la República<span class="req">*</span></label><select id="r-estado" required data-options="estados"></select></div>
+        <div class="field"><label for="r-cp">Código postal<span class="req">*</span></label><input id="r-cp" type="text" inputmode="numeric" required></div>
+        <div class="field full"><label for="r-city">Ciudad</label><input id="r-city" type="text"></div>
+        <div class="full"><button class="btn big" type="submit" style="width:100%;justify-content:space-between">Crear cuenta <span class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button></div>
+      </form>
+      <p class="done" hidden>Gracias por enviar tus respuestas</p>
+      <p class="help">¿Ya tiene una cuenta? <button type="button" data-open="acceso">Acceso</button></p>
+    </div>
+  </dialog>
 
   <script>
     (() => {
-      const btn = document.querySelector('.pw button');
-      const pw = document.getElementById('password');
-      btn.addEventListener('click', () => {
+      const $ = (s, el = document) => el.querySelector(s);
+      const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const arrow = '<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+
+      // Especialidades del Portal Médico (todas llevan al registro, como en el original)
+      const specs = [
+        ['Respiratorio', 'assets/img/portal/index-respi.webp'], ['Rinitis', 'assets/img/portal/index-rinitis.webp'],
+        ['Sistema Nervioso Central', 'assets/img/portal/index-snc.webp'], ['Gastroenterología', 'assets/img/portal/index-gastro.webp'],
+        ['Músculo Esquelético', 'assets/img/portal/index-dolor.webp'], ['Ginecología', 'assets/img/portal/gineco1.webp'],
+        ['Cardiología', 'assets/img/portal/index-cardio.webp'], ['OTC', 'assets/img/portal/index-otc.webp']
+      ];
+      $('#specs').innerHTML = specs.map(([t, f], i) => `<button type="button" class="spec reveal" style="--d:${(i % 4) * .06}s" data-open="registro" data-interest="${t}"><img src="${f}" alt="${t}" loading="lazy"><span class="lm-go">${arrow}</span><h3>${t}</h3></button>`).join('');
+
+      const opts = {
+        especialidades: ['Urología', 'Terapia Interna', 'Reumatología', 'Psiquiatría', 'Proctología', 'Pediatría', 'Otros', 'Otorrinolaringología', 'Ortopedia y Traumatología', 'Oncología', 'Oftalmología', 'Odontología', 'Nutrición', 'Neurología', 'Neumología', 'Nefrología', 'Médico Cirujano', 'Medicina Interna', 'Medicina General', 'Medicina Familiar', 'Infectología', 'Hematología', 'Ginecología y Obstetricia', 'Geriatria', 'Gastroenterología', 'Endocrinología', 'Dermatología', 'Cirugía Plástica y reconstruc', 'Cirugía General', 'Cardiología', 'Angiología', 'Anestesiología', 'Alergia'],
+        estados: ['Aguascalientes', 'Baja California', 'Baja California Sur', 'Campeche', 'Chiapas', 'Chihuahua', 'Ciudad de México', 'Coahuila', 'Colima', 'Durango', 'Estado de México', 'Guanajuato', 'Guerrero', 'Hidalgo', 'Jalisco', 'Michoacán', 'Morelos', 'Nayarit', 'Nuevo León', 'Oaxaca', 'Puebla', 'Querétaro', 'Quintana Roo', 'San Luis Potosí', 'Sin Localidad', 'Sinaloa', 'Sonora', 'Tabasco', 'Tamaulipas', 'Tlaxcala', 'Veracruz', 'Yucatán', 'Zacatecas'],
+        portafolio: ['Cardiología', 'Ginecología', 'Gastroenterología', 'Músculo Esquelético', 'OTC', 'Respiratorio', 'Rinitis', 'Sistema Nervioso Central', 'Enfermería']
+      };
+      $$('[data-options]').forEach((s) => { s.innerHTML = '<option value="">Selecciona</option>' + opts[s.dataset.options].map((o) => `<option>${o}</option>`).join(''); });
+      $('[data-checks]').innerHTML = opts.portafolio.map((o) => `<label><input type="checkbox" value="${o}"><span>${o}</span></label>`).join('');
+      const checks = $$('[data-checks] input');
+      const countChecks = () => {
+        const n = checks.filter((c) => c.checked).length;
+        checks.forEach((c) => { c.disabled = !c.checked && n >= 3; });
+        $('[data-count-checks]').textContent = `${n} de 3 seleccionados`;
+      };
+      checks.forEach((c) => c.addEventListener('change', countChecks));
+
+      // Ventanas de acceso y registro
+      const open = (id, interest) => {
+        $$('dialog[open]').forEach((d) => d.close());
+        const d = document.getElementById(id);
+        if (interest) { const c = checks.find((x) => x.value === interest); if (c && !c.checked && checks.filter((x) => x.checked).length < 3) { c.checked = true; countChecks(); } }
+        d.showModal();
+      };
+      document.addEventListener('click', (e) => {
+        const o = e.target.closest('[data-open]');
+        if (o) { e.preventDefault(); open(o.dataset.open, o.dataset.interest); return; }
+        if (e.target.closest('[data-close]')) e.target.closest('dialog').close();
+        if (e.target.tagName === 'DIALOG') e.target.close();
+      });
+      if (location.hash === '#registro' || location.hash === '#acceso') open(location.hash.slice(1));
+
+      const pwBtn = $('[data-pw]'), pw = $('#password');
+      pwBtn.addEventListener('click', () => {
         const show = pw.type === 'password';
         pw.type = show ? 'text' : 'password';
-        btn.textContent = show ? 'Ocultar' : 'Mostrar';
-        btn.setAttribute('aria-pressed', String(show));
+        pwBtn.textContent = show ? 'Ocultar' : 'Mostrar';
+        pwBtn.setAttribute('aria-pressed', String(show));
       });
-      // Maqueta: el formulario se conectará al mismo inicio de sesión que usa chinoin.com.
-      document.getElementById('login').addEventListener('submit', (e) => e.preventDefault());
 
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      const art = document.querySelector('.login-art');
-      const layers = art.querySelectorAll('.layer');
-      art.addEventListener('pointermove', (e) => {
-        const r = art.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
-        layers.forEach((l) => { const d = +l.dataset.depth; l.style.transform = `translate3d(${-x * d}px, ${-y * d}px, 0)`; });
-      });
+      // Maqueta: en producción ambos formularios se conectan a los de emc.chinoin.com (HubSpot).
+      $$('form[data-demo]').forEach((f) => f.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const bad = $$('[required]', f).filter((x) => !x.value.trim() || (x.type === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x.value)));
+        $$('.field', f).forEach((x) => x.classList.remove('invalid'));
+        bad.forEach((x) => x.closest('.field').classList.add('invalid'));
+        if (bad[0]) { bad[0].focus(); return; }
+        if (f.matches('[data-registro]')) { f.hidden = true; $('.done', f.parentElement).hidden = false; }
+      }));
+
+      // Aparición al hacer scroll y botones magnéticos
+      const io = new IntersectionObserver((es) => es.forEach((x) => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }), { threshold: .12 });
+      $$('.reveal').forEach((x) => io.observe(x));
+      if (!reduce) document.addEventListener('pointermove', (e) => {
+        const b = e.target.closest && e.target.closest('.magnetic');
+        $$('.magnetic.is-pulled').forEach((x) => { if (x !== b) { x.style.transform = ''; x.classList.remove('is-pulled'); } });
+        if (!b) return;
+        const r = b.getBoundingClientRect();
+        b.classList.add('is-pulled');
+        b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .18}px, ${(e.clientY - r.top - r.height / 2) * .3}px)`;
+      }, { passive: true });
     })();
   </script>
 </body>

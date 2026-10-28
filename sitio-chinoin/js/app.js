@@ -4,6 +4,7 @@
   const D = window.CHINOIN;
   const CAT = window.CHINOIN_CATALOGO || [];
   const FICHAS = window.CHINOIN_FICHAS || {};
+  const MARCAS = window.CHINOIN_MARCAS || {};
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -47,9 +48,17 @@
   const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return ''; } };
 
   // Qué hace el botón de cada producto, según a dónde lleva en el sitio original.
+  // Información y tiendas del sitio de la marca (js/marcas.js)
+  function marcaDe(p) {
+    for (const m of Object.values(MARCAS)) if (m.fichas[p.id]) return { marca: m, ficha: m.fichas[p.id] };
+    return null;
+  }
+
   function destino(p) {
     const h = p.href;
     if (D.fichasPorProducto[p.id]) return { tipo: 'ficha', fichas: D.fichasPorProducto[p.id] };
+    const mk = marcaDe(p);
+    if (mk) return { tipo: 'marca', ...mk, href: h || mk.marca.sitio, sitio: host(h || mk.marca.sitio) };
     if (!h) return { tipo: 'ninguno' };
     if (/chinoin\.com\/es\/gelan-plus/.test(h)) return { tipo: 'roto', href: h };
     if (/chinoin\.com/.test(h)) return { tipo: 'registro', href: h };
@@ -214,6 +223,7 @@
   function productCard(p, i = 0) {
     const d = destino(p);
     const badge = d.tipo === 'registro' ? `<span class="pc-badge">${ICON.lock} Profesionales de la salud</span>`
+      : d.tipo === 'marca' ? `<span class="pc-badge buy">${ICON.ext} Cómpralo en ${d.marca.comprar.length} tiendas</span>`
       : d.tipo === 'externo' ? `<span class="pc-badge ext">${ICON.ext} ${esc(d.sitio)}</span>`
         : d.tipo === 'ficha' ? `<span class="pc-badge info">${ICON.file} Ficha completa</span>` : '';
     return `
@@ -403,7 +413,7 @@
               <h2 class="h-section">Portal <em>Médico</em></h2>
               <p>La página que estás intentando visualizar solo está disponible para usuarios registrados.</p>
               <div style="display:flex;gap:12px;flex-wrap:wrap">
-                <a class="btn light magnetic" href="portal-medico.html">Iniciar sesión <span class="arrow">${ICON.arrow}</span></a>
+                <a class="btn light magnetic" href="portal-medico.html#acceso">Iniciar sesión <span class="arrow">${ICON.arrow}</span></a>
                 <a class="btn ghost magnetic" href="#/biblioteca-virtual">Biblioteca virtual</a>
               </div>
             </div>
@@ -545,6 +555,23 @@
       </details>`).join('')}</div>`;
   }
 
+  function marcaAccordion(secs, open = 3) {
+    const body = (items) => {
+      let out = '', list = false;
+      items.forEach(([k, t]) => {
+        if (k === 'li' && !list) { out += '<ul>'; list = true; }
+        if (k !== 'li' && list) { out += '</ul>'; list = false; }
+        out += k === 'li' ? `<li>${esc(t)}</li>` : k === 'img' ? img(t, '') : `<p>${esc(t)}</p>`;
+      });
+      return out + (list ? '</ul>' : '');
+    };
+    return `<div class="ficha">${secs.map((s, i) => `
+      <details class="ficha-item"${i < open ? ' open' : ''}>
+        <summary><span>${esc(s.t)}</span><i>${ICON.chev}</i></summary>
+        <div class="ficha-body">${body(s.items)}</div>
+      </details>`).join('')}</div>`;
+  }
+
   function viewProducto(id) {
     const p = findProduct(id);
     if (!p) return null;
@@ -556,7 +583,18 @@
     if (related.length < 3) related.push(...CAT.filter((x) => x.id !== p.id && !related.includes(x) && x.grupos.some((g) => p.grupos.includes(g))).slice(0, 4 - related.length));
 
     let action = '';
-    if (d.tipo === 'externo') {
+    if (d.tipo === 'marca') {
+      action = `
+        <div class="buy-box buy-shop">
+          <p class="buy-title">${ICON.ext} ¿Dónde comprar?</p>
+          <p class="buy-note">Tiendas donde ${esc(d.marca.nombre)} indica que puedes encontrarlo:</p>
+          <div class="shops">${d.marca.comprar.map((t) => ext(t.href, `<span>${esc(t.tienda)}</span>${ICON.ext}`, 'shop')).join('')}</div>
+          <div class="shop-more">
+            <a class="btn magnetic" href="#ficha" data-scroll>Información del producto <span class="arrow">${ICON.down}</span></a>
+            ${ext(d.href, `Sitio oficial: ${esc(d.sitio)} ${ICON.ext}`, 'inline-ext')}
+          </div>
+        </div>`;
+    } else if (d.tipo === 'externo') {
       action = `
         <div class="buy-box">
           <p class="buy-title">Información, presentaciones y dónde encontrarlo</p>
@@ -568,7 +606,7 @@
         <div class="buy-box locked">
           <p class="buy-title">${ICON.lock} Información para profesionales de la salud</p>
           <p>La página que estás intentando ver solo está disponible para usuarios registrados.</p>
-          <a class="btn purple magnetic big" href="portal-medico.html">Iniciar sesión <span class="arrow">${ICON.arrow}</span></a>
+          <a class="btn purple magnetic big" href="portal-medico.html#acceso">Iniciar sesión <span class="arrow">${ICON.arrow}</span></a>
         </div>`;
     } else if (d.tipo === 'ficha') {
       action = `
@@ -579,6 +617,14 @@
     }
 
     const tabs = d.tipo === 'ficha' ? d.fichas : [];
+    const marcaInfo = d.tipo === 'marca' && d.ficha.secciones.length ? `
+      <section class="ficha-section" id="ficha">
+        <div class="wrap">
+          <div class="ficha-tabs" role="tablist"><button role="tab" aria-selected="true">Información del producto</button></div>
+          ${marcaAccordion(d.ficha.secciones)}
+          <p class="source-note">Información publicada en ${ext(d.marca.sitio, esc(host(d.marca.sitio)), 'inline-ext')}.</p>
+        </div>
+      </section>` : '';
     const tabLabel = (k) => FICHAS[k] && FICHAS[k].tipo === 'ipp' ? 'Información amplia para prescribir' : 'Información del producto';
 
     return `
@@ -590,7 +636,7 @@
             <div class="product-stage" data-stage>
               ${disc('glass float', 'width:38%;height:38%;right:-6%;top:-4%;--dur:8s')}
               ${disc('float', 'width:16%;height:16%;left:6%;bottom:10%;--dur:6s;opacity:.85')}
-              ${img(p.img, p.name, 'stage-img', 'loading="eager"')}
+              ${img((d.tipo === 'marca' && d.ficha.img) || p.img, p.name, 'stage-img', 'loading="eager"')}
             </div>
             <div class="product-info">
               <div class="pc-tags big">${p.grupos.map((g) => `<span>${g}</span>`).join('')}${p.padecimientos.map((x) => `<a href="#/${x}">${padLabel(x)}</a>`).join('')}</div>
@@ -604,6 +650,7 @@
           </div>
         </div>
       </section>
+      ${marcaInfo}
       ${tabs.length ? `
       <section class="ficha-section" id="ficha">
         <div class="wrap">
