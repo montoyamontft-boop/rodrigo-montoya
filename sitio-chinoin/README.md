@@ -27,6 +27,7 @@ python3 sitio-chinoin/tools/bundle.py chinoin-preview.html
 | `js/data.js` | Textos de cada página, menú, portafolios y footer |
 | `js/catalogo.js` | Los 32 productos del catálogo (generado con `tools/catalogo.py`) |
 | `js/fichas.js` | Fichas completas de producto y aviso de privacidad (generado con `tools/fichas.py`) |
+| `js/veterinaria.js` | 74 productos veterinarios, sus fichas, empresa e historia de chinoinveterinaria.com (generado con `tools/veterinaria.py`) |
 | `js/app.js` | Vistas, navegación y animaciones |
 | `css/styles.css` | Sistema visual |
 | `assets/` | Logo oficial (`logo-chinoin.webp` del header original), imágenes de chinoin.com optimizadas a WebP y fotos de Veterinaria |
@@ -36,7 +37,25 @@ Para regenerar catálogo y fichas a partir de las páginas descargadas de chinoi
 ```bash
 python3 tools/catalogo.py <carpeta_html> > js/catalogo.js
 python3 tools/fichas.py   <carpeta_html> > js/fichas.js
+python3 tools/veterinaria.py <carpeta_html_veterinaria> lista_imagenes.txt > js/veterinaria.js
 ```
+
+## Veterinaria
+
+Antes el menú mandaba a chinoinveterinaria.com en otra pestaña; ahora es una sección del sitio
+(`#/veterinaria`) con el contenido de ese sitio:
+
+- **74 productos** de las líneas Pequeñas Especies (Farmacéutica, Oftálmicos, Vacunas) y Grandes Especies
+  (Farmacéutica, Biológicos), con filtros por línea, especie y categoría, y buscador por nombre o principio activo.
+- **Fichas**: 17 productos tienen ficha completa en texto (descripción, mecanismo, dosis, advertencias,
+  presentación); los otros 57 en el original solo tienen una línea y una imagen con la información, que aquí
+  se muestra ampliable.
+- **Menú anatómico** (Bovinos, Ovinos, Caprinos, Porcinos, Equinos, Caninos, Felinos): en el original esas
+  páginas solo tienen una foto; aquí muestran los productos cuya ficha indica uso en esa especie.
+- Lanzamientos recientes, historia (1912–2014), empresa (misión, valores, visión, cultura), APP del Dolor y
+  contacto de ventas y gerencia médica.
+- Detalles del original que se corrigieron al copiar: una tarjeta vacía, Parastin Puppy duplicado (una de sus
+  tarjetas enlazaba a `#`) y una categoría marcada como "Audio" en Vacufive 5V.
 
 ## Cómo funciona la compra / "Ver más" de cada producto
 
@@ -61,12 +80,10 @@ dónde mandaba el botón "Ver más" del catálogo original:
 
 - **Únete al equipo**: la página `chinoin.com/es/unete-al-equipo` no se pudo leer desde el entorno de trabajo;
   falta su texto (se muestra un aviso).
-- **Veterinaria**: el catálogo veterinario vive en `chinoinveterinaria.com` (sin acceso todavía). La página ya
-  tiene el diseño nuevo con fotos de mascotas y el enlace al sitio veterinario.
 - **Formularios**: Farmacovigilancia tiene exactamente los campos del formulario de HubSpot original
   (`portalId 48099646`, `formId 2602e084-…`). En esta maqueta no se envía nada; en producción se conecta a ese
   mismo formulario.
 
 ## Créditos de fotos
 
-Las fotos de mascotas de Veterinaria son de [Unsplash](https://unsplash.com) (licencia Unsplash, uso libre).
+Las fotos de mascotas de la portada de Veterinaria son de [Unsplash](https://unsplash.com) (licencia Unsplash, uso libre).

@@ -35,6 +35,7 @@
     info: '<svg viewBox="0 0 24 24" class="fill"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-1 9v6h2v-6h-2Zm0-4v2h2V7h-2Z" fill-rule="evenodd"/></svg>',
     linkedin: '<svg viewBox="0 0 24 24" class="fill"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4V21H3V9.75Zm6.5 0h3.8v1.6h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-4.95c0-1.18-.02-2.7-1.65-2.7-1.65 0-1.9 1.29-1.9 2.62V21h-4V9.75Z"/></svg>',
     x: '<svg viewBox="0 0 24 24" class="fill"><path d="M17.8 3h3.1l-6.8 7.8 8 10.2h-6.3l-4.9-6.4L5.3 21H2.2l7.3-8.3L1.9 3h6.4l4.4 5.9L17.8 3Zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5Z"/></svg>',
+    facebook: '<svg viewBox="0 0 24 24" class="fill"><path d="M14 8.5V6.8c0-.8.2-1.3 1.4-1.3H17V2.2C16.6 2.1 15.4 2 14.1 2 11.3 2 9.6 3.7 9.6 6.6v1.9H6.8v3.7h2.8V22H14v-9.8h2.8l.4-3.7H14Z"/></svg>',
     youtube: '<svg viewBox="0 0 24 24" class="fill"><path d="M23 12s0-3.6-.46-5.33a2.78 2.78 0 0 0-1.95-1.96C18.88 4.25 12 4.25 12 4.25s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96C1 8.4 1 12 1 12s0 3.6.46 5.33a2.78 2.78 0 0 0 1.95 1.96c1.71.46 8.59.46 8.59.46s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96C23 15.6 23 12 23 12Zm-13.25 3.27V8.73L15.5 12l-5.75 3.27Z"/></svg>'
   };
 
@@ -992,47 +993,315 @@
   /* ============================================================
      Veterinaria
      ============================================================ */
+  const VET = window.CHINOIN_VET || { productos: [], destacados: [], textos: {} };
+  const V = D.veterinaria;
+  const vetFind = (id) => VET.productos.find((p) => p.id === id);
+  const lineaId = (p) => V.lineas.filter((l) => p.lineas.includes(`${l.grupo} · ${l.linea}`)).map((l) => l.id);
+  const especiesDe = (p) => (p.ficha && p.ficha.especies) || [];
+  const cap = (s) => { const t = String(s || '').toLocaleLowerCase('es'); return t.charAt(0).toLocaleUpperCase('es') + t.slice(1); };
+  const especieImg = (label) => (VET.textos.especiesImgs || {})[label];
+
+  function vetCard(p, i = 0) {
+    const esp = especiesDe(p);
+    return `
+      <a class="product-card vet-card" href="#/veterinaria/producto/${p.id}" style="--i:${i}" data-vid="${p.id}">
+        <div class="shot">${img(p.img, p.name)}</div>
+        <div class="meta">
+          <div class="pc-tags"><span>${esc(cap(p.forma))}</span>${p.categoria ? `<span>${esc(cap(p.categoria))}</span>` : ''}</div>
+          <h3>${esc(p.name)}</h3>
+          ${p.sub ? `<p class="vc-sub">${esc(cap(p.sub))}</p>` : ''}
+          ${esp.length ? `<span class="vc-species">${ICON.paw} ${esp.join(' · ')}</span>` : ''}
+        </div>
+        <span class="pc-go">${ICON.arrow}</span>
+      </a>`;
+  }
+
+  const vetHeroCrumbs = (extra = []) => `<nav class="crumbs dark" aria-label="Ruta"><a href="#/">Inicio</a><span aria-hidden="true">/</span><a href="#/veterinaria">Veterinaria</a>${extra.map((c) => `<span aria-hidden="true">/</span>${c.route ? `<a href="${c.route}">${c.label}</a>` : `<span>${c.label}</span>`}`).join('')}</nav>`;
+
   function viewVeterinaria() {
-    const V = D.veterinaria;
     const g = V.fotos.galeria;
+    const T = VET.textos;
+    const feat = VET.destacados.map(vetFind).filter(Boolean);
+    const grupos = [...new Set(V.lineas.map((l) => l.grupo))];
     return `
       <section class="vet-hero">
         <div class="vet-blob b1"></div><div class="vet-blob b2"></div>
         <div class="paws" aria-hidden="true">${Array.from({ length: 9 }, (_, i) => `<i style="--i:${i}">${ICON.paw}</i>`).join('')}</div>
         <div class="wrap vet-hero-grid">
           <div>
-            <nav class="crumbs dark" aria-label="Ruta"><a href="#/">Inicio</a><span aria-hidden="true">/</span><a href="#/catalogo">Productos</a><span aria-hidden="true">/</span><span>Veterinaria</span></nav>
-            <span class="kicker">CHINOIN® Veterinaria</span>
+            ${vetHeroCrumbs()}
+            <span class="kicker">CHINOIN® Veterinaria · ${V.firma}</span>
             <h1 class="h-display vet-title">${V.title}</h1>
-            <p class="vet-lead">${V.citas[0]}</p>
+            <p class="vet-slogan">${V.slogan}</p>
+            <p class="vet-lead">${V.intro}</p>
             <div class="hero-ctas">
-              ${ext(D.links.veterinaria, `Visitar Chinoin Veterinaria <span class="arrow">${ICON.ext}</span>`, 'btn magnetic big')}
+              <a class="btn magnetic big" href="#/veterinaria/productos">${V.cta} <span class="arrow">${ICON.arrow}</span></a>
+              <a class="btn ghost-dark magnetic" href="#vet-especies" data-scroll>Buscar por especie</a>
             </div>
           </div>
           <div class="vet-photo">
             <div class="vet-photo-frame">${img(V.fotos.hero, 'Perro corgi', '', 'loading="eager"')}</div>
             <span class="vet-sticker s1">${ICON.paw}</span>
             <span class="vet-sticker s2">♥</span>
+            <span class="vet-count"><b data-count="${VET.productos.length}">${VET.productos.length}</b> productos para la salud animal</span>
           </div>
         </div>
       </section>
-      <section class="vet-strip">
-        <div class="vet-marquee"><div class="vet-track">${[...g, ...g].map((f, i) => `<span class="vet-pic" style="--r:${(i % 2 ? 1 : -1) * (2 + (i % 3))}deg">${img(f, 'Mascota')}</span>`).join('')}</div></div>
+      <section class="vet-strip" aria-hidden="true">
+        <div class="vet-track">${[...g, ...g].map((f, i) => `<span class="vet-pic" style="--r:${(i % 2 ? 1 : -1) * (2 + (i % 3))}deg">${img(f, '')}</span>`).join('')}</div>
       </section>
+
+      <section class="section vet-body" id="vet-especies">
+        <div class="wrap">
+          <div class="section-head"><div class="reveal"><span class="kicker">Menú anatómicos</span><h2 class="h-section">¿Para quién <em>buscas?</em></h2></div></div>
+          <div class="species">${V.especies.map((e, i) => {
+            const n = VET.productos.filter((p) => especiesDe(p).includes(e.label)).length;
+            return `<a class="specie reveal" style="--d:${i * 0.05}s" href="#/veterinaria/especie/${e.id}">
+              <span class="sp-img">${img(especieImg(e.label), e.label)}</span>
+              <strong>${e.label}</strong>${n ? `<small>${n} ${n === 1 ? 'producto' : 'productos'}</small>` : ''}
+            </a>`;
+          }).join('')}</div>
+        </div>
+      </section>
+
+      <section class="section vet-launch">
+        <div class="wrap"><div class="section-head">
+          <div class="reveal"><span class="kicker">Novedades</span><h2 class="h-section">${V.lanzamientos.replace('recientes', '<em>recientes</em>')}</h2></div>
+          <a class="btn purple magnetic reveal" href="#/veterinaria/productos">Ver todos <span class="arrow">${ICON.arrow}</span></a>
+        </div></div>
+        <div class="rail" data-rail><div class="rail-track">${feat.map((p, i) => vetCard(p, i)).join('')}</div></div>
+      </section>
+
       <section class="section vet-body">
-        <div class="wrap split-2">
-          <div class="vet-collage reveal">
-            ${img(g[1], 'Perro y gato', 'c1')}${img(g[3], 'Gatito', 'c2')}${img(g[0], 'Golden retriever', 'c3')}
+        <div class="wrap">
+          <div class="section-head"><div class="reveal"><span class="kicker">Líneas</span><h2 class="h-section">Nuestras <em>líneas</em></h2></div></div>
+          <div class="vet-lines">${grupos.map((gr) => `
+            <div class="vet-group reveal">
+              <h3>Línea de ${gr}</h3>
+              <div class="vet-group-links">${V.lineas.filter((l) => l.grupo === gr).map((l) => {
+                const list = VET.productos.filter((p) => lineaId(p).includes(l.id));
+                return `<a href="#/veterinaria/linea/${l.id}" class="vline">
+                  <span class="vline-shots">${list.slice(0, 3).map((p) => img(p.img, '')).join('')}</span>
+                  <span class="vline-meta"><strong>${l.linea}</strong><small>${list.length} productos</small></span>${ICON.arrow}
+                </a>`;
+              }).join('')}</div>
+            </div>`).join('')}</div>
+        </div>
+      </section>
+
+      <section class="section vet-values">
+        <div class="wrap">
+          <div class="vet-values-grid">${V.pilares.map((x, i) => `
+            <article class="vval reveal" style="--d:${i * 0.06}s"><span class="vval-n">0${i + 1}</span><h3>${x.t}</h3><p>${x.p}</p></article>`).join('')}</div>
+        </div>
+      </section>
+
+      <section class="section vet-history">
+        <div class="wrap">
+          <div class="section-head"><div class="reveal"><span class="kicker">Historia</span><h2 class="h-section">${V.historiaTitle.replace('CRECIENDO', '<em>creciendo</em>').replace('92 AÑOS', '92 años')}</h2></div></div>
+        </div>
+        <div class="vtimeline" data-rail>
+          <div class="vt-track">${(T.historia || []).map((h, i) => `
+            <article class="vt-item reveal" style="--d:${(i % 4) * 0.06}s"><span class="vt-year">${h.year}</span><p>${h.p}</p></article>`).join('')}</div>
+        </div>
+      </section>
+
+      <section class="section vet-company">
+        <div class="wrap">
+          <div class="section-head"><div class="reveal"><span class="kicker">Empresa</span><h2 class="h-section">Nuestra <em>empresa</em></h2></div></div>
+          <div class="vco" data-vco>
+            <div class="vco-tabs" role="tablist">${(T.empresa || []).map((e, i) => `<button role="tab" aria-selected="${!i}" data-vco-tab="${i}">${e.t}</button>`).join('')}</div>
+            <div class="vco-stage">${(T.empresa || []).map((e, i) => `
+              <article class="vco-panel" data-vco-panel="${i}"${i ? ' hidden' : ''}>
+                <div class="vco-img">${img(e.img, e.t, '', 'loading="eager"')}</div>
+                <div class="vco-text"><h3>${e.t}</h3>${e.p.map((p) => `<p>${p}</p>`).join('')}</div>
+              </article>`).join('')}</div>
           </div>
-          <div>
-            <span class="kicker reveal">Uso humano y veterinario</span>
-            <h2 class="h-section reveal">Cuidamos también a <em>quienes nos acompañan</em></h2>
-            <p class="lead reveal">${V.citas[1]}</p>
-            ${pendingNote('Productos veterinarios pendientes', 'El catálogo veterinario está en chinoinveterinaria.com, que todavía no se puede leer desde este entorno. Se cargará con sus textos y fotos originales.')}
-            <div style="margin-top:28px">${ext(D.links.veterinaria, `Ir a chinoinveterinaria.com <span class="arrow">${ICON.ext}</span>`, 'btn purple magnetic')}</div>
+        </div>
+      </section>
+
+      <section class="section vet-contact">
+        <div class="wrap vet-contact-grid">
+          <div class="vapp reveal">
+            <span class="kicker">Herramienta para médicos veterinarios</span>
+            <h2 class="h-section">${V.app.title.replace('Dolor', '<em>Dolor</em>')}</h2>
+            <p class="lead">${V.app.sub}</p>
+            <div class="hero-ctas">
+              ${ext(V.app.href, `Ingresar <span class="arrow">${ICON.ext}</span>`, 'btn magnetic')}
+              ${V.app.stores.map((s) => ext(s.href, s.label, 'btn ghost-dark magnetic')).join('')}
+            </div>
+          </div>
+          <div class="vcontact reveal">
+            <h3>Contacto</h3>
+            <a href="${V.contacto.ventas.href}">${ICON.phone}<span><small>${V.contacto.ventas.label}</small>${V.contacto.ventas.value}</span></a>
+            <a href="${V.contacto.gerencia.href}">${ICON.phone}<span><small>${V.contacto.gerencia.label}</small>${V.contacto.gerencia.value}</span></a>
+            <a href="mailto:${V.contacto.email}">${ICON.mail}<span><small>Email</small>${V.contacto.email}</span></a>
+            <p>${ICON.pin} ${V.contacto.direccion}</p>
+            <div class="social">${V.social.map((s) => ext(s.href, ICON[s.icon || 'facebook'], 'social-link" aria-label="' + s.label)).join('')}</div>
           </div>
         </div>
       </section>`;
+  }
+
+  function mountVeterinaria() {
+    const tabs = $$('[data-vco-tab]');
+    let i = 0, timer;
+    const show = (n) => {
+      i = n;
+      tabs.forEach((t, k) => t.setAttribute('aria-selected', String(k === n)));
+      $$('[data-vco-panel]').forEach((p, k) => {
+        p.hidden = k !== n;
+        if (k === n && !reduceMotion) p.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 500, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      });
+    };
+    tabs.forEach((t, k) => t.addEventListener('click', () => { clearInterval(timer); show(k); }));
+    if (!reduceMotion && tabs.length) timer = setInterval(() => { if (!document.body.contains(tabs[0])) return clearInterval(timer); show((i + 1) % tabs.length); }, 6000);
+  }
+
+  // Catálogo veterinario (todas, por línea o por especie)
+  const vetState = { lineas: new Set(), especies: new Set(), cats: new Set(), q: '' };
+
+  function viewVetProductos(kind, id) {
+    vetState.lineas.clear(); vetState.especies.clear(); vetState.cats.clear(); vetState.q = '';
+    let title = 'Productos <em>veterinarios</em>', kicker = 'Veterinaria', photo = null, crumb = 'Productos';
+    if (kind === 'linea') {
+      const l = V.lineas.find((x) => x.id === id); if (!l) return null;
+      vetState.lineas.add(id); title = `${l.linea} <em>· ${l.grupo}</em>`; kicker = `Línea de ${l.grupo}`; crumb = `${l.grupo} · ${l.linea}`;
+    }
+    if (kind === 'especie') {
+      const e = V.especies.find((x) => x.id === id); if (!e) return null;
+      vetState.especies.add(e.label); title = e.label; kicker = 'Menú anatómicos'; photo = especieImg(e.label); crumb = e.label;
+    }
+    const cats = [...new Set(VET.productos.map((p) => cap(p.categoria)).filter(Boolean))].sort();
+    const chip = (k, v, label) => `<button type="button" class="chip" data-vk="${k}" data-value="${esc(v)}" aria-pressed="false">${label}</button>`;
+    return `
+      <section class="vet-head${photo ? ' with-photo' : ''}">
+        ${photo ? `<div class="vet-head-photo">${img(photo, title)}</div>` : ''}
+        <div class="wrap">
+          ${vetHeroCrumbs([{ label: crumb }])}
+          <span class="kicker">${kicker}</span>
+          <h1 class="h-display">${title}</h1>
+          ${kind === 'especie' ? `<p class="vet-lead">Productos cuya ficha indica uso en ${title.toLowerCase()}. La ficha de cada producto detalla especies, dosis y advertencias.</p>` : `<p class="vet-lead">${V.intro}</p>`}
+        </div>
+      </section>
+      <section class="catalog vet-body">
+        <div class="wrap catalog-grid">
+          <aside class="filters" aria-label="Filtros">
+            <h3>Filtrar por:</h3>
+            <label class="search">${ICON.search}<input type="search" placeholder="Buscar producto o principio activo" aria-label="Buscar producto" data-vq></label>
+            <div class="f-group"><span>Línea</span><div class="chips">${V.lineas.map((l) => chip('linea', l.id, `${l.grupo.split(' ')[0]} · ${l.linea}`)).join('')}</div></div>
+            <div class="f-group"><span>Especie</span><div class="chips">${V.especies.map((e) => chip('especie', e.label, e.label)).join('')}</div></div>
+            <div class="f-group"><span>Categoría</span><div class="chips">${cats.map((c) => chip('cat', c, c)).join('')}</div></div>
+            <button type="button" class="clear" data-vclear>Borrar todos los filtros</button>
+          </aside>
+          <div>
+            <div class="results-bar"><span data-vcount></span></div>
+            <div class="product-grid" data-vgrid>${VET.productos.map((p, i) => vetCard(p, i)).join('')}</div>
+            <div class="empty" hidden>No hay productos con estos filtros. <button type="button" data-vclear>Borrar todos los filtros</button></div>
+          </div>
+        </div>
+      </section>`;
+  }
+
+  function mountVetProductos() {
+    const cards = $$('[data-vgrid] .product-card');
+    const q = $('[data-vq]');
+    const sets = { linea: vetState.lineas, especie: vetState.especies, cat: vetState.cats };
+    const sync = () => $$('[data-vk]').forEach((c) => c.setAttribute('aria-pressed', String(sets[c.dataset.vk].has(c.dataset.value))));
+    const apply = (animate = true) => {
+      const first = new Map(cards.map((c) => [c, c.getBoundingClientRect()]));
+      let n = 0;
+      cards.forEach((c) => {
+        const p = vetFind(c.dataset.vid);
+        const ok = (!vetState.lineas.size || lineaId(p).some((x) => vetState.lineas.has(x)))
+          && (!vetState.especies.size || especiesDe(p).some((x) => vetState.especies.has(x)))
+          && (!vetState.cats.size || vetState.cats.has(cap(p.categoria)))
+          && (!vetState.q || norm([p.name, p.sub, p.forma, p.categoria].join(' ')).includes(norm(vetState.q)));
+        c.hidden = !ok; if (ok) n++;
+      });
+      $('[data-vcount]').textContent = `${n} ${n === 1 ? 'producto' : 'productos'}`;
+      $('.empty').hidden = n > 0;
+      if (!animate || reduceMotion) return;
+      cards.forEach((c) => {
+        if (c.hidden) return;
+        const a = first.get(c), b = c.getBoundingClientRect();
+        if (!a.width) { c.animate([{ opacity: 0, transform: 'scale(.92)' }, { opacity: 1, transform: 'none' }], { duration: 450, easing: 'cubic-bezier(.2,.8,.2,1)' }); return; }
+        const dx = a.left - b.left, dy = a.top - b.top;
+        if (dx || dy) c.animate([{ transform: `translate(${dx}px,${dy}px)` }, { transform: 'none' }], { duration: 500, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      });
+    };
+    $$('[data-vk]').forEach((c) => c.addEventListener('click', () => {
+      const s = sets[c.dataset.vk];
+      s.has(c.dataset.value) ? s.delete(c.dataset.value) : s.add(c.dataset.value);
+      sync(); apply();
+    }));
+    q.addEventListener('input', () => { vetState.q = q.value.trim(); apply(); });
+    $$('[data-vclear]').forEach((b) => b.addEventListener('click', () => { Object.values(sets).forEach((s) => s.clear()); vetState.q = ''; q.value = ''; sync(); apply(); }));
+    sync(); apply(false);
+  }
+
+  function viewVetProducto(id) {
+    const p = vetFind(id);
+    if (!p) return null;
+    const f = p.ficha || {};
+    const esp = especiesDe(p);
+    const fondo = (f.imagenes || [])[0];
+    const related = VET.productos.filter((x) => x.id !== p.id && (x.name.split(' ')[0] === p.name.split(' ')[0] || (x.categoria === p.categoria && lineaId(x).some((l) => lineaId(p).includes(l))))).slice(0, 8);
+    const lid = lineaId(p)[0];
+    const l = V.lineas.find((x) => x.id === lid);
+    return `
+      <section class="product-hero vet-product">
+        <div class="hero-bg soft vet"></div>
+        <div class="wrap">
+          ${vetHeroCrumbs([...(l ? [{ label: `${l.grupo} · ${l.linea}`, route: `#/veterinaria/linea/${l.id}` }] : []), { label: esc(p.name) }])}
+          <div class="product-detail">
+            <div class="product-stage" data-stage>
+              ${disc('glass float', 'width:38%;height:38%;right:-6%;top:-4%;--dur:8s')}
+              <span class="stage-paw" aria-hidden="true">${ICON.paw}</span>
+              ${img(p.img, p.name, 'stage-img', 'loading="eager"')}
+            </div>
+            <div class="product-info">
+              <div class="pc-tags big"><span>${esc(cap(p.forma))}</span>${p.categoria ? `<span>${esc(cap(p.categoria))}</span>` : ''}${p.lineas.map((x) => `<span class="ln">${x}</span>`).join('')}</div>
+              <h1 class="h-display product-name">${esc(f.title || p.name)}</h1>
+              ${f.subtitle || p.sub ? `<p class="vet-sub">${esc(f.subtitle || cap(p.sub))}</p>` : ''}
+              ${esp.length ? `<div class="vet-uso"><span>Uso</span>${esp.map((e) => { const s = V.especies.find((x) => x.label === e); return s ? `<a href="#/veterinaria/especie/${s.id}">${img(especieImg(e), e)}${e}</a>` : `<span>${e}</span>`; }).join('')}</div>` : ''}
+              <div class="buy-box">
+                <p class="buy-title">${ICON.info} ¿Dudas sobre este producto?</p>
+                <div class="hero-ctas">
+                  <a class="btn magnetic" href="${V.contacto.ventas.href}">${V.contacto.ventas.label}: ${V.contacto.ventas.value}</a>
+                  <a class="btn ghost-dark magnetic" href="mailto:${V.contacto.email}?subject=${encodeURIComponent(p.name)}">${ICON.mail} Gerencia médica</a>
+                </div>
+                ${p.url ? `<p class="buy-note">${ext(p.url, `Ver ficha en chinoinveterinaria.com ${ICON.ext}`, 'inline-ext')}</p>` : ''}
+              </div>
+              <ul class="help-links"><li><a href="#/veterinaria/productos">${ICON.back} Regresar a los productos</a></li></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+      ${fondo ? `<section class="vet-fondo"><div class="wrap"><button type="button" class="vet-fondo-img reveal" data-lightbox="${fondo}">${img(fondo, p.name)}</button></div></section>` : ''}
+      ${(f.secciones || []).length ? `
+      <section class="ficha-section" id="ficha"><div class="wrap">
+        <div class="ficha">${f.secciones.map((s, i) => `
+          <details class="ficha-item"${i < 3 ? ' open' : ''}>
+            <summary><span>${esc(s.t)}</span><i>${ICON.chev}</i></summary>
+            <div class="ficha-body">${(() => {
+              let out = '', inList = false;
+              s.p.forEach(([k, t]) => {
+                if (k === 'li' && !inList) { out += '<ul>'; inList = true; }
+                if (k !== 'li' && inList) { out += '</ul>'; inList = false; }
+                out += k === 'li' ? `<li>${esc(t)}</li>` : `<p>${esc(t)}</p>`;
+              });
+              return out + (inList ? '</ul>' : '');
+            })()}</div>
+          </details>`).join('')}</div>
+        ${(f.presentaciones || []).length ? `<h2 class="h-section" style="font-size:clamp(28px,3vw,40px);margin:50px 0 20px">Presentación</h2>
+          <div class="vet-pres">${f.presentaciones.map((x) => `<figure class="reveal">${x.img ? img(x.img, x.text) : ''}<figcaption>${esc(x.text)}</figcaption></figure>`).join('')}</div>` : ''}
+      </div></section>` : ''}
+      ${related.length ? `
+      <section class="section related vet-body">
+        <div class="wrap"><div class="section-head"><div class="reveal"><span class="kicker">También te puede interesar</span><h2 class="h-section">Productos <em>relacionados</em></h2></div></div></div>
+        <div class="rail" data-rail><div class="rail-track">${related.map((x, i) => vetCard(x, i)).join('')}</div></div>
+      </section>` : ''}`;
   }
 
   const view404 = () => pageHero({ kicker: 'Error 404', title: 'Página no <em>encontrada</em>', crumbs: [{ label: '404' }], compact: true }) +
@@ -1059,7 +1328,14 @@
       case 'cuidado-de-la-salud': return page(viewCuidado(), 'Medicamentos de venta libre');
       case 'probioticos': return page(viewPortafolio('probioticos', { grupo: 'Probióticos' }), 'Probióticos');
       case 'odontologia': return page(viewPortafolio('odontologia', { grupo: 'Odontología' }), 'Odontología');
-      case 'veterinaria': return page(viewVeterinaria(), 'Veterinaria');
+      case 'veterinaria': {
+        if (!b) return page(viewVeterinaria(), 'Veterinaria', mountVeterinaria);
+        const c = hash.replace(/^#\/?/, '').split('/').filter(Boolean)[2];
+        if (b === 'productos') return page(viewVetProductos('todos'), 'Productos veterinarios', mountVetProductos);
+        if (b === 'linea' || b === 'especie') { const h = viewVetProductos(b, c); if (h) return page(h, 'Veterinaria', mountVetProductos); }
+        if (b === 'producto') { const h = viewVetProducto(c); if (h) return page(h, vetFind(c).name, mountProducto); }
+        break;
+      }
       case 'calidad-chinoin': return page(viewCalidad(), 'Calidad');
       case 'responsabilidad-social': return page(viewResponsabilidad(), 'Responsabilidad Social');
       case 'tecnologia': return page(viewTecnologia(), 'Tecnología');
@@ -1264,7 +1540,7 @@
 
   // Etiqueta del cursor según lo que hay debajo
   const CURSOR_LABELS = [
-    ['.product-card, .photo-card, .logo-card:not(.static), .unit, .contact-card, .mega-feature, .book', 'Ver'],
+    ['.product-card, .photo-card, .logo-card:not(.static), .unit, .contact-card, .mega-feature, .book, .specie, .vline', 'Ver'],
     ['[data-rail]', 'Arrastra'],
     ['[data-lightbox]', 'Ampliar'],
     ['.marquee a', 'Ir']

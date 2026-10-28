@@ -482,14 +482,54 @@ window.CHINOIN = {
     { id: 'zymir-ab-suspension', name: 'Zymir-AB® Suspensión', ficha: 'zymir-ab-suspension' }
   ],
 
-  // Veterinaria: en el original el menú abre chinoinveterinaria.com en otra pestaña.
+  // Veterinaria: contenido de chinoinveterinaria.com/sitio (portada, contacto y apps).
+  // Productos, fichas, empresa e historia están en js/veterinaria.js (generado con tools/veterinaria.py).
   veterinaria: {
     title: 'Veterinaria',
-    // Textos de chinoin.com que hablan de la línea veterinaria
-    citas: [
-      'El Círculo Dorado de Chinoin® forma parte de nuestra cultura y ADN, lo que nos impulsa día a día a brindar soluciones terapéuticas con precio justo para cada uno de nuestros clientes de las diferentes líneas humana y veterinaria con las que contamos.',
-      'Contamos con la capacidad, instalaciones y tecnología avanzada para la fabricación de productos, tanto para uso humano como veterinario.'
+    sitio: 'https://chinoinveterinaria.com/sitio/',
+    slogan: 'Chinoin Veterinaria al servicio de la salud y bienestar animal.',
+    firma: 'Experiencia que da Vida',
+    intro: 'Dirigido al desarrollo, fabricación y comercialización de productos para la salud animal, destacando su participación principalmente en: Bovinos, Ovinos, Caprinos, Porcinos, Equinos y Pequeñas Especies.',
+    cta: 'Conoce los productos.',
+    pilares: [
+      { t: 'CHINOIN', p: 'Es una empresa orgullosamente mexicana dedicada al desarrollo, fabricación y comercialización de medicamentos de línea humana y veterinaria' },
+      { t: 'Calidad', p: 'Contamos con los más altos estándares de calidad' },
+      { t: 'Tecnología', p: 'Utilizamos tecnología de punta en la elaboración de nuestros productos' },
+      { t: 'Pasión', p: 'Pasión y dedicación, ingredientes en nuestras fórmulas.' },
+      { t: 'Nuestro futuro', p: 'Trabajar intensamente en la búsqueda de nuevos productos que enriquezcan nuestras líneas de negocio' }
     ],
+    historiaTitle: '92 AÑOS CRECIENDO',
+    lanzamientos: 'Lanzamientos recientes',
+    lineas: [
+      { id: 'pequenas-farmaceutica', grupo: 'Pequeñas Especies', linea: 'Farmacéutica' },
+      { id: 'pequenas-oftalmicos', grupo: 'Pequeñas Especies', linea: 'Oftálmicos' },
+      { id: 'pequenas-vacunas', grupo: 'Pequeñas Especies', linea: 'Vacunas' },
+      { id: 'grandes-farmaceutica', grupo: 'Grandes Especies', linea: 'Farmacéutica' },
+      { id: 'grandes-biologicos', grupo: 'Grandes Especies', linea: 'Biológicos' }
+    ],
+    especies: [
+      { id: 'bovinos', label: 'Bovinos' }, { id: 'ovinos', label: 'Ovinos' }, { id: 'caprinos', label: 'Caprinos' },
+      { id: 'porcinos', label: 'Porcinos' }, { id: 'equinos', label: 'Equinos' }, { id: 'caninos', label: 'Caninos' }, { id: 'felinos', label: 'Felinos' }
+    ],
+    contacto: {
+      ventas: { label: 'Ventas', value: '01-800-907-4900', href: 'tel:018009074900' },
+      gerencia: { label: 'Gerencia médica', value: '55-5262-3173', href: 'tel:+525552623173' },
+      email: 'gervet@chinoin.com',
+      direccion: 'Carretera Pabellón de Hidalgo km. 4.2 Municipio Rincón de Romos, 20420 Aguascalientes, Ags.'
+    },
+    app: {
+      title: 'APP del Dolor', sub: 'Dolor en pequeñas especies', href: 'https://chinoinveterinaria.com/app',
+      stores: [
+        { label: 'App Store', href: 'https://itunes.apple.com/us/app/chinoin-veterinaria/id1329764781?l=es&ls=1&mt=8' },
+        { label: 'Google Play', href: 'https://play.google.com/store/apps/details?id=com.chinoin.Animales_AR' }
+      ]
+    },
+    social: [
+      { label: 'Facebook', href: 'https://www.facebook.com/ChinoinProductosFarmaceuticos' },
+      { label: 'X', href: 'https://twitter.com/ChinoinPF', icon: 'x' },
+      { label: 'YouTube', href: 'https://www.youtube.com/channel/UC3SguU-Dc1L61rFbBm8Lbww', icon: 'youtube' }
+    ],
+    // Fotos de mascotas (Unsplash) para dar calidez a la sección
     fotos: {
       hero: 'assets/img/vet/corgi.webp',
       galeria: [
