@@ -12,6 +12,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)
 BASE = 'https://www.kipling.edu.mx'
 D = json.load(open(os.path.join(HERE, 'content.json'), encoding='utf-8'))
+# /apps/api/images/... answers with a redirect to the original file; point straight at it
+_REDIR = os.path.join(HERE, 'redirecciones.json')
+if os.path.exists(_REDIR):
+    _txt = json.dumps(D, ensure_ascii=False)
+    for _src, _dst in json.load(open(_REDIR)).items():
+        _txt = _txt.replace(_src, _dst)
+    D = json.loads(_txt)
 CHROME, HOME, PAGES = D['chrome'], D['home'], D['pages']
 esc = html.escape
 
@@ -64,16 +71,41 @@ def norm(u):
     return ALIASES.get(u, u)
 
 
+SPA = False  # True while writing the single-file edition (every page lives in one HTML)
+
+
+def home_href(root):
+    return '#/' if SPA else root + 'index.html'
+
+
 def link(u, root):
     """Map an original URL to its redesigned local page when we have it."""
     if not u:
         return u
     n = norm(u)
     if n in (BASE, BASE + '/'):
-        return root + 'index.html'
+        return home_href(root)
     if n in URL2SLUG:
-        return f'{root}paginas/{URL2SLUG[n]}.html'
+        return f'#/{URL2SLUG[n]}' if SPA else f'{root}paginas/{URL2SLUG[n]}.html'
     return u
+
+
+YT = re.compile(r'(?:youtube\.com/watch\?v=|youtu\.be/)([\w-]{6,})')
+MAP_EMBEDS = {}  # footer map link -> Google Maps embed (filled from the Ubicación page)
+
+
+def viewer_attrs(u):
+    """In-page viewers so videos, maps and PDFs open without leaving the site."""
+    if not u:
+        return ''
+    m = YT.search(u)
+    if m:
+        return f' data-viewer="video" data-src="https://www.youtube-nocookie.com/embed/{m.group(1)}?autoplay=1&rel=0"'
+    if u in MAP_EMBEDS:
+        return f' data-viewer="map" data-src="{esc(MAP_EMBEDS[u])}"'
+    if re.search(r'\.pdf$', u, re.I):
+        return f' data-viewer="pdf" data-src="{esc(u)}"'
+    return ''
 
 
 def is_external(u):
@@ -89,8 +121,8 @@ def a_attrs(u, root, lightbox=None):
     attrs = f'href="{esc(href)}"'
     if lightbox and is_image(u):
         attrs += f' data-lightbox="{esc(lightbox)}"'
-    elif is_external(href) or (href.startswith('http') and not href.startswith(root)):
-        attrs += ' target="_blank" rel="noopener"'
+    elif href.startswith('http'):
+        attrs += ' target="_blank" rel="noopener"' + viewer_attrs(href)
     return attrs
 
 
@@ -173,7 +205,7 @@ def header_html(root, solid=False):
 <div class="progress" aria-hidden="true"><span></span></div>
 <header class="site-header{' is-solid' if solid else ''}" data-header>
   <div class="header-inner">
-    <a class="brand" href="{root}index.html" aria-label="{esc(CHROME['footer']['name'])}">
+    <a class="brand" href="{home_href(root)}" aria-label="{esc(CHROME['footer']['name'])}">
       <img class="brand-light" src="{root}assets/img/footer_logo.png" alt="{esc(CHROME['footer']['name'])}" width="2024" height="333">
       <img class="brand-color" src="{root}assets/img/header_logo.png" alt="" width="2024" height="388">
     </a>
@@ -195,11 +227,14 @@ def header_html(root, solid=False):
 </div>
 <div class="search" data-search aria-hidden="true">
   <button class="icon-btn search-close" data-search-close aria-label="Close">{icon('close')}</button>
-  <form class="search-form" action="{BASE}/apps/search/" method="get" role="search">
-    <label class="sr-only" for="site_search">Search</label>
-    <input type="search" id="site_search" name="q" placeholder="Search this site" title="Search" autocomplete="off">
-    <button type="submit" class="search-go" aria-label="Search">{icon('search')}</button>
-  </form>
+  <div class="search-box">
+    <form class="search-form" action="{BASE}/apps/search/" method="get" role="search" data-search-form>
+      <label class="sr-only" for="site_search">Search</label>
+      <input type="search" id="site_search" name="q" placeholder="Search this site" title="Search" autocomplete="off">
+      <button type="submit" class="search-go" aria-label="Search">{icon('search')}</button>
+    </form>
+    <ol class="search-results" data-search-results aria-live="polite"></ol>
+  </div>
 </div>'''
 
 
@@ -224,7 +259,7 @@ def footer_html(root):
   <div class="foot-bands" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
   <div class="container foot-grid">
     <div class="foot-brand">
-      <a href="{root}index.html"><img src="{root}assets/img/footer_logo.png" alt="{esc(f['name'])}" width="2024" height="333" loading="lazy"></a>
+      <a href="{home_href(root)}"><img src="{root}assets/img/footer_logo.png" alt="{esc(f['name'])}" width="2024" height="333" loading="lazy"></a>
       <p class="foot-name">{esc(f['name'])}</p>
       <div class="foot-mails">{mails}</div>
     </div>
@@ -247,6 +282,17 @@ def mobile_cta(root):
     return (f'<a class="m-cta" {a_attrs(cita["href"], root)}>{icon("calendar", "i i-sm")}<span>{esc(cita["text"])}</span></a>')
 
 
+VIEWER = f'''
+<div class="viewer" data-viewer-box aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="viewer-card">
+    <div class="viewer-bar">
+      <a class="viewer-out" data-viewer-out href="#" target="_blank" rel="noopener">{icon('arrow-up-right', 'i i-sm')}</a>
+      <button class="icon-btn" data-viewer-close aria-label="Close">{icon('close')}</button>
+    </div>
+    <div class="viewer-frame"></div>
+  </div>
+</div>'''
+
 LIGHTBOX = f'''
 <div class="lightbox" data-lb aria-hidden="true" role="dialog" aria-modal="true">
   <button class="icon-btn lb-close" data-lb-close aria-label="Close">{icon('close')}</button>
@@ -257,7 +303,7 @@ LIGHTBOX = f'''
 </div>'''
 
 
-def page_shell(title, body, root, desc=None, solid=False, body_cls=''):
+def page_shell(title, body, root, desc=None, solid=False, body_cls='', extra='', body_attrs=''):
     desc = desc or D['meta_description']
     return f'''<!DOCTYPE html>
 <html lang="es" class="no-js">
@@ -277,7 +323,7 @@ def page_shell(title, body, root, desc=None, solid=False, body_cls=''):
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{root}assets/css/kipling.css">
 </head>
-<body class="{body_cls}">
+<body class="{body_cls}"{body_attrs}>
 {header_html(root, solid)}
 <main id="contenido">
 {body}
@@ -285,6 +331,8 @@ def page_shell(title, body, root, desc=None, solid=False, body_cls=''):
 {footer_html(root)}
 {mobile_cta(root)}
 {LIGHTBOX}
+{VIEWER}
+{extra}
 <script src="{root}assets/js/kipling.js" defer></script>
 </body>
 </html>
@@ -303,8 +351,11 @@ def rich(html_in, root, gallery='content'):
             continue
         new = link(h, root)
         a['href'] = new
-        if new.startswith('http') and not new.startswith(root):
+        if new.startswith('http'):
             a['target'] = '_blank'; a['rel'] = 'noopener'
+            v = BeautifulSoup(f'<a{viewer_attrs(new)}></a>', 'lxml').a
+            for k, val in v.attrs.items():
+                a[k] = val
         elif 'target' in a.attrs:
             del a['target']
     # short lines made only of bold text act as section headings on the original site
@@ -407,7 +458,7 @@ def files_html(block, root):
     cards = []
     embeds = []
     for f in block['items']:
-        cards.append(f'<a class="doc" href="{esc(f["href"])}" target="_blank" rel="noopener">'
+        cards.append(f'<a class="doc" href="{esc(f["href"])}" target="_blank" rel="noopener"{viewer_attrs(f["href"])}>'
                      f'<span class="doc-ic">{icon("file")}<b>PDF</b></span><span class="doc-t">{esc(f["text"])}</span>'
                      f'{icon("arrow-up-right", "i i-sm doc-go")}</a>')
         if f.get('embed'):
@@ -441,7 +492,7 @@ def cta_card(root):
 def banner_html(p, root, hero_block=None):
     crumbs = []
     bc = p.get('breadcrumb') or []
-    crumbs.append(f'<a href="{root}index.html">{esc(CHROME["footer"]["name"])}</a>')
+    crumbs.append(f'<a href="{home_href(root)}">{esc(CHROME["footer"]["name"])}</a>')
     for c in bc[:-1]:
         crumbs.append(f'<a {a_attrs(c["href"], root)}>{esc(c["text"])}</a>')
     if bc:
@@ -511,7 +562,7 @@ def render_page(url, p, root='../'):
     needs_form = any('tfaforms' in (b.get('html') or '') for b in blocks)
     body = banner_html(p, root, hero_block) + f'<section class="page-body">{layout}</section>'
     if needs_form:
-        body += '<script src="https://nordangliaeducation.tfaforms.net/js/iframe_resize_helper.js" defer></script>'
+        body += '' if SPA else '<script src="https://nordangliaeducation.tfaforms.net/js/iframe_resize_helper.js" defer></script>'
     return body
 
 
@@ -713,13 +764,87 @@ def render_home(root=''):
     return body
 
 
+# ---------------------------------------------------------------- maps, search index, single-file edition
+def load_map_embeds():
+    ub = next((p for u, p in PAGES.items() if URL2SLUG.get(u, '').startswith('ubicacion')), None)
+    if not ub:
+        return
+    srcs = re.findall(r'<iframe[^>]+src="([^"]+maps/embed[^"]+)"', ' '.join(b.get('html', '') for b in ub['blocks']))
+    links = [it['href'] for ad in CHROME['footer']['addresses'] for it in ad['items'] if it['kind'] == 'map']
+    for href, src in zip(links, srcs):
+        MAP_EMBEDS[href] = html.unescape(src)
+
+
+def page_bodies(root):
+    yield '', D['chrome']['footer']['name'], 'is-home', render_home(root)
+    for slug, url in SLUG2URL.items():
+        p = PAGES[url]
+        if p['kind'] == 'news-list':
+            body = render_news(url, p, root)
+        elif p['kind'] == 'article':
+            body = render_article(url, p, root)
+        else:
+            body = render_page(url, p, root)
+        yield slug, p['doc_title'], 'is-inner', body
+
+
+def search_entry(slug, title, body, href):
+    s = BeautifulSoup(body, 'lxml')
+    for t in s.select('.cta-card, .modal, .crumbs, script'):
+        t.decompose()
+    h1 = s.find(['h1'])
+    text = re.sub(r'\s+', ' ', s.get_text(' ')).strip()
+    return {'t': h1.get_text(' ', strip=True) if h1 else title, 'u': href, 'x': text[:5000]}
+
+
+def inline_assets(doc):
+    import base64, mimetypes
+    css = open(os.path.join(OUT, 'assets/css/kipling.css'), encoding='utf-8').read()
+    js = open(os.path.join(OUT, 'assets/js/kipling.js'), encoding='utf-8').read()
+    doc = doc.replace('<link rel="stylesheet" href="assets/css/kipling.css">', '<style>\n' + css + '\n</style>')
+    doc = doc.replace('<script src="assets/js/kipling.js" defer></script>', '<script>\n' + js.replace('</script', '<\\/script') + '\n</script>')
+    cache = {}
+
+    def data(m):
+        path = m.group(2)
+        if path not in cache:
+            mt = mimetypes.guess_type(path)[0] or 'image/x-icon'
+            cache[path] = f'data:{mt};base64,' + base64.b64encode(open(os.path.join(OUT, path), 'rb').read()).decode()
+        return f'{m.group(1)}="{cache[path]}"'
+    doc = re.sub(r'(src|href)="(assets/img/[^"]+)"', data, doc)
+    left = re.findall(r'(?:src|href)="(assets/[^"]+)"', doc)
+    assert not left, left[:5]
+    return doc
+
+
+def build_single_file():
+    global SPA
+    SPA = True
+    try:
+        pages = list(page_bodies(''))
+        index = [search_entry(slug, title, body, '#/' + slug) for slug, title, _, body in pages]
+        tpls = ''.join(f'<template data-page="{slug}" data-title="{esc(title)}" data-cls="{cls}">{body}</template>'
+                       for slug, title, cls, body in pages)
+        extra = tpls + '<script>window.KIPLING_INDEX=' + json.dumps(index, ensure_ascii=False).replace('</', '<\\/') + ';</script>'
+        home = pages[0]
+        doc = page_shell(home[1], home[3], '', body_cls='is-home', extra=extra, body_attrs=' data-spa')
+    finally:
+        SPA = False
+    doc = inline_assets(doc)
+    stray = re.findall(r'href="((?:\.\./)?(?:paginas/[^"]+|index\.html))"', doc)
+    assert not stray, stray[:5]
+    open(os.path.join(OUT, 'kipling-completo.html'), 'w', encoding='utf-8').write(doc)
+    return len(pages)
+
+
 # ---------------------------------------------------------------- write
 def main():
+    load_map_embeds()
     os.makedirs(os.path.join(OUT, 'paginas'), exist_ok=True)
     for f in os.listdir(os.path.join(OUT, 'paginas')):
         if f.endswith('.html'):
             os.remove(os.path.join(OUT, 'paginas', f))
-    home = page_shell(D['chrome']['footer']['name'], render_home(''), '', body_cls='is-home')
+    home = page_shell(D['chrome']['footer']['name'], render_home(''), '', body_cls='is-home', body_attrs=' data-root=""')
     open(os.path.join(OUT, 'index.html'), 'w', encoding='utf-8').write(home)
     n = 0
     for slug, url in SLUG2URL.items():
@@ -731,11 +856,15 @@ def main():
         else:
             body = render_page(url, p)
         open(os.path.join(OUT, 'paginas', slug + '.html'), 'w', encoding='utf-8').write(
-            page_shell(p['doc_title'], body, '../', body_cls='is-inner'))
+            page_shell(p['doc_title'], body, '../', body_cls='is-inner', body_attrs=' data-root="../"'))
         n += 1
     json.dump({u: s for u, s in URL2SLUG.items()}, open(os.path.join(HERE, 'mapa-urls.json'), 'w'),
               indent=1, ensure_ascii=False)
-    print('index.html +', n, 'páginas')
+    index = [search_entry(slug, title, body, 'index.html' if not slug else f'paginas/{slug}.html')
+             for slug, title, _, body in page_bodies('')]
+    open(os.path.join(OUT, 'assets/js/indice.js'), 'w', encoding='utf-8').write(
+        '/* Índice de búsqueda generado por build.py */\nwindow.KIPLING_INDEX=' + json.dumps(index, ensure_ascii=False) + ';\n')
+    print('index.html +', n, 'páginas; kipling-completo.html con', build_single_file(), 'páginas')
 
 
 if __name__ == '__main__':

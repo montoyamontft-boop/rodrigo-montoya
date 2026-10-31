@@ -6,6 +6,11 @@ Solo cambia la interfaz.
 
 ## Cómo verlo
 
+**Opción rápida:** abre `kipling-completo.html`. Es un solo archivo con las 34 páginas adentro.
+Al cambiar de página no sales del archivo. Los videos de YouTube, los mapas y los PDF se abren en una ventana dentro del mismo sitio, y el buscador busca en el contenido del sitio sin salir.
+
+**Sitio de varias páginas:**
+
 Hay que abrirlo con un servidor local. Si se abre el archivo con doble clic, los formularios y los mapas incrustados pueden no cargar.
 
 ```bash
@@ -65,6 +70,7 @@ En `_fuente/` está todo lo necesario para regenerar el sitio si el colegio actu
 | `extract.py` | Extrae textos, menús, galerías, documentos y noticias a `content.json` |
 | `build.py` | Genera `index.html` y `paginas/*.html` a partir de `content.json` |
 | `mapa-urls.json` | Relación de cada dirección original con su página rediseñada |
+| `redirecciones.json` | Dirección final de las imágenes que el sitio original sirve con redirección |
 
 ```bash
 python3 _fuente/crawl.py /ruta/temporal
