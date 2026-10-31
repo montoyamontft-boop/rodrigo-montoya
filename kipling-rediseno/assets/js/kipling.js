@@ -285,6 +285,14 @@
   function openModal() { if (!modal || !document.contains(modal)) { return; } modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false'); lock(); setTimeout(function () { $('[data-modal-close]', modal).focus(); }, 60); }
   function closeModal() { if (!modal || !modal.classList.contains('is-open')) { return; } modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true'); unlock(); }
 
+  /* Nord Anglia's form may only be framed by https pages (every ancestor included) */
+  function canFrameForm() {
+    if (window.location.protocol !== 'https:') { return false; }
+    var anc = window.location.ancestorOrigins;
+    if (anc) { for (var i = 0; i < anc.length; i++) { if (anc[i].indexOf('https:') !== 0) { return false; } } }
+    return true;
+  }
+
   function initPage(scope) {
     /* split headings */
     $$('[data-split]', scope).forEach(function (el) {
@@ -421,13 +429,20 @@
     $$('.embed-form', scope).forEach(function (w) {
       var f = $('iframe', w);
       if (!f) { return; }
+      if (!canFrameForm()) {
+        f.parentNode.removeChild(f);
+        w.classList.add('is-offline');
+        var alt = w.previousElementSibling;
+        if (alt && alt.classList.contains('form-alt')) { alt.style.display = 'none'; }
+        return;
+      }
       f.addEventListener('load', function () { w.classList.add('is-loaded'); });
       var slow = setTimeout(function () { if (!w.classList.contains('is-loaded')) { w.classList.add('is-slow'); } }, 9000);
       cleanups.push(function () { clearTimeout(slow); });
     });
 
     /* formulario de solicitud (FormAssembly ajusta su altura con este script) */
-    if ($('#formassembly_form', scope) && !window.__tfaHelper) {
+    if ($('#formassembly_form', scope) && canFrameForm() && !window.__tfaHelper) {
       window.__tfaHelper = true;
       var s = document.createElement('script');
       s.src = 'https://nordangliaeducation.tfaforms.net/js/iframe_resize_helper.js';

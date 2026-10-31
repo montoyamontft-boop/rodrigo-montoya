@@ -461,6 +461,15 @@ def rich(html_in, root, gallery='content'):
             fr['onload'] = "this.parentNode.classList.add('is-loaded')"  # may fire before the page script runs
             wrap.insert(0, BeautifulSoup('<div class="form-loading" aria-hidden="true"><span></span></div>', 'lxml').div)
             cta = HOME['modal']['cta']['text']
+            # Nord Anglia only lets the form be framed by https pages (frame-ancestors 'self' https:);
+            # elsewhere (a downloaded file, an app preview) this card is shown instead of an empty frame
+            wrap['data-form-src'] = src
+            offline = BeautifulSoup(
+                f'<div class="form-offline"><span class="form-offline-ic">{icon("calendar")}</span>'
+                f'<p class="form-offline-t">{esc(fr["title"])}</p>'
+                f'<a class="btn btn-cta btn-lg" href="{esc(src)}" target="_blank" rel="noopener"><span>{esc(cta)}</span>'
+                f'{icon("arrow-up-right", "i i-sm")}</a></div>', 'lxml').div
+            wrap.append(offline)
             alt = BeautifulSoup(f'<div class="form-alt"><a class="btn btn-cta btn-lg" href="{esc(src)}" target="_blank" rel="noopener">'
                                 f'<span>{esc(cta)}</span>{icon("arrow-up-right", "i i-sm")}</a></div>', 'lxml').div
             wrap.insert_before(alt)
@@ -634,7 +643,7 @@ def render_page(url, p, root='../'):
     needs_form = any('tfaforms' in (b.get('html') or '') for b in blocks)
     body = banner_html(p, root, hero_block) + f'<section class="page-body">{layout}</section>'
     if needs_form:
-        body += '' if SPA else '<script src="https://nordangliaeducation.tfaforms.net/js/iframe_resize_helper.js" defer></script>'
+        pass  # kipling.js loads FormAssembly's resize helper only when the form can be framed
     return body
 
 
