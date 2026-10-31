@@ -813,3 +813,16 @@ p { margin: 0; }
 /* long words / URLs from the original texts must wrap instead of widening the page */
 .prose, .lead, .news-sum, .doc-t, .side-nav a { overflow-wrap: anywhere; }
 @media (max-width: 1080px) { .page-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ------------------------------------------------------------ formulario de cita */
+.embed-form { position: relative; min-height: 480px; }
+.embed-form iframe { min-height: 640px; position: relative; z-index: 1; opacity: 0; transition: opacity .5s; }
+.embed-form.is-loaded iframe { opacity: 1; }
+.form-loading { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; background: #fff; transition: opacity .4s; }
+.form-loading span { width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--sand); border-top-color: var(--crimson); animation: spin 1s linear infinite; }
+.embed-form.is-loaded .form-loading, .embed-form.is-slow .form-loading { opacity: 0; pointer-events: none; }
+.embed-form.is-slow iframe { opacity: 1; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.form-alt { display: flex; justify-content: flex-end; margin: 0 0 14px; }
+@keyframes nudge { 0%, 100% { transform: none; } 50% { transform: translateY(-4px) scale(1.03); } }
+.prose a.btn-cta, .prose a.btn-cta:hover { color: #fff; background: linear-gradient(120deg, var(--crimson) 0%, var(--red) 100%); background-size: 100% 100%; font-weight: 700; }

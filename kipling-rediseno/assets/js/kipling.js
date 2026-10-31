@@ -417,6 +417,15 @@
       im.addEventListener('error', function () { var t = im.closest('.tile, .news-img, .logo-cell'); if (t) { t.classList.add('img-missing'); } });
     });
 
+    /* formulario de cita: indicador de carga; si tarda, se resalta el botón que lo abre en su propia página */
+    $$('.embed-form', scope).forEach(function (w) {
+      var f = $('iframe', w);
+      if (!f) { return; }
+      f.addEventListener('load', function () { w.classList.add('is-loaded'); });
+      var slow = setTimeout(function () { if (!w.classList.contains('is-loaded')) { w.classList.add('is-slow'); } }, 9000);
+      cleanups.push(function () { clearTimeout(slow); });
+    });
+
     /* formulario de solicitud (FormAssembly ajusta su altura con este script) */
     if ($('#formassembly_form', scope) && !window.__tfaHelper) {
       window.__tfaHelper = true;

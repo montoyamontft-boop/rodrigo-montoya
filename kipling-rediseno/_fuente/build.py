@@ -434,7 +434,7 @@ def rich(html_in, root, gallery='content'):
         wrap = s.new_tag('div')
         if 'tfaforms.net' in src:
             fr['id'] = 'formassembly_form'
-            fr['height'] = '1200'
+            fr['height'] = '760'
             fr['title'] = 'Formulario de solicitud'
             wrap['class'] = 'embed embed-form'
         elif src.endswith('.pdf'):
@@ -455,6 +455,15 @@ def rich(html_in, root, gallery='content'):
             if k in fr.attrs:
                 del fr[k]
         fr.wrap(wrap)
+        if 'tfaforms.net' in src:
+            # if the embedded form cannot load (blocked network, strict viewer), the same form opens on its own page
+            del fr['loading']
+            fr['onload'] = "this.parentNode.classList.add('is-loaded')"  # may fire before the page script runs
+            wrap.insert(0, BeautifulSoup('<div class="form-loading" aria-hidden="true"><span></span></div>', 'lxml').div)
+            cta = HOME['modal']['cta']['text']
+            alt = BeautifulSoup(f'<div class="form-alt"><a class="btn btn-cta btn-lg" href="{esc(src)}" target="_blank" rel="noopener">'
+                                f'<span>{esc(cta)}</span>{icon("arrow-up-right", "i i-sm")}</a></div>', 'lxml').div
+            wrap.insert_before(alt)
     out = body.decode_contents()
     return out
 
