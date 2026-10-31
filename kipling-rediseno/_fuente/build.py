@@ -10,23 +10,34 @@ from bs4 import BeautifulSoup
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.dirname(HERE)
-BASE = 'https://www.kipling.edu.mx'
-D = json.load(open(os.path.join(HERE, 'content.json'), encoding='utf-8'))
-# /apps/api/images/... answers with a redirect to the original file; point straight at it
-_REDIR = os.path.join(HERE, 'redirecciones.json')
-if os.path.exists(_REDIR):
-    _txt = json.dumps(D, ensure_ascii=False)
-    for _src, _dst in json.load(open(_REDIR)).items():
-        _txt = _txt.replace(_src, _dst)
-    D = json.loads(_txt)
-CHROME, HOME, PAGES = D['chrome'], D['home'], D['pages']
 esc = html.escape
 
-# ---------------------------------------------------------------- url mapping
-ALIASES = {
-    BASE + '/apps/news/category/14340': BASE + '/apps/news/',
-    BASE + '/apps/news/category/14340?pageIndex=1': BASE + '/apps/news/',
-}
+# Cada campus se genera con su propia navegación y pie de página. IB y Blog viven en
+# www.kipling.mx (Grupo Kipling) y se generan dentro de cada campus para no salir del sitio.
+SITES = [
+    {'key': 'satelite', 'content': 'content.json', 'base': 'https://www.kipling.edu.mx', 'prefix': '',
+     'logo': 'header_logo.png', 'favicon': 'favicon.ico'},
+    {'key': 'esmeralda', 'content': 'content_esmeralda.json', 'base': 'https://www.kiplingesmeralda.edu.mx',
+     'prefix': 'esmeralda/', 'logo': 'esmeralda/header_logo.png', 'favicon': 'esmeralda/favicon.ico'},
+]
+GRUPO_BASE = 'https://www.kipling.mx'
+DOMAINS = {'kipling.edu.mx': 'https://www.kipling.edu.mx', 'kiplingesmeralda.edu.mx': 'https://www.kiplingesmeralda.edu.mx',
+           'kipling.mx': GRUPO_BASE}
+
+
+def load_json(name):
+    d = json.load(open(os.path.join(HERE, name), encoding='utf-8'))
+    # /apps/api/images/... answers with a redirect to the original file; point straight at it
+    redir = os.path.join(HERE, 'redirecciones.json')
+    if os.path.exists(redir):
+        txt = json.dumps(d, ensure_ascii=False)
+        for src, dst in json.load(open(redir)).items():
+            txt = txt.replace(src, dst)
+        d = json.loads(txt)
+    return d
+
+
+GRUPO = load_json('content_grupo.json')
 
 
 def slugify(s):
@@ -39,59 +50,99 @@ def content_key(p):
                                    p.get('body')], sort_keys=True).encode()).hexdigest()
 
 
-URL2SLUG, SLUG2URL, used = {}, {}, set()
-by_key = {}
-# shorter / prettier URLs first so they win the canonical slug
-for url in sorted(PAGES, key=lambda u: (len(u), u)):
-    p = PAGES[url]
-    k = content_key(p)
-    if k in by_key:
-        URL2SLUG[url] = by_key[k]
-        continue
-    if p['kind'] == 'news-list':
-        base = 'noticias' if 'pageIndex=2' not in url else 'noticias-2'
-    else:
-        parent = p['breadcrumb'][0]['text'] if len(p['breadcrumb']) > 1 else ''
-        base = slugify(p['title'])
-        if base in used and parent:
-            base = slugify(parent) + '-' + base
-    s, i = base, 2
-    while s in used:
-        s = f'{base}-{i}'; i += 1
-    used.add(s)
-    by_key[k] = s
-    URL2SLUG[url] = s
-    SLUG2URL[s] = url
-
-
 def norm(u):
+    """Canonical form of any Kipling URL (https, www, news category aliases)."""
     if not u:
         return u
-    u = u.replace('http://www.kipling.edu.mx', BASE).replace('https://kipling.edu.mx', BASE)
-    return ALIASES.get(u, u)
+    m = re.match(r'^(?:https?:)?//(?:www\.)?(kipling\.edu\.mx|kiplingesmeralda\.edu\.mx|kipling\.mx)(/.*)?$', u, re.I)
+    if not m:
+        return u
+    base, path = DOMAINS[m.group(1).lower()], m.group(2) or '/'
+    path = re.sub(r'^/apps/news/category/\d+(\?pageIndex=1)?$', '/apps/news/', path)
+    return base + path
+
+
+def assign_slugs(pages, used):
+    url2slug, slug2url, by_key = {}, {}, {}
+    # shorter / prettier URLs first so they win the canonical slug
+    for url in sorted(pages, key=lambda u: (len(u), u)):
+        p = pages[url]
+        k = content_key(p)
+        if k in by_key:
+            url2slug[url] = by_key[k]
+            continue
+        if p['kind'] == 'news-list':
+            base = 'noticias' if 'pageIndex=2' not in url else 'noticias-2'
+        else:
+            parent = p['breadcrumb'][0]['text'] if len(p['breadcrumb']) > 1 else ''
+            base = slugify(p['title'])
+            if base in used and parent:
+                base = slugify(parent) + '-' + base
+        s, i = base, 2
+        while s in used:
+            s = f'{base}-{i}'; i += 1
+        used.add(s)
+        by_key[k] = s
+        url2slug[url] = s
+        slug2url[s] = url
+    return url2slug, slug2url
+
+
+for _site in SITES:
+    _d = load_json(_site['content'])
+    _site['D'] = _d
+    _site['pages'] = {norm(u): p for u, p in _d['pages'].items()}
+    _used = set()
+    _site['url2slug'], _site['slug2url'] = assign_slugs(_site['pages'], _used)
+    g_pages = {norm(u): p for u, p in GRUPO['pages'].items()}
+    g_u2s, g_s2u = assign_slugs(g_pages, _used)
+    _site['pages'].update(g_pages)
+    _site['url2slug'].update(g_u2s)
+    _site['slug2url'].update(g_s2u)
+    _site['login'] = {norm(u) for u in _d['login']}
+    _site['maps'] = {}
+
+SITE = D = CHROME = HOME = PAGES = URL2SLUG = SLUG2URL = None
+BASE = ''
+LOGIN_URLS = set()
+MAP_EMBEDS = {}  # footer map link -> Google Maps embed (filled from the Ubicación page)
+
+
+def use_site(site):
+    global SITE, D, CHROME, HOME, PAGES, URL2SLUG, SLUG2URL, BASE, LOGIN_URLS, MAP_EMBEDS
+    SITE, D = site, site['D']
+    CHROME, HOME, PAGES = D['chrome'], D['home'], site['pages']
+    URL2SLUG, SLUG2URL, BASE = site['url2slug'], site['slug2url'], site['base']
+    LOGIN_URLS, MAP_EMBEDS = site['login'], site['maps']
 
 
 SPA = False  # True while writing the single-file edition (every page lives in one HTML)
 
 
+def page_href(site, slug, root):
+    if SPA:
+        return '#/' + site['prefix'] + slug
+    return root + site['prefix'] + (f'paginas/{slug}.html' if slug else 'index.html')
+
+
 def home_href(root):
-    return '#/' if SPA else root + 'index.html'
+    return page_href(SITE, '', root)
 
 
 def link(u, root):
-    """Map an original URL to its redesigned local page when we have it."""
+    """Map an original URL to its redesigned page when we have it (this campus first)."""
     if not u:
         return u
     n = norm(u)
-    if n in (BASE, BASE + '/'):
-        return home_href(root)
-    if n in URL2SLUG:
-        return f'#/{URL2SLUG[n]}' if SPA else f'{root}paginas/{URL2SLUG[n]}.html'
+    for site in [SITE] + [x for x in SITES if x is not SITE]:
+        if n in (site['base'], site['base'] + '/'):
+            return page_href(site, '', root)
+        if n in site['url2slug'] and (site is SITE or not n.startswith(GRUPO_BASE)):
+            return page_href(site, site['url2slug'][n], root)
     return u
 
 
 YT = re.compile(r'(?:youtube\.com/watch\?v=|youtu\.be/)([\w-]{6,})')
-MAP_EMBEDS = {}  # footer map link -> Google Maps embed (filled from the Ubicación page)
 
 
 def viewer_attrs(u):
@@ -109,11 +160,11 @@ def viewer_attrs(u):
 
 
 def is_external(u):
-    return bool(u) and u.startswith('http') and not u.startswith(BASE)
+    return bool(u) and u.startswith('http')
 
 
 def is_image(u):
-    return bool(u) and re.search(r'\.(jpe?g|png|gif|webp)$', u, re.I) is not None
+    return bool(u) and re.search(r'\.(jpe?g|png|gif|webp|heic)$', u, re.I) is not None
 
 
 def a_attrs(u, root, lightbox=None):
@@ -157,7 +208,6 @@ def icon(name, cls='i'):
 
 
 # ---------------------------------------------------------------- chrome
-LOGIN_URLS = set(D['login'])
 
 
 def nav_html(root):
@@ -207,7 +257,7 @@ def header_html(root, solid=False):
   <div class="header-inner">
     <a class="brand" href="{home_href(root)}" aria-label="{esc(CHROME['footer']['name'])}">
       <img class="brand-light" src="{root}assets/img/footer_logo.png" alt="{esc(CHROME['footer']['name'])}" width="2024" height="333">
-      <img class="brand-color" src="{root}assets/img/header_logo.png" alt="" width="2024" height="388">
+      <img class="brand-color" src="{root}assets/img/{SITE['logo']}" alt="" width="2024" height="388">
     </a>
     <nav class="site-nav" aria-label="Main Menu">{nav_html(root)}</nav>
     <div class="header-tools">
@@ -219,12 +269,17 @@ def header_html(root, solid=False):
 <div class="drawer" data-drawer aria-hidden="true">
   <div class="drawer-panel" role="dialog" aria-modal="true" aria-label="Main Menu">
     <div class="drawer-head">
-      <img src="{root}assets/img/header_logo.png" alt="{esc(CHROME['footer']['name'])}" width="2024" height="388">
+      <img src="{root}assets/img/{SITE['logo']}" alt="{esc(CHROME['footer']['name'])}" width="2024" height="388">
       <button class="icon-btn" data-menu-close aria-label="Close">{icon('close')}</button>
     </div>
     <nav aria-label="Main Menu">{mobile_nav_html(root)}</nav>
   </div>
 </div>
+'''
+
+
+def search_html():
+    return f'''
 <div class="search" data-search aria-hidden="true">
   <button class="icon-btn search-close" data-search-close aria-label="Close">{icon('close')}</button>
   <div class="search-box">
@@ -316,20 +371,21 @@ def page_shell(title, body, root, desc=None, solid=False, body_cls='', extra='',
 <meta name="theme-color" content="#B40029">
 <link rel="apple-touch-icon" sizes="180x180" href="{root}assets/img/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="{root}assets/img/favicon-32x32.png" sizes="32x32">
-<link rel="icon" href="{root}assets/img/favicon.ico" type="image/x-icon">
+<link rel="icon" href="{root}assets/img/{SITE['favicon']}" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://3.files.edl.io" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{root}assets/css/kipling.css">
 </head>
-<body class="{body_cls}"{body_attrs}>
-{header_html(root, solid)}
+<body class="{body_cls}" data-campus="{SITE['key']}"{body_attrs}>
+<div data-chrome-top>{header_html(root, solid)}</div>
+{search_html()}
 <main id="contenido">
 {body}
 </main>
-{footer_html(root)}
-{mobile_cta(root)}
+<div data-chrome-bottom>{footer_html(root)}
+{mobile_cta(root)}</div>
 {LIGHTBOX}
 {VIEWER}
 {extra}
@@ -350,6 +406,9 @@ def rich(html_in, root, gallery='content'):
             a['data-lightbox'] = gallery
             continue
         new = link(h, root)
+        txt = a.get_text(strip=True)
+        if re.fullmatch(r'[\w.+-]+@[\w-]+(\.[\w-]+)+', txt) and not new.startswith('mailto:'):
+            new = 'mailto:' + txt  # the original links this address to a broken https:// URL
         a['href'] = new
         if new.startswith('http'):
             a['target'] = '_blank'; a['rel'] = 'noopener'
@@ -362,14 +421,15 @@ def rich(html_in, root, gallery='content'):
     for el in body.find_all(['div', 'p']):
         kids = [c for c in el.contents if str(c).strip()]
         if len(kids) == 1 and getattr(kids[0], 'name', None) in ('strong', 'b') and not kids[0].find(['img', 'iframe']):
-            if len(el.get_text(strip=True)) < 70:
+            if len(el.get_text(strip=True)) < 70 and not re.match(r'^\s*[-–•·*]', el.get_text()):
                 el['class'] = 'kicker'
     for im in body.find_all('img'):
         im['loading'] = 'lazy'; im['decoding'] = 'async'
         if not im.find_parent('a'):
             im['data-zoom'] = gallery
     for fr in body.find_all('iframe'):
-        src = fr.get('src', '')
+        src = fr.get('src', '').replace('&amp;', '&')  # the original double-escapes some embed URLs
+        fr['src'] = src
         w, h = fr.get('width'), fr.get('height')
         wrap = s.new_tag('div')
         if 'tfaforms.net' in src:
@@ -477,7 +537,8 @@ def side_nav_html(block, root):
                                    for s in it['sub']) + '</ul>'
         items.append(f'<li><a class="{cur.strip()}" {a_attrs(it["href"], root)}>'
                      f'<span>{esc(it["text"])}</span>{icon("arrow", "i i-sm")}</a>{sub}</li>')
-    return f'<nav class="side-nav" aria-label="Page Navigation"><ul>{"".join(items)}</ul></nav>'
+    long = ' side-nav-long' if len(items) > 10 else ''
+    return f'<nav class="side-nav{long}" aria-label="Page Navigation"><ul>{"".join(items)}</ul></nav>'
 
 
 def cta_card(root):
@@ -542,6 +603,8 @@ def render_page(url, p, root='../'):
             side_photos += photos_html(b, f'g{gid}')
     has_side = bool(side_nav or side_files)
     body_main = ''.join(parts)
+    if url.startswith(GRUPO_BASE) and p['title'] == 'Blog':
+        body_main += blog_cards(p, root)
     if has_side:
         layout = f'''
 <div class="container page-grid">
@@ -566,6 +629,49 @@ def render_page(url, p, root='../'):
     return body
 
 
+def first_image(p):
+    for b in p.get('blocks', []):
+        if b['type'] == 'photos' and b['items']:
+            return b['items'][0]['display']
+        if b['type'] == 'text':
+            m = re.search(r'<img[^>]+src="([^"]+)"', b['html'])
+            if m:
+                return html.unescape(m.group(1))
+    return None
+
+
+def excerpt(p, n=170):
+    for b in p.get('blocks', []):
+        if b['type'] == 'text':
+            t = re.sub(r'\s+', ' ', BeautifulSoup(b['html'], 'lxml').get_text(' ')).strip()
+            if len(t) > 40:
+                return t if len(t) <= n else t[:n].rsplit(' ', 1)[0] + '…'
+    return ''
+
+
+def blog_cards(p, root):
+    """Blog index: every post from the original sidebar as a card (title, photo and opening lines)."""
+    cards = []
+    for blk in p['sidebar']:
+        if blk['type'] != 'nav':
+            continue
+        for it in blk['items']:
+            if it['current']:
+                continue
+            post = PAGES.get(norm(it['href']))
+            if not post:
+                continue
+            img = first_image(post)
+            ex = excerpt(post)
+            media = (f'<div class="news-img" style="--bg:url(\'{esc(img)}\')"><img src="{esc(img)}" alt="{esc(it["text"])}" loading="lazy" decoding="async"></div>'
+                     if img else '<div class="news-img news-img-brand" aria-hidden="true"><span></span></div>')
+            cards.append(f'<article class="news-card reveal"><a {a_attrs(it["href"], root)}>{media}'
+                         f'<div class="news-body"><h3 class="news-title">{esc(it["text"])}</h3>'
+                         f'{f"<p class=news-sum>{esc(ex)}</p>" if ex else ""}'
+                         f'<span class="news-go">{icon("arrow", "i")}</span></div></a></article>')
+    return f'<div class="news-grid blog-cards">{"".join(cards)}</div>' if cards else ''
+
+
 def news_card(a, root, gid='news', big=False):
     img = a.get('img')
     summary = f'<div class="news-sum">{rich(a["summary"], root)}</div>' if a.get('summary') else ''
@@ -578,7 +684,7 @@ def news_card(a, root, gid='news', big=False):
                 f'<h3 class="news-title">{esc(a["title"])}</h3>{summary}'
                 f'<span class="news-go">{icon("arrow", "i")}</span></a></article>')
     return (f'<article class="news-card reveal"><a {attrs}>'
-            f'<div class="news-img"><img src="{esc(img)}" alt="{esc(a["title"])}" loading="lazy" decoding="async"></div>'
+            f'<div class="news-img" style="--bg:url(\'{esc(img)}\')"><img src="{esc(img)}" alt="{esc(a["title"])}" loading="lazy" decoding="async"></div>'
             f'<div class="news-body"><h3 class="news-title">{esc(a["title"])}</h3>{summary}'
             f'<span class="news-go">{icon("arrow-up-right" if is_image(href) else "arrow", "i")}</span></div></a></article>')
 
@@ -670,6 +776,7 @@ def render_home(root=''):
     sec_label = next(n['text'] for n in CHROME['nav'] if n['text'] == 'Secciones')
     sp1_text = ' '.join(sp1['lines'])
     sp2_body, sp2_sig = sp2['lines'][0], sp2['lines'][1:]
+    sig_html = ''.join(f'<p class="{c}">{esc(t)}</p>' for c, t in zip(['sig-name', 'sig-role', 'sig-campus'], sp2_sig))
     body = f'''
 <section class="hero" data-hero>
   <div class="hero-media"><img src="{esc(sp1['img'])}" alt="{esc(sp1['alt'])}" fetchpriority="high"></div>
@@ -713,11 +820,7 @@ def render_home(root=''):
     <div class="welcome-copy">
       <h2 class="sec-title reveal" data-split>{esc(sp2['title'])}</h2>
       <blockquote class="welcome-quote reveal"><p>{esc(sp2_body)}</p></blockquote>
-      <div class="signature reveal">
-        <p class="sig-name">{esc(sp2_sig[0])}</p>
-        <p class="sig-role">{esc(sp2_sig[1])}</p>
-        <p class="sig-campus">{esc(sp2_sig[2])}</p>
-      </div>
+      <div class="signature reveal">{sig_html}</div>
     </div>
   </div>
 </section>
@@ -754,7 +857,7 @@ def render_home(root=''):
   <div class="modal-card">
     <div class="cta-bands" aria-hidden="true"><i></i><i></i><i></i></div>
     <button class="icon-btn modal-close" data-modal-close aria-label="Close">{icon('close')}</button>
-    <img class="modal-logo" src="{root}assets/img/header_logo.png" alt="" width="2024" height="388">
+    <img class="modal-logo" src="{root}assets/img/{SITE['logo']}" alt="" width="2024" height="388">
     <h2 class="modal-title" id="modal-title">{esc(m['title'])}</h2>
     <div class="modal-text">{m['summary']}</div>
     <a class="btn btn-cta btn-lg" {a_attrs(m['cta']['href'], root)}><span>{esc(m['cta']['text'])}</span>{icon('arrow', 'i i-sm')}</a>
@@ -775,8 +878,14 @@ def load_map_embeds():
         MAP_EMBEDS[href] = html.unescape(src)
 
 
-def page_bodies(root):
+def site_root(inner):
+    return '../' * (SITE['prefix'].count('/') + (1 if inner else 0))
+
+
+def page_bodies(spa=False):
+    root = '' if spa else site_root(False)
     yield '', D['chrome']['footer']['name'], 'is-home', render_home(root)
+    root = '' if spa else site_root(True)
     for slug, url in SLUG2URL.items():
         p = PAGES[url]
         if p['kind'] == 'news-list':
@@ -790,11 +899,11 @@ def page_bodies(root):
 
 def search_entry(slug, title, body, href):
     s = BeautifulSoup(body, 'lxml')
-    for t in s.select('.cta-card, .modal, .crumbs, script'):
+    for t in s.select('.cta-card, .modal, .crumbs, script, .blog-cards'):
         t.decompose()
     h1 = s.find(['h1'])
     text = re.sub(r'\s+', ' ', s.get_text(' ')).strip()
-    return {'t': h1.get_text(' ', strip=True) if h1 else title, 'u': href, 'x': text[:5000]}
+    return {'t': h1.get_text(' ', strip=True) if h1 else title, 'u': href, 'x': text[:5000], 'c': SITE['key']}
 
 
 def inline_assets(doc):
@@ -821,50 +930,59 @@ def build_single_file():
     global SPA
     SPA = True
     try:
-        pages = list(page_bodies(''))
-        index = [search_entry(slug, title, body, '#/' + slug) for slug, title, _, body in pages]
-        tpls = ''.join(f'<template data-page="{slug}" data-title="{esc(title)}" data-cls="{cls}">{body}</template>'
-                       for slug, title, cls, body in pages)
-        extra = tpls + '<script>window.KIPLING_INDEX=' + json.dumps(index, ensure_ascii=False).replace('</', '<\\/') + ';</script>'
-        home = pages[0]
-        doc = page_shell(home[1], home[3], '', body_cls='is-home', extra=extra, body_attrs=' data-spa')
+        tpls, index, chrome, n = [], [], [], 0
+        for site in SITES:
+            use_site(site)
+            for slug, title, cls, body in page_bodies(spa=True):
+                key = site['prefix'] + slug
+                index.append(search_entry(slug, title, body, '#/' + key))
+                tpls.append(f'<template data-page="{key}" data-campus="{site["key"]}" data-title="{esc(title)}" data-cls="{cls}">{body}</template>')
+                n += 1
+            chrome.append(f'<template data-chrome-top="{site["key"]}">{header_html("")}</template>'
+                          f'<template data-chrome-bottom="{site["key"]}">{footer_html("")}{mobile_cta("")}</template>')
+        use_site(SITES[0])
+        home_title = D['chrome']['footer']['name']
+        home_body = render_home('')
+        extra = ''.join(tpls) + ''.join(chrome) + '<script>window.KIPLING_INDEX=' + \
+            json.dumps(index, ensure_ascii=False).replace('</', '<\\/') + ';</script>'
+        doc = page_shell(home_title, home_body, '', body_cls='is-home', extra=extra, body_attrs=' data-spa')
     finally:
         SPA = False
     doc = inline_assets(doc)
-    stray = re.findall(r'href="((?:\.\./)?(?:paginas/[^"]+|index\.html))"', doc)
+    stray = re.findall(r'href="((?:\.\./)*(?:esmeralda/)?(?:paginas/[^"]+|index\.html))"', doc)
     assert not stray, stray[:5]
     open(os.path.join(OUT, 'kipling-completo.html'), 'w', encoding='utf-8').write(doc)
-    return len(pages)
+    return n
 
 
 # ---------------------------------------------------------------- write
 def main():
-    load_map_embeds()
-    os.makedirs(os.path.join(OUT, 'paginas'), exist_ok=True)
-    for f in os.listdir(os.path.join(OUT, 'paginas')):
-        if f.endswith('.html'):
-            os.remove(os.path.join(OUT, 'paginas', f))
-    home = page_shell(D['chrome']['footer']['name'], render_home(''), '', body_cls='is-home', body_attrs=' data-root=""')
-    open(os.path.join(OUT, 'index.html'), 'w', encoding='utf-8').write(home)
-    n = 0
-    for slug, url in SLUG2URL.items():
-        p = PAGES[url]
-        if p['kind'] == 'news-list':
-            body = render_news(url, p)
-        elif p['kind'] == 'article':
-            body = render_article(url, p)
-        else:
-            body = render_page(url, p)
-        open(os.path.join(OUT, 'paginas', slug + '.html'), 'w', encoding='utf-8').write(
-            page_shell(p['doc_title'], body, '../', body_cls='is-inner', body_attrs=' data-root="../"'))
-        n += 1
-    json.dump({u: s for u, s in URL2SLUG.items()}, open(os.path.join(HERE, 'mapa-urls.json'), 'w'),
-              indent=1, ensure_ascii=False)
-    index = [search_entry(slug, title, body, 'index.html' if not slug else f'paginas/{slug}.html')
-             for slug, title, _, body in page_bodies('')]
+    index, mapa = [], {}
+    for site in SITES:
+        use_site(site)
+        load_map_embeds()
+    for site in SITES:
+        use_site(site)
+        folder = os.path.join(OUT, site['prefix'], 'paginas')
+        os.makedirs(folder, exist_ok=True)
+        for f in os.listdir(folder):
+            if f.endswith('.html'):
+                os.remove(os.path.join(folder, f))
+        n = 0
+        for slug, title, cls, body in page_bodies():
+            inner = bool(slug)
+            root = site_root(inner)
+            path = os.path.join(OUT, site['prefix'], f'paginas/{slug}.html' if inner else 'index.html')
+            open(path, 'w', encoding='utf-8').write(
+                page_shell(title, body, root, body_cls=cls, body_attrs=f' data-root="{root}"'))
+            index.append(search_entry(slug, title, body, site['prefix'] + (f'paginas/{slug}.html' if inner else 'index.html')))
+            n += 1
+        mapa[site['key']] = dict(URL2SLUG)
+        print(site['key'], n, 'páginas')
+    json.dump(mapa, open(os.path.join(HERE, 'mapa-urls.json'), 'w'), indent=1, ensure_ascii=False)
     open(os.path.join(OUT, 'assets/js/indice.js'), 'w', encoding='utf-8').write(
         '/* Índice de búsqueda generado por build.py */\nwindow.KIPLING_INDEX=' + json.dumps(index, ensure_ascii=False) + ';\n')
-    print('index.html +', n, 'páginas; kipling-completo.html con', build_single_file(), 'páginas')
+    print('kipling-completo.html con', build_single_file(), 'páginas')
 
 
 if __name__ == '__main__':

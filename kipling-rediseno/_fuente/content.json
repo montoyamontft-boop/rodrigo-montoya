@@ -5377,6 +5377,329 @@
    ],
    "sidebar": [],
    "doc_title": "Ubicación | Campus Satélite y Preschool - Ubicación - Kipling Campus Satélite"
+  },
+  "https://www.kipling.edu.mx/apps/pages/index.jsp?uREC_ID=4450085&type=d": {
+   "title": "Proceso de Admisión Campus Satélite",
+   "breadcrumb": [
+    {
+     "text": "Proceso de Admisión",
+     "href": "https://www.kipling.edu.mx/apps/pages/index.jsp?uREC_ID=4450085&type=d"
+    },
+    {
+     "text": "Proceso de Admisión Campus Satélite",
+     "href": null
+    }
+   ],
+   "kind": "page",
+   "layout": "right-aligned",
+   "blocks": [
+    {
+     "type": "photos",
+     "items": [
+      {
+       "src": "https://3.files.edl.io/6db6/25/09/02/174725-9712e2b6-b890-47ac-adb2-ec0b867fbad6.jpg",
+       "display": "https://3.files.edl.io/6db6/25/09/02/174725-9712e2b6-b890-47ac-adb2-ec0b867fbad6.jpg",
+       "caption": "",
+       "alt": ""
+      }
+     ],
+     "mode": "stack"
+    }
+   ],
+   "sidebar": [
+    {
+     "type": "nav",
+     "items": [
+      {
+       "text": "Proceso de Admisión Campus Satélite",
+       "href": "https://www.kipling.edu.mx/apps/pages/index.jsp?uREC_ID=4450085&type=d&pREC_ID=2701233",
+       "current": true,
+       "sub": []
+      },
+      {
+       "text": "Proceso de Admisión Campus Preschool",
+       "href": "https://www.kipling.edu.mx/apps/pages/index.jsp?uREC_ID=4450085&type=d&pREC_ID=2701239",
+       "current": false,
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "doc_title": "Proceso de Admisión Campus Satélite - Proceso de Admisión - Kipling Campus Satélite"
+  },
+  "https://www.kipling.edu.mx/apps/pages/index.jsp?uREC_ID=4450085&type=d&pREC_ID=2701233": {
+   "title": "Proceso de Admisión Campus Satélite",
+   "breadcrumb": [
+    {
+     "text": "Proceso de Admisión",
+     "href": "https://www.kipling.edu.mx/apps/pages/index.jsp?uREC_ID=4450085&type=d"
+    },
+    {
+     "text": "Proceso de Admisión Campus Satélite",
+     "href": null
+    }
+   ],
+   "kind": "page",
+   "layout": "right-aligned",
+   "blocks": [
+    {
+     "type": "photos",
+     "items": [
+      {
+       "src": "https://3.files.edl.io/6db6/25/09/02/174725-9712e2b6-b890-47ac-adb2-ec0b867fbad6.jpg",
+       "display": "https://3.files.edl.io/6db6/25/09/02/174725-9712e2b6-b890-47ac-adb2-ec0b867fbad6.jpg",
+       "caption": "",
+       "alt": ""
+      }
+     ],
+     "mode": "stack"
+    }
+   ],
+   "sidebar": [
+    {
+     "type": "nav",
+     "items": [
+      {
+       "text": "Proceso de Admisión Campus Satélite",
+       "href": "https://www.kipling.edu.mx/apps/pages/index.jsp?uREC_ID=4450085&type=d&pREC_ID=2701233",
+       "current": true,
+       "sub": []
+      },
+      {
+       "text": "Proceso de Admisión Campus Preschool",
+       "href": "https://www.kipling.edu.mx/apps/pages/index.jsp?uREC_ID=4450085&type=d&pREC_ID=2701239",
+       "current": false,
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "doc_title": "Proceso de Admisión Campus Satélite - Proceso de Admisión - Kipling Campus Satélite"
+  },
+  "https://www.kipling.edu.mx/apps/pages/index.jsp?uREC_ID=4450085&type=d&pREC_ID=2701239": {
+   "title": "Proceso de Admisión Campus Preschool",
+   "breadcrumb": [
+    {
+     "text": "Proceso de Admisión",
+     "href": "https://www.kipling.edu.mx/apps/pages/index.jsp?uREC_ID=4450085&type=d"
+    },
+    {
+     "text": "Proceso de Admisión Campus Preschool",
+     "href": null
+    }
+   ],
+   "kind": "page",
+   "layout": "right-aligned",
+   "blocks": [
+    {
+     "type": "photos",
+     "items": [
+      {
+       "src": "https://3.files.edl.io/fa4a/25/09/02/175217-da218884-cc38-40b1-98db-3e27d7c8a8a2.jpg",
+       "display": "https://3.files.edl.io/fa4a/25/09/02/175217-da218884-cc38-40b1-98db-3e27d7c8a8a2.jpg",
+       "caption": "",
+       "alt": ""
+      }
+     ],
+     "mode": "stack"
+    }
+   ],
+   "sidebar": [
+    {
+     "type": "nav",
+     "items": [
+      {
+       "text": "Proceso de Admisión Campus Satélite",
+       "href": "https://www.kipling.edu.mx/apps/pages/index.jsp?uREC_ID=4450085&type=d&pREC_ID=2701233",
+       "current": false,
+       "sub": []
+      },
+      {
+       "text": "Proceso de Admisión Campus Preschool",
+       "href": "https://www.kipling.edu.mx/apps/pages/index.jsp?uREC_ID=4450085&type=d&pREC_ID=2701239",
+       "current": true,
+       "sub": []
+      }
+     ]
+    }
+   ],
+   "doc_title": "Proceso de Admisión Campus Preschool - Proceso de Admisión - Kipling Campus Satélite"
+  },
+  "https://www.kipling.edu.mx/apps/news/category/14340": {
+   "title": "Eventos Generales",
+   "breadcrumb": [],
+   "kind": "news-list",
+   "articles": [
+    {
+     "title": "Come & Join",
+     "summary": "Conoce Kipling School en nuestro Open House<br/><br/>Una educación que combina excelencia académica, oportunidades globales y desarrollo integral.",
+     "href": "https://www.kipling.edu.mx/apps/pages/admissions/inquiry/",
+     "img": null,
+     "alert": true
+    },
+    {
+     "title": "Kipling joins forces with Nord Anglia Education",
+     "summary": "We're proud to announce a major milestone for our school today: we’ve just joined Nord Anglia Education, the world's leading international schools organisation.",
+     "href": "https://3.files.edl.io/a4eb/25/02/06/015020-4f84e8b9-0868-4671-aae6-9e971344f26c.jpg",
+     "img": "https://3.files.edl.io/15aa/25/02/06/015028-76caf98c-8a4b-4e0a-8b49-b0c94656b6d0.jpg",
+     "alert": false
+    },
+    {
+     "title": "¡Excelentes resultados en el Programa del Diploma!",
+     "summary": "",
+     "href": "https://3.files.edl.io/749f/24/08/16/175833-eca66b9b-8735-4e1b-b351-8df18db01e4d.jpg",
+     "img": "https://3.files.edl.io/3a7c/24/08/16/175844-62dd23fb-4989-40af-bc14-b1e6f755b48a.jpg",
+     "alert": false
+    },
+    {
+     "title": "Convenios y Becas Universitarios",
+     "summary": "Información referente a los convenios y becas universitarios que tenemos en High School.",
+     "href": "https://3.files.edl.io/efc1/21/07/05/152204-3f915a67-de5e-44eb-90ca-7d6633346fcb.jpg",
+     "img": "https://3.files.edl.io/de6d/21/07/05/152216-e9bb8f29-ef68-465f-9bb0-a3b979e8bfcd.jpg",
+     "alert": false
+    },
+    {
+     "title": "¡Ven y conoce Campus Satélite!",
+     "summary": "¿Te gustaría formar parte de la familia Kipling?<br/>Te invitamos a nuestro Come &amp; Join, donde podrás obtener toda la información que necesitas de parte de nuestras directoras de sección. Para más información o confirmación al correo ks.admisiones@kipling.edu.mx o al WhatsApp 55 41 30 51 37.",
+     "href": "https://3.files.edl.io/e61e/25/10/27/171641-3a1d5a1d-c86d-4133-8798-e4e15963a6c6.jpg",
+     "img": "https://3.files.edl.io/10fc/25/10/27/171652-f6a5fed6-ec30-4bf5-ad35-2999483eb034.jpg",
+     "alert": false
+    },
+    {
+     "title": "100% de Aprobación | Exámenes de Francés",
+     "summary": "100% de aprobación en la acreditación de las pruebas internacionales de francés DELF PRIM, DELF JUNIOR y DELF TOUT PUBLIC.<br/>¡Una muestra más del gran trabajo realizado por todos en Kipling!",
+     "href": "https://3.files.edl.io/4985/22/07/21/200316-6c24b449-5a85-4e7d-8918-1fea205fd61a.jpg",
+     "img": "https://3.files.edl.io/34e7/22/07/21/200327-d159d931-91c5-4233-810b-1296ec581e10.jpg",
+     "alert": false
+    },
+    {
+     "title": "EMAT",
+     "summary": "Información referente a los beneficios que da el programa EMAT a nuestros pequeños de Preschool y Elementary.",
+     "href": "https://www.kipling.edu.mx/apps/news/article/1452633?categoryId=14340",
+     "img": "https://3.files.edl.io/5681/21/06/04/153248-9b377af9-2463-4a17-a9c0-e481049afc57.jpg",
+     "alert": false
+    },
+    {
+     "title": "Portal de Pagos",
+     "summary": "¡Renovamos nuestro portal de pagos!",
+     "href": "https://www.kipling.edu.mx/apps/pages/pagos",
+     "img": "https://3.files.edl.io/9690/22/03/20/182858-e63751bd-46d8-4ad8-ad17-07e6f2f3e61a.png",
+     "alert": false
+    },
+    {
+     "title": "Google Workspace for Education",
+     "summary": "Seguimos innovando de manera constante, utilizando tecnologías de vanguardia que serán de gran utilidad para toda la comunidad Kipling.",
+     "href": "https://3.files.edl.io/1d5b/21/05/26/181148-ae9ef23e-1cef-41ea-ad45-caf74e89df00.jpg",
+     "img": "https://3.files.edl.io/dbd5/21/05/26/181200-7607fd8e-5d19-4544-96f4-313feb5fde2c.jpg",
+     "alert": false
+    },
+    {
+     "title": "¡Forma parte de la familia Kipling!",
+     "summary": "¿Quieres ser parte de la familia Kipling Campus Satélite? Contacta a nuestra área de admisiones para más informes.",
+     "href": "https://3.files.edl.io/9fbb/21/02/05/183954-0615518f-d4b6-4ac3-b17e-5362ed20bb0c.png",
+     "img": "https://3.files.edl.io/90a2/21/02/05/184002-d145e0f8-e581-4907-bbd9-f40f7f8b5b18.png",
+     "alert": false
+    }
+   ],
+   "pagination": [
+    {
+     "text": "2",
+     "href": "https://www.kipling.edu.mx/apps/news/category/14340?pageIndex=2"
+    },
+    {
+     "text": "Siguiente",
+     "href": "https://www.kipling.edu.mx/apps/news/category/14340?pageIndex=2"
+    }
+   ],
+   "doc_title": "News | Kipling Campus Satélite"
+  },
+  "https://www.kipling.edu.mx/apps/news/category/14340?pageIndex=1": {
+   "title": "Eventos Generales",
+   "breadcrumb": [],
+   "kind": "news-list",
+   "articles": [
+    {
+     "title": "Come & Join",
+     "summary": "Conoce Kipling School en nuestro Open House<br/><br/>Una educación que combina excelencia académica, oportunidades globales y desarrollo integral.",
+     "href": "https://www.kipling.edu.mx/apps/pages/admissions/inquiry/",
+     "img": null,
+     "alert": true
+    },
+    {
+     "title": "Kipling joins forces with Nord Anglia Education",
+     "summary": "We're proud to announce a major milestone for our school today: we’ve just joined Nord Anglia Education, the world's leading international schools organisation.",
+     "href": "https://3.files.edl.io/a4eb/25/02/06/015020-4f84e8b9-0868-4671-aae6-9e971344f26c.jpg",
+     "img": "https://3.files.edl.io/15aa/25/02/06/015028-76caf98c-8a4b-4e0a-8b49-b0c94656b6d0.jpg",
+     "alert": false
+    },
+    {
+     "title": "¡Excelentes resultados en el Programa del Diploma!",
+     "summary": "",
+     "href": "https://3.files.edl.io/749f/24/08/16/175833-eca66b9b-8735-4e1b-b351-8df18db01e4d.jpg",
+     "img": "https://3.files.edl.io/3a7c/24/08/16/175844-62dd23fb-4989-40af-bc14-b1e6f755b48a.jpg",
+     "alert": false
+    },
+    {
+     "title": "Convenios y Becas Universitarios",
+     "summary": "Información referente a los convenios y becas universitarios que tenemos en High School.",
+     "href": "https://3.files.edl.io/efc1/21/07/05/152204-3f915a67-de5e-44eb-90ca-7d6633346fcb.jpg",
+     "img": "https://3.files.edl.io/de6d/21/07/05/152216-e9bb8f29-ef68-465f-9bb0-a3b979e8bfcd.jpg",
+     "alert": false
+    },
+    {
+     "title": "¡Ven y conoce Campus Satélite!",
+     "summary": "¿Te gustaría formar parte de la familia Kipling?<br/>Te invitamos a nuestro Come &amp; Join, donde podrás obtener toda la información que necesitas de parte de nuestras directoras de sección. Para más información o confirmación al correo ks.admisiones@kipling.edu.mx o al WhatsApp 55 41 30 51 37.",
+     "href": "https://3.files.edl.io/e61e/25/10/27/171641-3a1d5a1d-c86d-4133-8798-e4e15963a6c6.jpg",
+     "img": "https://3.files.edl.io/10fc/25/10/27/171652-f6a5fed6-ec30-4bf5-ad35-2999483eb034.jpg",
+     "alert": false
+    },
+    {
+     "title": "100% de Aprobación | Exámenes de Francés",
+     "summary": "100% de aprobación en la acreditación de las pruebas internacionales de francés DELF PRIM, DELF JUNIOR y DELF TOUT PUBLIC.<br/>¡Una muestra más del gran trabajo realizado por todos en Kipling!",
+     "href": "https://3.files.edl.io/4985/22/07/21/200316-6c24b449-5a85-4e7d-8918-1fea205fd61a.jpg",
+     "img": "https://3.files.edl.io/34e7/22/07/21/200327-d159d931-91c5-4233-810b-1296ec581e10.jpg",
+     "alert": false
+    },
+    {
+     "title": "EMAT",
+     "summary": "Información referente a los beneficios que da el programa EMAT a nuestros pequeños de Preschool y Elementary.",
+     "href": "https://www.kipling.edu.mx/apps/news/article/1452633?categoryId=14340",
+     "img": "https://3.files.edl.io/5681/21/06/04/153248-9b377af9-2463-4a17-a9c0-e481049afc57.jpg",
+     "alert": false
+    },
+    {
+     "title": "Portal de Pagos",
+     "summary": "¡Renovamos nuestro portal de pagos!",
+     "href": "https://www.kipling.edu.mx/apps/pages/pagos",
+     "img": "https://3.files.edl.io/9690/22/03/20/182858-e63751bd-46d8-4ad8-ad17-07e6f2f3e61a.png",
+     "alert": false
+    },
+    {
+     "title": "Google Workspace for Education",
+     "summary": "Seguimos innovando de manera constante, utilizando tecnologías de vanguardia que serán de gran utilidad para toda la comunidad Kipling.",
+     "href": "https://3.files.edl.io/1d5b/21/05/26/181148-ae9ef23e-1cef-41ea-ad45-caf74e89df00.jpg",
+     "img": "https://3.files.edl.io/dbd5/21/05/26/181200-7607fd8e-5d19-4544-96f4-313feb5fde2c.jpg",
+     "alert": false
+    },
+    {
+     "title": "¡Forma parte de la familia Kipling!",
+     "summary": "¿Quieres ser parte de la familia Kipling Campus Satélite? Contacta a nuestra área de admisiones para más informes.",
+     "href": "https://3.files.edl.io/9fbb/21/02/05/183954-0615518f-d4b6-4ac3-b17e-5362ed20bb0c.png",
+     "img": "https://3.files.edl.io/90a2/21/02/05/184002-d145e0f8-e581-4907-bbd9-f40f7f8b5b18.png",
+     "alert": false
+    }
+   ],
+   "pagination": [
+    {
+     "text": "2",
+     "href": "https://www.kipling.edu.mx/apps/news/category/14340?pageIndex=2"
+    },
+    {
+     "text": "Siguiente",
+     "href": "https://www.kipling.edu.mx/apps/news/category/14340?pageIndex=2"
+    }
+   ],
+   "doc_title": "News | Kipling Campus Satélite"
   }
  },
  "login": [

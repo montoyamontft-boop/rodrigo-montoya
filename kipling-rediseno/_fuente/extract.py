@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup, NavigableString, Comment
 
 PAGES = sys.argv[1]
 OUT = sys.argv[2]
-BASE = 'https://www.kipling.edu.mx/'
+BASE = sys.argv[3] if len(sys.argv) > 3 else 'https://www.kipling.edu.mx/'
 index = json.load(open(os.path.join(PAGES, 'index.json')))
 
 KEEP = {'p', 'div', 'span', 'strong', 'b', 'em', 'i', 'u', 'a', 'ul', 'ol', 'li', 'br', 'img',
@@ -288,11 +288,11 @@ def extract_chrome(s, url):
     tf = f.select_one('.text-footer')
     foot['legal'] = [x.strip() for x in tf.find(string=True, recursive=False).parent.get_text('\n').split('\n')
                      if x.strip() and 'Aviso' not in x]
-    pa = tf.select_one('.footer-info-block a')
-    foot['legal_privacy'] = {'text': pa.get_text(strip=True), 'href': pa['href']}
+    pa = tf.select_one('.footer-info-block a') or tf.find('a', href=True)
+    foot['legal_privacy'] = {'text': pa.get_text(strip=True), 'href': abs_url(pa['href'], url)}
     foot['emails'] = [a['href'][7:] for a in f.select('.footer-row a[href^="mailto:"]')]
     lf = f.select_one('a.link-footer')
-    foot['bottom_link'] = {'text': lf.get_text(strip=True), 'href': lf['href']}
+    foot['bottom_link'] = {'text': lf.get_text(strip=True), 'href': abs_url(lf['href'], url)}
     return {'nav': nav, 'footer': foot}
 
 
@@ -308,6 +308,8 @@ for url, meta in index.items():
         data['meta_description'] = s.find('meta', attrs={'name': 'description'})['content']
         continue
     rec = extract_page(s, url)
+    if rec.get('title', '').startswith('404'):
+        continue
     if rec['kind'] == 'login':
         data['login'].append(url)
         continue
