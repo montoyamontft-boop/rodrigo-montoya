@@ -10,6 +10,8 @@ Mantiene los mismos textos, apartados, enlaces, logotipos e imágenes de los sit
 
 ## Cómo verlo
 
+**En línea:** https://kipling-propuesta.netlify.app (publicado con Netlify Drop, en https; ahí el formulario de cita funciona dentro del sitio).
+
 **Opción rápida:** abre `kipling-completo.html`. Es un solo archivo con las 132 páginas de los dos campus adentro:
 
 - Al cambiar de página no sales del archivo.
