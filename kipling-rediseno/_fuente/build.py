@@ -417,6 +417,9 @@ def rich(html_in, root, gallery='content'):
                 a[k] = val
         elif 'target' in a.attrs:
             del a['target']
+    # the page title is the only h1; headings typed as h1 inside an article become h2
+    for h in body.find_all('h1'):
+        h.name = 'h2'
     # short lines made only of bold text act as section headings on the original site
     for el in body.find_all(['div', 'p']):
         kids = [c for c in el.contents if str(c).strip()]
