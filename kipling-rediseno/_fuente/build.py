@@ -369,6 +369,7 @@ def page_shell(title, body, root, desc=None, solid=False, body_cls='', extra='',
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <meta name="theme-color" content="#B40029">
+<meta name="robots" content="noindex, nofollow">
 <link rel="apple-touch-icon" sizes="180x180" href="{root}assets/img/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="{root}assets/img/favicon-32x32.png" sizes="32x32">
 <link rel="icon" href="{root}assets/img/{SITE['favicon']}" type="image/x-icon">
