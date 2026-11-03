@@ -4,6 +4,7 @@ Página estática de prueba para las skills de diseño (`design-taste-frontend`)
 
 * `index.html` — la página final, autocontenida (fuentes incrustadas, sin dependencias). Ábrela directo en el navegador.
 * `page.html` + `build.py` — fuente. `python3 build.py` regenera `index.html` (dibuja el toro y su despiece, incrusta las fuentes).
+* `assets/logo.png` — logotipo del negocio, sin modificar (recortado de una captura; conviene reemplazarlo por el archivo original en alta resolución).
 * `fonts/` — Libre Franklin y Source Serif 4 (SIL Open Font License, vía Fontsource).
 
 Datos reales tomados de Google (nov. 2026): calificaciones y número de opiniones de las tres sucursales, horarios de apertura,

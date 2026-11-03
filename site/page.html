@@ -6,6 +6,7 @@
 <title>Carnes del Norte Selecto · Carnicería y asador en Ciudad López Mateos</title>
 <meta name="description" content="Carnicería, asador y terraza en Ciudad López Mateos, Atizapán. Cortes norteños para llevar o para comer aquí, y noches con música en vivo.">
 <meta name="theme-color" content="#0d060b">
+<link rel="icon" type="image/png" href="assets/logo.png">
 <script>document.documentElement.classList.add('js')</script>
 <style>
 @font-face { font-family: "Libre Franklin"; src: url("fonts/libre-franklin-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
@@ -78,9 +79,7 @@ p { margin: 0; }
 .top { position: absolute; inset: 0 0 auto 0; z-index: 5; }
 .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 84px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; white-space: nowrap; font: 700 1.0625rem/1 var(--display); letter-spacing: -0.02em; }
-.brand svg { width: 52px; --gap-c: var(--bg); }
-.brand .cut, .brand .rest { fill: var(--ink); stroke-width: 12; }
-.brand .tail { stroke: var(--ink); }
+.brand img { width: 56px; height: 56px; }
 .nav { display: flex; align-items: center; gap: clamp(16px, 2.4vw, 36px); font: 600 var(--step-body)/1 var(--display); }
 .nav a:not(.btn) { position: relative; text-decoration: none; padding: 8px 0; }
 .nav a:not(.btn)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 2px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 260ms var(--ease-out); }
@@ -254,10 +253,7 @@ legend { padding: 0; }
 
 /* ---------- footer ---------- */
 .foot { background: var(--field-1); color: var(--field-1-ink); padding-block: clamp(48px, 5vw, 80px) 32px; }
-.blocks { width: 100%; height: auto; }
-.blocks text { font: 800 210px/1 var(--display); letter-spacing: -0.04em; fill: var(--field-1); }
-.blocks .blk { transform-box: fill-box; transform-origin: 50% 100%; transition: transform 1000ms var(--ease-expo); transition-delay: calc(var(--i) * 70ms); }
-.js .blocks:not(.is-in) .blk { transform: scaleY(0.05); }
+.foot-logo { width: clamp(180px, 18vw, 260px); height: auto; }
 .foot-cols { margin-top: 56px; display: grid; grid-template-columns: repeat(4, 1fr) 2fr; gap: 28px; font-size: var(--step-small); }
 .foot-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .foot-cols a { text-decoration: none; }
@@ -307,7 +303,7 @@ legend { padding: 0; }
   .items { grid-template-columns: 1fr; gap: 32px; }
   .mini { width: 60px; }
   .brand span { display: none; }
-  .brand svg { width: 60px; }
+  .brand img { width: 60px; height: 60px; }
   .cat { margin-top: 72px; }
   .cat h3 { font-size: 8.5vw; }
   .terraza-pics { grid-template-columns: 1fr; }
@@ -333,7 +329,7 @@ legend { padding: 0; }
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#inicio">{{BULL class="bull"}}<span>Carnes del Norte Selecto</span></a>
+    <a class="brand" href="#inicio"><img src="assets/logo.png" alt="" width="299" height="299"><span>Carnes del Norte Selecto</span></a>
     <nav class="nav" aria-label="Principal">
       <a href="#vitrina">Vitrina</a>
       <a href="#carne-asada">Carne asada</a>
@@ -589,7 +585,7 @@ legend { padding: 0; }
 
 <footer class="foot">
   <div class="wrap">
-    <svg class="blocks" id="blocks" viewBox="0 0 1396 300" role="img" aria-label="Selecto"><g class="blk" style="--i:0"><rect x="0" y="54" width="196" height="246" fill="#ff488b"/><text x="98" y="232" text-anchor="middle">S</text></g><g class="blk" style="--i:1"><rect x="200" y="0" width="196" height="300" fill="#ffffff"/><text x="298" y="178" text-anchor="middle">E</text></g><g class="blk" style="--i:2"><rect x="400" y="96" width="196" height="204" fill="#ff488b"/><text x="498" y="274" text-anchor="middle">L</text></g><g class="blk" style="--i:3"><rect x="600" y="30" width="196" height="270" fill="#ffffff"/><text x="698" y="208" text-anchor="middle">E</text></g><g class="blk" style="--i:4"><rect x="800" y="78" width="196" height="222" fill="#ff488b"/><text x="898" y="256" text-anchor="middle">C</text></g><g class="blk" style="--i:5"><rect x="1000" y="12" width="196" height="288" fill="#ffffff"/><text x="1098" y="190" text-anchor="middle">T</text></g><g class="blk" style="--i:6"><rect x="1200" y="114" width="196" height="186" fill="#ff488b"/><text x="1298" y="292" text-anchor="middle">O</text></g></svg>
+    <img class="foot-logo" src="assets/logo.png" alt="Carnes del Norte Selecto" width="299" height="299" loading="lazy">
     <div class="foot-cols">
       <ul><li><a href="#vitrina">La vitrina</a></li><li><a href="#carne-asada">Carne asada</a></li></ul>
       <ul><li><a href="#terraza">La terraza</a></li><li><a href="#noches">Noches</a></li></ul>
@@ -610,7 +606,7 @@ legend { padding: 0; }
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // reveal once, never leave content hidden
-  const targets = document.querySelectorAll('[data-reveal], #chart, #blocks');
+  const targets = document.querySelectorAll('[data-reveal], #chart');
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
     targets.forEach((t) => io.observe(t));
