@@ -160,12 +160,24 @@ legend { padding: 0; }
 .terraza { background: var(--field-2); color: var(--field-2-ink); padding-block: var(--gap); }
 .statement { font: 600 var(--step-sub)/1.3 var(--display); letter-spacing: -0.02em; max-width: 34em; }
 .slot { display: inline-block; width: 1.9em; height: 1em; vertical-align: -0.12em; margin-inline: 0.12em; overflow: hidden; }
-.slot svg { width: 100%; height: 100%; }
+
 .terraza-foot { margin-top: 72px; margin-left: 50%; display: grid; gap: 24px; justify-items: start; max-width: 40ch; }
 
 .terraza .btn { background: var(--field-2-ink); color: var(--field-2); }
 .terraza .btn:hover { background: #2a2f45; }
-.terraza-pics { margin-top: clamp(64px, 7vw, 110px); display: grid; grid-template-columns: 7fr 5fr; gap: 12px; }
+.terraza-pics { margin-top: clamp(64px, 7vw, 110px); display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pic { overflow: hidden; background: var(--surface); }
+.pic img, .slot img, .frame-box img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.06) contrast(1.04); }
+.terraza-pics .pic { aspect-ratio: 5 / 3; }
+.band { margin: 56px 0 0; }
+.vitrina .band + .cat { margin-top: clamp(120px, 10vw, 150px); }
+.band .pic { aspect-ratio: 21 / 8; }
+.band figcaption, .suc-pic figcaption { margin-top: 12px; font-size: var(--step-small); color: var(--muted); }
+.suc-pic { margin-top: 48px; }
+.suc-pic .pic { aspect-ratio: 3 / 1; }
+.credits { margin-top: 48px; font-size: var(--step-small); max-width: 110ch; }
+.credits ul { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.credits a { text-decoration: underline; text-underline-offset: 3px; }
 .terraza-pics figure { margin: 0; }
 .terraza-pics svg { width: 100%; height: auto; }
 .terraza-pics figcaption { margin-top: 12px; font-size: var(--step-small); color: var(--soft-ink); }
@@ -179,7 +191,8 @@ legend { padding: 0; }
 .noches .body { margin-top: 28px; max-width: 40ch; }
 .noches .links { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 30px; }
 .frame { margin: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.frame svg { width: 100%; height: auto; }
+.frame-box { position: relative; aspect-ratio: 880 / 490; clip-path: url(#bullobb); background: var(--field-1); }
+.frame-box img { position: absolute; inset: 0; filter: saturate(1.08) contrast(1.12) brightness(0.92); }
 .frame .scene { opacity: 0; transition: opacity 1400ms ease; }
 .frame .scene.is-on { opacity: 1; }
 .no-js-frame .scene:first-of-type { opacity: 1; }
@@ -261,6 +274,8 @@ legend { padding: 0; }
   .js .hero-bull .cut, .js .hero-bull .rest, .js .hero-bull .tail, .js .hero-bull .eye { opacity: 0; transform: translateY(24px); transform-box: fill-box; animation: rise 1000ms var(--ease-expo) forwards; animation-delay: calc(var(--i, 0) * 70ms + 380ms); }
   .hero-bull { animation: settle 14s var(--ease-out) both; transform-origin: 20% 40%; }
   @keyframes rise { to { opacity: 1; transform: none; } }
+  .js .band .pic img { transform: scale(1.08); transition: transform 9s var(--ease-out); }
+  .js .band.is-in .pic img { transform: none; }
   @keyframes settle { from { transform: scale(1.06) translateX(2vw); } to { transform: none; } }
   .flame { transform-box: fill-box; transform-origin: 50% 100%; animation: flick 1.6s ease-in-out infinite alternate; }
   .flame:nth-of-type(2n) { animation-duration: 1.2s; animation-delay: -0.4s; }
@@ -296,6 +311,8 @@ legend { padding: 0; }
   .cat { margin-top: 72px; }
   .cat h3 { font-size: 8.5vw; }
   .terraza-pics { grid-template-columns: 1fr; }
+  .band .pic { aspect-ratio: 4 / 3; }
+  .suc-pic .pic { aspect-ratio: 3 / 2; }
   .tile { aspect-ratio: auto; min-height: 150px; gap: 18px; }
   .tile q { font-size: 1.125rem; }
   .coupon { grid-template-columns: 1fr; }
@@ -312,7 +329,7 @@ legend { padding: 0; }
 </head>
 <body>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><clipPath id="bullclip"><polygon points="232,176 330,128 420,140 412,266 240,290"/><polygon points="240,290 412,266 404,396 300,372 258,346"/><polygon points="420,140 540,148 536,262 412,266"/><polygon points="412,266 536,262 532,406 404,396"/><polygon points="540,148 660,150 660,262 536,262"/><polygon points="536,262 660,262 660,400 532,406"/><polygon points="660,150 790,145 845,166 850,262 660,262"/><polygon points="660,262 850,262 845,166 872,202 880,300 864,420 782,396 660,400"/><polygon points="292,362 344,378 338,470 298,470"/><polygon points="362,388 404,396 398,470 364,470"/><polygon points="760,398 812,402 804,470 768,470"/><polygon points="822,406 864,420 852,470 818,470"/><polygon points="240,290 232,176 205,168 165,172 125,186 92,210 66,244 74,270 108,280 150,286 192,304"/><polygon points="205,170 196,140 178,114 152,98 170,126 180,152 182,172"/><polygon points="298,470 338,470 334,560 300,560"/><polygon points="364,470 398,470 396,560 366,560"/><polygon points="768,470 804,470 800,560 770,560"/><polygon points="818,470 852,470 848,560 820,560"/><polygon points="890,380 912,380 918,426 886,426"/><path d="M872,200 C904,240 910,310 900,384" stroke="#000" stroke-width="12" fill="none"/></clipPath></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><clipPath id="bullobb" clipPathUnits="objectBoundingBox"><polygon points="0.2068,0.1857 0.3182,0.0878 0.4205,0.1122 0.4114,0.3694 0.2159,0.4184"/><polygon points="0.2159,0.4184 0.4114,0.3694 0.4023,0.6347 0.2841,0.5857 0.2364,0.5327"/><polygon points="0.4205,0.1122 0.5568,0.1286 0.5523,0.3612 0.4114,0.3694"/><polygon points="0.4114,0.3694 0.5523,0.3612 0.5477,0.6551 0.4023,0.6347"/><polygon points="0.5568,0.1286 0.6932,0.1327 0.6932,0.3612 0.5523,0.3612"/><polygon points="0.5523,0.3612 0.6932,0.3612 0.6932,0.6429 0.5477,0.6551"/><polygon points="0.6932,0.1327 0.8409,0.1224 0.9034,0.1653 0.9091,0.3612 0.6932,0.3612"/><polygon points="0.6932,0.3612 0.9091,0.3612 0.9034,0.1653 0.9341,0.2388 0.9432,0.4388 0.9250,0.6837 0.8318,0.6347 0.6932,0.6429"/><polygon points="0.2750,0.5653 0.3341,0.5980 0.3273,0.7857 0.2818,0.7857"/><polygon points="0.3545,0.6184 0.4023,0.6347 0.3955,0.7857 0.3568,0.7857"/><polygon points="0.8068,0.6388 0.8659,0.6469 0.8568,0.7857 0.8159,0.7857"/><polygon points="0.8773,0.6551 0.9250,0.6837 0.9114,0.7857 0.8727,0.7857"/><polygon points="0.2159,0.4184 0.2068,0.1857 0.1761,0.1694 0.1307,0.1776 0.0852,0.2061 0.0477,0.2551 0.0182,0.3245 0.0273,0.3776 0.0659,0.3980 0.1136,0.4102 0.1614,0.4469"/><polygon points="0.1761,0.1735 0.1659,0.1122 0.1455,0.0592 0.1159,0.0265 0.1364,0.0837 0.1477,0.1367 0.1500,0.1776"/><polygon points="0.2818,0.7857 0.3273,0.7857 0.3227,0.9694 0.2841,0.9694"/><polygon points="0.3568,0.7857 0.3955,0.7857 0.3932,0.9694 0.3591,0.9694"/><polygon points="0.8159,0.7857 0.8568,0.7857 0.8523,0.9694 0.8182,0.9694"/><polygon points="0.8727,0.7857 0.9114,0.7857 0.9068,0.9694 0.8750,0.9694"/><polygon points="0.9545,0.6020 0.9795,0.6020 0.9864,0.6959 0.9500,0.6959"/></clipPath></defs></svg>
 
 <header class="top">
   <div class="wrap">
@@ -350,6 +367,10 @@ legend { padding: 0; }
     <span class="count">10 cortes de res</span>
   </div>
   <p class="lead" data-reveal style="--d:1">Cada corte con su lugar en el animal y el punto de partida para cocinarlo.</p>
+  <figure class="band" data-reveal style="--d:2">
+    <div class="pic"><img src="assets/vitrina.jpg" alt="Cortes de res frescos y bandejas de carne molida en una vitrina" width="1600" height="1068" loading="lazy"></div>
+    <figcaption>Res fresca en la vitrina de una carnicería.</figcaption>
+  </figure>
 
   <div class="cat">
     <div class="sec-head" data-reveal>
@@ -439,13 +460,17 @@ legend { padding: 0; }
 <section class="terraza" id="terraza" aria-labelledby="terraza-t">
   <div class="wrap">
     <h2 id="terraza-t" class="vh">La terraza</h2>
-    <p class="statement" data-reveal>Lo que sale de la vitrina<span class="slot" aria-hidden="true"><svg viewBox="0 0 76 40" preserveAspectRatio="xMidYMid slice"><rect width="76" height="40" fill="#ff488b"/><path d="M8 14 L30 6 L62 9 L70 22 L58 34 L22 35 L10 28Z" fill="#fff"/><path d="M13 16 L31 10 L59 13 L65 22 L55 30 L24 31 L15 26Z" fill="#9e1446"/><path d="M22 20 C30 17 38 24 48 19 M28 26 C36 24 44 28 52 25" stroke="#ff7aab" stroke-width="2.5" fill="none"/></svg></span> se asa al carbón<span class="slot" aria-hidden="true"><svg viewBox="0 0 76 40" preserveAspectRatio="xMidYMid slice"><rect width="76" height="40" fill="#0d060b"/><path class="flame" d="M18 40 C10 28 20 22 18 8 C28 18 32 28 28 40Z" fill="#ff488b"/><path class="flame" d="M34 40 C28 26 40 18 38 2 C50 16 52 30 46 40Z" fill="#ff488b"/><path class="flame" d="M52 40 C48 30 56 24 56 14 C64 24 66 32 62 40Z" fill="#ff488b"/><rect y="32" width="76" height="8" fill="#470c35"/></svg></span> y se come en la terraza, bajo el árbol de flores rosas<span class="slot" aria-hidden="true"><svg viewBox="0 0 76 40" preserveAspectRatio="xMidYMid slice"><rect width="76" height="40" fill="#101421"/><rect x="35" y="18" width="6" height="22" fill="#6b4a3a"/><circle class="blossom" cx="26" cy="14" r="10" fill="#ff488b"/><circle class="blossom" cx="44" cy="10" r="12" fill="#ff7aab"/><circle class="blossom" cx="56" cy="18" r="9" fill="#ff488b"/></svg></span>.</p>
+    <p class="statement" data-reveal>Lo que sale de la vitrina<span class="slot" aria-hidden="true"><img src="assets/ribeye.jpg" alt="" width="1280" height="1423" style="object-position:50% 45%" loading="lazy"></span> se asa al carbón<span class="slot" aria-hidden="true"><img src="assets/brasa.jpg" alt="" width="1600" height="1195" style="object-position:30% 55%" loading="lazy"></span> y se come en la terraza, bajo el árbol de flores rosas<span class="slot" aria-hidden="true"><img src="assets/bugambilia.jpg" alt="" width="1200" height="1600" style="object-position:50% 72%" loading="lazy"></span>.</p>
     <div class="terraza-foot" data-reveal style="--d:1">
       <p>El restaurante y la terraza abren a las 8 a.m. Desayuno, comida y sobremesa con la carne de la misma vitrina.</p>
       <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Carnes+del+Norte+Selecto+Ciudad+L%C3%B3pez+Mateos" rel="noopener">Cómo llegar <span class="arr" aria-hidden="true">→</span></a>
     </div>
     <div class="terraza-pics">
       <figure data-reveal>
+        <div class="pic"><img src="assets/parrilla.jpg" alt="Parrilla de carbón encendida, con las rejillas a distintas alturas" width="1600" height="1200" loading="lazy"></div>
+        <figcaption>Una parrilla de carbón encendida.</figcaption>
+      </figure>
+      <figure data-reveal style="--d:1">
         <svg viewBox="0 0 700 420" role="img" aria-label="Dibujo de la terraza: mesas de madera bajo un árbol de flores rosas">
           <rect width="700" height="420" fill="#101421"/>
           <rect x="0" y="300" width="700" height="120" fill="#1d2236"/>
@@ -460,19 +485,7 @@ legend { padding: 0; }
           <g fill="#8a5a3a"><rect x="60" y="330" width="20" height="56"/><rect x="260" y="330" width="20" height="56"/><rect x="420" y="330" width="20" height="56"/><rect x="620" y="330" width="20" height="56"/></g>
           <g fill="#fff"><circle cx="40" cy="40" r="4"/><circle cx="110" cy="52" r="4"/><circle cx="180" cy="60" r="4"/><circle cx="520" cy="56" r="4"/><circle cx="590" cy="48" r="4"/><circle cx="660" cy="38" r="4"/></g>
         </svg>
-        <figcaption>La terraza: mesas de madera y el árbol rosa al centro.</figcaption>
-      </figure>
-      <figure data-reveal style="--d:1">
-        <svg viewBox="0 0 500 420" role="img" aria-label="Dibujo del letrero: un toro blanco sobre fondo negro">
-          <rect width="500" height="420" fill="#0d060b"/>
-          <rect x="40" y="60" width="420" height="300" fill="#1b0e17"/>
-          <g transform="translate(92 82) scale(0.36)" fill="#fff">
-            <polygon points="240,290 232,176 205,168 165,172 125,186 92,210 66,244 74,270 108,280 150,286 192,304"/><polygon points="205,170 196,140 178,114 152,98 170,126 180,152 182,172"/>
-            <polygon points="232,176 330,128 420,140 540,148 660,150 790,145 845,166 872,202 880,300 864,420 852,560 820,560 818,470 804,470 800,560 770,560 760,398 660,400 532,406 404,396 396,560 366,560 362,388 344,378 334,560 300,560 292,362 258,346 240,290"/>
-          </g>
-          <text x="250" y="322" text-anchor="middle" fill="#fff" font-family="Libre Franklin, Arial, sans-serif" font-weight="700" font-size="30" letter-spacing="1">CARNES DEL NORTE</text>
-        </svg>
-        <figcaption>El letrero de la entrada: el toro blanco sobre negro.</figcaption>
+        <figcaption>La terraza dibujada: mesas de madera y el árbol rosa al centro.</figcaption>
       </figure>
     </div>
   </div>
@@ -492,43 +505,14 @@ legend { padding: 0; }
         <a class="link" href="https://www.facebook.com/search/top?q=Carnes%20del%20Norte%20Select" rel="noopener">En Facebook</a>
       </div>
     </div>
-    <figure class="frame" id="frame" data-reveal style="--d:1" tabindex="0" aria-label="Escenas de una noche en Carnes del Norte. Toca para ver la siguiente.">
-      <svg viewBox="50 85 880 490" aria-hidden="true">
-        <g clip-path="url(#bullclip)">
-          <g class="scene is-on" data-cap="El micrófono, bajo la luz rosa.">
-            <rect x="0" y="0" width="1000" height="700" fill="#470c35"/>
-            <circle cx="470" cy="300" r="210" fill="#ff488b"/>
-            <rect x="452" y="300" width="36" height="270" fill="#0d060b"/>
-            <rect x="420" y="190" width="100" height="150" rx="50" fill="#fff"/>
-            <rect x="430" y="300" width="80" height="10" fill="#0d060b"/>
-          </g>
-          <g class="scene" data-cap="La terraza de noche, con su árbol rosa.">
-            <rect x="0" y="0" width="1000" height="700" fill="#101421"/>
-            <rect x="460" y="250" width="34" height="330" fill="#6b4a3a"/>
-            <circle class="blossom" cx="380" cy="230" r="90" fill="#ff488b"/><circle class="blossom" cx="500" cy="170" r="110" fill="#ff7aab"/><circle class="blossom" cx="640" cy="230" r="90" fill="#ff488b"/>
-            <g fill="#fff"><circle cx="160" cy="200" r="7"/><circle cx="240" cy="240" r="7"/><circle cx="760" cy="240" r="7"/><circle cx="840" cy="210" r="7"/><circle cx="900" cy="260" r="7"/></g>
-          </g>
-          <g class="scene" data-cap="El asador encendido.">
-            <rect x="0" y="0" width="1000" height="700" fill="#0d060b"/>
-            <path class="flame" d="M200 470 C150 380 230 330 210 220 C290 300 320 380 290 470Z" fill="#ff488b"/>
-            <path class="flame" d="M380 470 C330 360 420 300 400 170 C500 270 520 380 480 470Z" fill="#ff488b"/>
-            <path class="flame" d="M580 470 C530 370 610 320 600 200 C690 300 700 390 670 470Z" fill="#ff488b"/>
-            <path class="flame" d="M760 470 C720 390 790 340 780 260 C850 330 860 410 830 470Z" fill="#ff488b"/>
-            <g fill="#fff"><rect x="100" y="330" width="800" height="14"/><rect x="100" y="380" width="800" height="14"/></g>
-            <ellipse cx="380" cy="320" rx="110" ry="34" fill="#b0174f"/><ellipse cx="640" cy="318" rx="120" ry="34" fill="#b0174f"/>
-            <rect x="0" y="470" width="1000" height="120" fill="#470c35"/>
-          </g>
-          <g class="scene" data-cap="Guitarra y requinto para el dueto.">
-            <rect x="0" y="0" width="1000" height="700" fill="#ff488b"/>
-            <circle cx="420" cy="380" r="130" fill="#470c35"/><circle cx="420" cy="250" r="95" fill="#470c35"/>
-            <circle cx="420" cy="330" r="34" fill="#0d060b"/>
-            <rect x="404" y="40" width="32" height="210" fill="#0d060b"/>
-            <circle cx="680" cy="360" r="90" fill="#fff"/><circle cx="680" cy="270" r="66" fill="#fff"/><circle cx="680" cy="330" r="24" fill="#0d060b"/>
-            <rect x="669" y="110" width="22" height="160" fill="#0d060b"/>
-          </g>
-        </g>
-      </svg>
-      <figcaption id="frame-cap">El micrófono, bajo la luz rosa.</figcaption>
+    <figure class="frame" id="frame" data-reveal style="--d:1" tabindex="0" aria-label="Fotos de música norteña. Toca para ver la siguiente.">
+      <div class="frame-box">
+        <img class="scene is-on" data-cap="Un conjunto norteño tocando en vivo." src="assets/norteno.jpg" alt="Conjunto norteño tocando frente a las mesas de un bar" width="1600" height="1200" style="object-position:30% 50%">
+        <img class="scene" data-cap="Carne sobre las brasas del carbón." src="assets/brasa.jpg" alt="Un trozo de carne sobre la parrilla, encima del carbón encendido" width="1600" height="1195" style="object-position:60% 50%" loading="lazy">
+        <img class="scene" data-cap="Un bajo sexto colgado en una tienda de instrumentos." src="assets/bajosexto-pared.jpg" alt="Bajo sexto colgado en una pared de madera" width="1200" height="1600" style="object-position:50% 62%" loading="lazy">
+        <img class="scene" data-cap="Bugambilias en flor al caer la tarde." src="assets/bugambilia.jpg" alt="Bugambilias rosas contra el cielo" width="1200" height="1600" style="object-position:50% 60%" loading="lazy">
+      </div>
+      <figcaption id="frame-cap">Un conjunto norteño tocando en vivo.</figcaption>
     </figure>
   </div>
 </section>
@@ -552,6 +536,10 @@ legend { padding: 0; }
     <h2 id="suc-t">Sucursales y horarios</h2>
     <span class="count">Ciudad López Mateos</span>
   </div>
+  <figure class="band suc-pic" data-reveal>
+    <div class="pic"><img src="assets/atizapan.jpg" alt="Calle con postes de luz y palmeras en Atizapán de Zaragoza" width="1600" height="1200" loading="lazy"></div>
+    <figcaption>Calzada San Mateo, Atizapán de Zaragoza.</figcaption>
+  </figure>
   <div class="suc-grid">
     <ul class="branches">
       <li class="branch" data-reveal><h3>Restaurante y terraza</h3><span class="open">Abre 8 a.m.</span><p>Para comer, con la carne de la vitrina y las noches de música.</p><a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Carnes+del+Norte+Selecto+restaurante+Ciudad+L%C3%B3pez+Mateos" rel="noopener">Ver en Maps</a></li>
@@ -609,6 +597,7 @@ legend { padding: 0; }
       <ul><li><a href="https://www.instagram.com/carnesdelnorteselect/" rel="noopener">Instagram</a></li><li><a href="https://www.facebook.com/search/top?q=Carnes%20del%20Norte%20Select" rel="noopener">Facebook</a></li></ul>
       <div class="addr"><p>Ciudad López Mateos, Atizapán de Zaragoza, Estado de México.</p><p>Carnicería desde las 7 a.m. · Restaurante desde las 8 a.m.</p></div>
     </div>
+    <div class="credits"><p>Fotos de Wikimedia Commons:</p><ul><li><a href="https://commons.wikimedia.org/wiki/File:Meat_at_the_butcher_shop.JPG" rel="noopener">Meat at the butcher shop</a>, Revital Salomon · CC BY-SA 4.0</li><li><a href="https://commons.wikimedia.org/wiki/File:Smoked_rib_eye_-_April_2024_-_Sarah_Stierch.jpg" rel="noopener">Smoked rib eye - April 2024 - Sarah Stierch</a>, Missvain · CC BY 4.0</li><li><a href="https://commons.wikimedia.org/wiki/File:Charcoal_grill.jpg" rel="noopener">Charcoal grill</a>, T.Tseng · CC BY 2.0</li><li><a href="https://commons.wikimedia.org/wiki/File:Small_piece_of_meat_(5650576076).jpg" rel="noopener">Small piece of meat (5650576076)</a>, Håkan Dahlström from Malmö, Sweden · CC BY 2.0</li><li><a href="https://commons.wikimedia.org/wiki/File:Bougainvillea_20.jpg" rel="noopener">Bougainvillea 20</a>, পাপৰি বৰা · CC BY-SA 4.0</li><li><a href="https://commons.wikimedia.org/wiki/File:M%C3%BAsica_Norte%C3%B1a_Pilo%27s_Bar.jpg" rel="noopener">Música Norteña Pilo's Bar</a>, WendyAvilesR · CC BY-SA 4.0</li><li><a href="https://commons.wikimedia.org/wiki/File:Bajo_sexto_%3F_-_I_can%27t_read_the_tagger!_12_String_Something_-_Homestead_Pickin%27_Parlor_(2007-08-10_05.51.16_by_kc7fys).jpg" rel="noopener">Bajo sexto ? - I can't read the tagger! 12 String Something - Homestead Pickin' Parlor (2007-08-10 05.51.16 by kc7fys)</a>, kc7fys from Saint Paul, USA · CC BY-SA 2.0</li><li><a href="https://commons.wikimedia.org/wiki/File:Calzada_San_Mateo,_Atizap%C3%A1n_de_Zaragoza,_Estado_de_M%C3%A9xico.jpg" rel="noopener">Calzada San Mateo, Atizapán de Zaragoza, Estado de México</a>, ProtoplasmaKid · CC BY-SA 4.0</li></ul></div>
     <div class="foot-last">
       <p>Propuesta de diseño para Carnes del Norte Selecto · no es el sitio oficial · 2026</p>
       <a class="btn" href="#inicio">Volver arriba ↑</a>

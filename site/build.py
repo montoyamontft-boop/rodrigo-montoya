@@ -63,6 +63,20 @@ def bullclip(cid: str) -> str:
     return f'<clipPath id="{cid}">{inner}<path d="{TAIL}" stroke="#000" stroke-width="12" fill="none"/></clipPath>'
 
 
+def bullclip_obb(cid: str) -> str:
+    """The silhouette in objectBoundingBox units, for clipping an HTML box of the bull's proportions."""
+    x0, y0, w, h = (float(v) for v in VIEWBOX.split())
+    def norm(pts):
+        out = []
+        for pair in pts.split():
+            x, y = (float(v) for v in pair.split(","))
+            out.append(f"{(x - x0) / w:.4f},{(y - y0) / h:.4f}")
+        return " ".join(out)
+    polys = list(CUTS.values()) + CHAMBERETE + REST
+    inner = "".join(f'<polygon points="{norm(p)}"/>' for p in polys)
+    return f'<clipPath id="{cid}" clipPathUnits="objectBoundingBox">{inner}</clipPath>'
+
+
 def mini(cut: str) -> str:
     """Small bull for the cut list: one region lit."""
     return bull(f'class="mini" data-lit="{cut}"')
@@ -71,6 +85,7 @@ def mini(cut: str) -> str:
 src = (HERE / "page.html").read_text(encoding="utf-8")
 src = re.sub(r"\{\{BULL ([^}]*)\}\}", lambda m: bull(m.group(1)), src)
 src = re.sub(r"\{\{BULLCLIP (\w+)\}\}", lambda m: bullclip(m.group(1)), src)
+src = re.sub(r"\{\{BULLCLIPOBB (\w+)\}\}", lambda m: bullclip_obb(m.group(1)), src)
 src = re.sub(r"\{\{MINI (\w+)\}\}", lambda m: mini(m.group(1)), src)
 src = src.replace("{{VIEWBOX}}", VIEWBOX)
 # inline the fonts so the page also works opened straight from disk (file:// blocks font files)
