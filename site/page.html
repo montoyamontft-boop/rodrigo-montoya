@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#0d060b">
 <link rel="icon" type="image/png" href="assets/logo.png">
 <script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="vendor/stage.css">
 <style>
 @font-face { font-family: "Libre Franklin"; src: url("fonts/libre-franklin-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
 @font-face { font-family: "Source Serif 4"; src: url("fonts/source-serif-4-latin-wght-normal.woff2") format("woff2"); font-weight: 200 900; font-style: normal; font-display: swap; }
@@ -88,6 +89,8 @@ p { margin: 0; }
 /* ---------- hero ---------- */
 .hero { position: relative; min-height: max(100svh, 720px); overflow: hidden; }
 .hero .wrap { position: relative; z-index: 2; padding-top: clamp(120px, 15vh, 160px); }
+.hero .wrap { pointer-events: none; }
+.hero .wrap > * { pointer-events: auto; width: fit-content; }
 .hero h1 { font-size: var(--step-display); text-transform: uppercase; line-height: 0.9; max-width: 9.5em; }
 .hero h1 span { display: block; }
 .hero-copy { margin-top: 40px; max-width: 34ch; }
@@ -116,7 +119,7 @@ p { margin: 0; }
 .item p { margin-top: 6px; color: var(--ink); max-width: 40ch; }
 
 /* ---------- calculator ---------- */
-.calc { margin-top: var(--gap); background: var(--field-1); color: var(--field-1-ink); padding-block: clamp(80px, 9vw, 140px); }
+.calc { background: var(--field-1); color: var(--field-1-ink); padding-block: clamp(80px, 9vw, 140px); }
 .calc-grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(40px, 5vw, 96px); align-items: start; }
 .calc h2 { font-size: var(--step-head); }
 .calc .lead { margin-top: 22px; font-size: var(--step-lead); line-height: 1.4; max-width: 30ch; }
@@ -191,9 +194,9 @@ legend { padding: 0; }
 .frame { margin: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .frame-box { position: relative; aspect-ratio: {{ASPECT}}; max-width: 620px; margin-inline: auto; clip-path: url(#bullobb); background: var(--field-1); }
 .frame-box img { position: absolute; inset: 0; filter: saturate(1.08) contrast(1.12) brightness(0.92); }
-.frame .scene { opacity: 0; transition: opacity 1400ms ease; }
-.frame .scene.is-on { opacity: 1; }
-.no-js-frame .scene:first-of-type { opacity: 1; }
+.frame .shot { opacity: 0; transition: opacity 1400ms ease; }
+.frame .shot.is-on { opacity: 1; }
+.no-js-frame .shot:first-of-type { opacity: 1; }
 .frame figcaption { margin-top: 16px; font-size: var(--step-small); color: var(--soft-ink); min-height: 1.5em; text-align: center; }
 
 /* ---------- proof tiles ---------- */
@@ -261,6 +264,94 @@ legend { padding: 0; }
 .foot-last { margin-top: 56px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; font-size: var(--step-small); }
 .foot-last .btn { min-height: 44px; padding: 0 16px; font-size: var(--step-small); }
 
+
+/* ---------- hero interaction ---------- */
+.hero-bull .cut { cursor: pointer; }
+.hero-bull .cut, .hero-bull .rest { translate: calc(var(--mx, 0) * (3 + var(--i, 0) * 1.6) * 1px) calc(var(--my, 0) * (3 + var(--i, 0) * 1.6) * 1px); }
+.hero-bull .cut:hover { fill: #ff7aab; }
+.tip { position: absolute; z-index: 4; left: 0; top: 0; pointer-events: none; background: var(--ink); color: var(--bg); font: 700 var(--step-body)/1 var(--display); padding: 10px 14px; opacity: 0; transform: translate(-50%, -140%) scale(0.9); transition: opacity 160ms, transform 220ms var(--ease-out); white-space: nowrap; }
+.tip.is-on { opacity: 1; transform: translate(-50%, -150%) scale(1); }
+.tip small { display: block; margin-top: 4px; font: 400 var(--step-small)/1.2 var(--text); }
+
+/* ---------- despiece scene ---------- */
+.despiece { background: var(--bg); padding-block: var(--gap) 0; }
+.desp-grid { display: grid; grid-template-columns: 4fr 8fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
+.desp-copy h2 { font-size: var(--step-head); }
+.desp-copy p { margin-top: 24px; font-size: var(--step-lead); line-height: 1.4; max-width: 28ch; }
+.desp-art { position: relative; width: min(100%, 78svh); justify-self: center; }
+.desp-bull { width: 100%; overflow: visible; --cut-c: var(--accent); --rest-c: #5e1c49; }
+.desp-label { position: absolute; transform: translate(-50%, -50%); text-decoration: none; z-index: 2; }
+.desp-label span { display: inline-block; background: var(--bg); color: var(--ink); font: 700 var(--step-small)/1 var(--display); padding: 8px 10px; white-space: nowrap; transition: background-color 180ms, color 180ms, transform 200ms var(--ease-out); }
+.desp-label:hover span, .desp-label:focus-visible span { background: var(--ink); color: var(--bg); transform: scale(1.06); }
+.scene.despiece.is-live { padding: 0; }
+.scene.despiece.is-live .desp-grid { height: 100svh; }
+.scene.despiece.is-live .desp-label span { opacity: 0; visibility: hidden; }
+
+/* ---------- carbon scene ---------- */
+.carbon { background: var(--bg); padding-block: var(--gap) 0; }
+.carbon-in { padding-inline: var(--m); max-width: 1680px; margin-inline: auto; }
+.carbon-title { font-size: var(--step-head); max-width: 12em; }
+.carbon-pic { margin: 40px 0 0; position: relative; overflow: hidden; aspect-ratio: 16 / 9; }
+.carbon-pic img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.08) contrast(1.06); }
+.carbon-pic figcaption { position: absolute; left: 0; bottom: 0; background: var(--bg); color: var(--ink); font-size: var(--step-small); padding: 10px 14px; }
+.scene.carbon.is-live { padding: 0; }
+.scene.carbon.is-live .carbon-in { position: relative; height: 100svh; max-width: none; padding: 0; }
+.scene.carbon.is-live .carbon-title { position: absolute; z-index: 2; left: var(--m); right: var(--m); top: 14svh; margin: 0 auto; text-align: center; font-size: var(--step-display); max-width: 11em; }
+.scene.carbon.is-live .carbon-pic { position: absolute; inset: 0; margin: 0; aspect-ratio: auto; }
+
+/* ---------- término ---------- */
+.termino { background: var(--field-2); color: var(--field-2-ink); padding-block: var(--gap); }
+.term-grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(40px, 6vw, 110px); align-items: center; }
+.termino h2 { font-size: var(--step-head); }
+.termino .lead { margin-top: 22px; font-size: var(--step-lead); line-height: 1.4; max-width: 32ch; }
+.term-form { margin-top: 40px; display: grid; gap: 26px; }
+.term-form input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: transparent; cursor: pointer; }
+.term-form input[type=range]::-webkit-slider-runnable-track { height: 10px; background: var(--tile); }
+.term-form input[type=range]::-moz-range-track { height: 10px; background: var(--tile); }
+.term-form input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 34px; height: 34px; margin-top: -12px; border-radius: 50%; background: var(--accent); transition: transform 160ms var(--ease-out); }
+.term-form input[type=range]::-moz-range-thumb { width: 34px; height: 34px; border: 0; border-radius: 50%; background: var(--accent); }
+.term-form input[type=range]:active::-webkit-slider-thumb { transform: scale(1.15); }
+.term-stops { display: flex; justify-content: space-between; margin-top: -14px; }
+.term-stops button { border: 0; background: none; padding: 6px 0; font: 600 var(--step-small)/1 var(--display); color: var(--soft-ink); cursor: pointer; transition: color 160ms; }
+.term-stops button:hover, .term-stops button.on { color: var(--field-2-ink); }
+.termino .chip span { background: var(--tile); color: var(--field-2-ink); }
+.termino .chip span:hover { background: #e4dce1; }
+.termino .chip input:checked + span { background: var(--field-2-ink); color: var(--field-2); }
+.term-read { margin-top: 40px; }
+.term-name { font: 700 var(--step-lead)/1.2 var(--display); }
+.term-nums { display: flex; gap: 40px; margin-top: 10px; flex-wrap: wrap; }
+.term-nums .big { font: 700 var(--step-head)/1 var(--display); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.term-desc { margin-top: 14px; max-width: 40ch; }
+.steak { margin: 0; }
+.steak svg { width: 100%; height: auto; }
+.steak use, .steak .st-eye { transform-box: fill-box; transform-origin: 50% 50%; transition: transform 700ms var(--ease-expo), fill 700ms var(--ease-out); }
+.st-crust { fill: #4a1f14; }
+.st-band { fill: #9a7466; transform: scale(0.93); }
+.st-core { fill: var(--core, #df5d6c); transform: scale(var(--core-s, 0.7)); }
+.st-eye { fill: #f3e6dc; opacity: 0.85; }
+.st-fat { fill: #f3e6dc; }
+.st-marble { fill: none; stroke: #f3e6dc; stroke-width: 5; stroke-linecap: round; opacity: 0.45; }
+.steak figcaption { margin-top: 12px; font-size: var(--step-small); color: var(--soft-ink); text-align: center; }
+
+/* ---------- vitrina: add to the grill ---------- */
+.add { margin-top: 12px; display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border: 0; background: var(--surface); color: var(--ink); font: 600 var(--step-small)/1 var(--display); cursor: pointer; transition: background-color 200ms, color 200ms, transform 140ms var(--ease-out); }
+.add:hover { background: #2a1624; }
+.add:active { transform: scale(0.96); }
+.add .add-on { display: none; }
+.add[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.add[aria-pressed="true"] .add-on { display: inline; }
+.add[aria-pressed="true"] .add-off { display: none; }
+.item:target .item-body strong { color: var(--accent); }
+.calc-bull .cut { cursor: pointer; }
+
+/* ---------- chart read-out ---------- */
+.bars li { cursor: default; }
+.bars li:hover .b, .bars li:focus-visible .b { background: #8c1f5c; }
+.bars li:hover .b.peak, .bars li:focus-visible .b.peak { background: #ff6aa1; }
+.chart-read { margin-top: 52px; font: 700 var(--step-body)/1.3 var(--display); min-height: 1.3em; }
+.chart .note { margin-top: 10px; }
+.btn { translate: var(--tx, 0) var(--ty, 0); transition: transform 160ms var(--ease-out), background-color 200ms, translate 260ms var(--ease-out); }
+
 /* ---------- motion ---------- */
 @media (prefers-reduced-motion: no-preference) {
   .js [data-reveal] { opacity: 0; transform: translateY(26px); transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-out); transition-delay: calc(var(--d, 0) * 80ms); }
@@ -282,6 +373,8 @@ legend { padding: 0; }
 /* ---------- phone & tablet ---------- */
 @media (max-width: 980px) {
   .nav a:not(.btn) { display: none; }
+  .desp-grid, .term-grid { grid-template-columns: 1fr; }
+  .desp-art { width: min(100%, 560px); }
   .calc-grid, .noches-grid, .suc-grid { grid-template-columns: 1fr; }
   .calc-out { position: static; }
   .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -298,6 +391,10 @@ legend { padding: 0; }
 }
 @media (max-width: 720px) {
   :root { --step-display: 10.2vw; }
+  .scene.despiece.is-live .desp-grid { align-content: center; gap: 20px; }
+  .scene.despiece.is-live .desp-copy p { display: none; }
+  .desp-label span { padding: 6px 7px; font-size: 0.8125rem; }
+  .term-stops button { font-size: 0.8125rem; }
   .hero-bull { width: calc(100% - 2 * var(--m)); margin: 36px var(--m) 0; }
   .items { grid-template-columns: 1fr; gap: 32px; }
   .mini { width: 48px; }
@@ -354,6 +451,22 @@ legend { padding: 0; }
     </div>
   </div>
   {{BULL class="bull hero-bull"}}
+  <div class="tip" id="tip" aria-hidden="true"></div>
+</section>
+
+<section class="scene despiece" data-scene="despiece" data-options='{"hold": 2}' aria-labelledby="desp-t">
+  <div class="scene-stage">
+    <div class="wrap desp-grid">
+      <div class="desp-copy">
+        <h2 id="desp-t">Cada corte, en su lugar</h2>
+        <p>Del cuello a la pierna, cada parte del toro tiene su nombre y su manera de cocinarse. Toca un corte para verlo en la vitrina.</p>
+      </div>
+      <div class="desp-art">
+        {{BULL class="bull desp-bull"}}
+        {{LABELS}}
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="vitrina wrap" id="vitrina" aria-labelledby="vitrina-t">
@@ -373,12 +486,12 @@ legend { padding: 0; }
       <span class="count">6 cortes</span>
     </div>
     <ul class="items">
-      <li class="item" data-reveal>{{MINI arrachera}}<div class="item-body"><div class="item-line"><strong>Arrachera</strong><span>4 min por lado</span></div><p>Del diafragma, de grano largo y marcado. Se rebana contra la fibra al servirla.</p></div></li>
-      <li class="item" data-reveal style="--d:1">{{MINI ribeye}}<div class="item-body"><div class="item-line"><strong>Rib eye</strong><span>5 min por lado</span></div><p>Del lomo alto, con el ojo de grasa al centro que se derrite sobre la brasa.</p></div></li>
-      <li class="item" data-reveal>{{MINI newyork}}<div class="item-body"><div class="item-line"><strong>New York</strong><span>5 min por lado</span></div><p>Del lomo bajo, con su orilla de grasa; conviene dejarla puesta mientras se asa.</p></div></li>
+      <li class="item" id="c-arrachera" data-reveal>{{MINI arrachera}}<div class="item-body"><div class="item-line"><strong>Arrachera</strong><span>4 min por lado</span></div><p>Del diafragma, de grano largo y marcado. Se rebana contra la fibra al servirla.</p><button class="add" type="button" data-add="arrachera" aria-pressed="false"><span class="add-off">Agregar al asador</span><span class="add-on">En tu carne asada</span></button></div></li>
+      <li class="item" id="c-ribeye" data-reveal style="--d:1">{{MINI ribeye}}<div class="item-body"><div class="item-line"><strong>Rib eye</strong><span>5 min por lado</span></div><p>Del lomo alto, con el ojo de grasa al centro que se derrite sobre la brasa.</p><button class="add" type="button" data-add="ribeye" aria-pressed="false"><span class="add-off">Agregar al asador</span><span class="add-on">En tu carne asada</span></button></div></li>
+      <li class="item" id="c-newyork" data-reveal>{{MINI newyork}}<div class="item-body"><div class="item-line"><strong>New York</strong><span>5 min por lado</span></div><p>Del lomo bajo, con su orilla de grasa; conviene dejarla puesta mientras se asa.</p><button class="add" type="button" data-add="newyork" aria-pressed="false"><span class="add-off">Agregar al asador</span><span class="add-on">En tu carne asada</span></button></div></li>
       <li class="item" data-reveal style="--d:1">{{MINI newyork}}<div class="item-body"><div class="item-line"><strong>T-bone</strong><span>6 min por lado</span></div><p>El hueso en T separa dos cortes en uno: de un lado New York, del otro filete.</p></div></li>
-      <li class="item" data-reveal>{{MINI picana}}<div class="item-body"><div class="item-line"><strong>Picaña</strong><span>Grasa primero</span></div><p>La tapa de la cadera, con su capa de grasa. Se asa primero del lado de la grasa.</p></div></li>
-      <li class="item" data-reveal style="--d:1">{{MINI costilla}}<div class="item-body"><div class="item-line"><strong>Costilla cargada</strong><span>3 min por lado</span></div><p>Carne entre hueso y hueso, en corte delgado para que se dore rápido.</p></div></li>
+      <li class="item" id="c-picana" data-reveal>{{MINI picana}}<div class="item-body"><div class="item-line"><strong>Picaña</strong><span>Grasa primero</span></div><p>La tapa de la cadera, con su capa de grasa. Se asa primero del lado de la grasa.</p><button class="add" type="button" data-add="picana" aria-pressed="false"><span class="add-off">Agregar al asador</span><span class="add-on">En tu carne asada</span></button></div></li>
+      <li class="item" id="c-costilla" data-reveal style="--d:1">{{MINI costilla}}<div class="item-body"><div class="item-line"><strong>Costilla cargada</strong><span>3 min por lado</span></div><p>Carne entre hueso y hueso, en corte delgado para que se dore rápido.</p><button class="add" type="button" data-add="costilla" aria-pressed="false"><span class="add-off">Agregar al asador</span><span class="add-on">En tu carne asada</span></button></div></li>
     </ul>
   </div>
 
@@ -388,11 +501,49 @@ legend { padding: 0; }
       <span class="count">4 cortes</span>
     </div>
     <ul class="items">
-      <li class="item" data-reveal>{{MINI diezmillo}}<div class="item-body"><div class="item-line"><strong>Diezmillo</strong><span>Para guisar</span></div><p>Del cuello y la espalda alta. Para bistec en salsa, guisos y carne con chile.</p></div></li>
-      <li class="item" data-reveal style="--d:1">{{MINI bola}}<div class="item-body"><div class="item-line"><strong>Bistec de bola</strong><span>Plancha, 2 min</span></div><p>De la pierna, magro y parejo. En bistec delgado o para milanesa.</p></div></li>
-      <li class="item" data-reveal>{{MINI chamberete}}<div class="item-body"><div class="item-line"><strong>Chamberete</strong><span>Caldo, 2 h</span></div><p>De la parte alta de la pata, con hueso y tuétano. El corte del caldo de res.</p></div></li>
-      <li class="item" data-reveal style="--d:1">{{MINI pecho}}<div class="item-body"><div class="item-line"><strong>Pecho</strong><span>Olla, 3 h</span></div><p>Fibra larga que se deshace con tiempo. Para deshebrar, salpicón y tacos.</p></div></li>
+      <li class="item" id="c-diezmillo" data-reveal>{{MINI diezmillo}}<div class="item-body"><div class="item-line"><strong>Diezmillo</strong><span>Para guisar</span></div><p>Del cuello y la espalda alta. Para bistec en salsa, guisos y carne con chile.</p></div></li>
+      <li class="item" id="c-bola" data-reveal style="--d:1">{{MINI bola}}<div class="item-body"><div class="item-line"><strong>Bistec de bola</strong><span>Plancha, 2 min</span></div><p>De la pierna, magro y parejo. En bistec delgado o para milanesa.</p></div></li>
+      <li class="item" id="c-chamberete" data-reveal>{{MINI chamberete}}<div class="item-body"><div class="item-line"><strong>Chamberete</strong><span>Caldo, 2 h</span></div><p>De la parte alta de la pata, con hueso y tuétano. El corte del caldo de res.</p></div></li>
+      <li class="item" id="c-pecho" data-reveal style="--d:1">{{MINI pecho}}<div class="item-body"><div class="item-line"><strong>Pecho</strong><span>Olla, 3 h</span></div><p>Fibra larga que se deshace con tiempo. Para deshebrar, salpicón y tacos.</p></div></li>
     </ul>
+  </div>
+</section>
+
+<section class="termino" id="termino" aria-labelledby="term-t">
+  <div class="wrap term-grid">
+    <div class="term-copy">
+      <h2 id="term-t" data-reveal>¿Cómo lo quieres?</h2>
+      <p class="lead" data-reveal style="--d:1">Del centro casi crudo al bien cocido: la temperatura interna y los minutos por lado de un rib eye a fuego directo fuerte.</p>
+      <form class="term-form" id="term-form" data-reveal style="--d:2" onsubmit="return false">
+        <label class="field-label" for="term">Término</label>
+        <input id="term" type="range" min="0" max="4" step="1" value="2" aria-valuetext="Término medio">
+        <div class="term-stops" aria-hidden="true"><button type="button" data-t="0">Azul</button><button type="button" data-t="1">Rojo</button><button type="button" data-t="2">Medio</button><button type="button" data-t="3">Tres cuartos</button><button type="button" data-t="4">Bien cocido</button></div>
+        <fieldset>
+          <legend class="field-label">Grosor del corte</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="grosor" value="0" checked><span>2.5 cm</span></label>
+            <label class="chip"><input type="radio" name="grosor" value="1"><span>4 cm</span></label>
+          </div>
+        </fieldset>
+      </form>
+      <div class="term-read" data-reveal style="--d:3" aria-live="polite">
+        <p class="term-name" id="term-name">Término medio</p>
+        <div class="term-nums"><p><span class="big" id="term-temp">57</span> °C al centro</p><p><span class="big" id="term-min">4</span> min por lado</p></div>
+        <p class="term-desc" id="term-desc">Centro rosado y jugo claro. Deja reposar cinco minutos antes de rebanar.</p>
+      </div>
+    </div>
+    <figure class="steak" data-reveal style="--d:1" data-t="2">
+      <svg viewBox="0 0 600 420" role="img" aria-label="Corte transversal de un rib eye que cambia de color según el término">
+        <defs><path id="steak-p" d="M70 210 C60 120 150 62 270 58 C380 54 500 80 540 160 C575 230 548 320 470 352 C380 390 240 392 160 360 C100 336 76 280 70 210Z"/></defs>
+        <use href="#steak-p" class="st-crust"/>
+        <use href="#steak-p" class="st-band"/>
+        <use href="#steak-p" class="st-core"/>
+        <path class="st-fat" d="M118 150 C150 96 230 78 300 80 C268 92 220 110 196 150 C176 184 176 220 186 252 C150 236 112 196 118 150Z"/>
+        <ellipse class="st-eye" cx="232" cy="190" rx="34" ry="26"/>
+        <path class="st-marble" d="M300 150 C340 170 380 160 420 180 M260 260 C300 250 350 280 400 262 M340 210 C370 222 410 214 450 232"/>
+      </svg>
+      <figcaption>Corte transversal dibujado de un rib eye.</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -452,6 +603,18 @@ legend { padding: 0; }
   </div>
 </section>
 
+<section class="scene carbon" data-scene="carbon" data-options='{"hold": 1.5}' aria-labelledby="carbon-t">
+  <div class="scene-stage">
+    <div class="carbon-in">
+      <h2 id="carbon-t" class="carbon-title">Al carbón, como en el norte</h2>
+      <figure class="carbon-pic">
+        <img src="assets/parrilla.jpg" alt="Parrilla de carbón encendida, con las rejillas a distintas alturas" width="1600" height="1200" loading="lazy">
+        <figcaption>Una parrilla de carbón encendida.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
 <section class="terraza" id="terraza" aria-labelledby="terraza-t">
   <div class="wrap">
     <h2 id="terraza-t" class="vh">La terraza</h2>
@@ -462,8 +625,8 @@ legend { padding: 0; }
     </div>
     <div class="terraza-pics">
       <figure data-reveal>
-        <div class="pic"><img src="assets/parrilla.jpg" alt="Parrilla de carbón encendida, con las rejillas a distintas alturas" width="1600" height="1200" loading="lazy"></div>
-        <figcaption>Una parrilla de carbón encendida.</figcaption>
+        <div class="pic"><img src="assets/bugambilia.jpg" alt="Bugambilias rosas en flor contra el cielo" width="1200" height="1600" style="object-position:50% 70%" loading="lazy"></div>
+        <figcaption>Bugambilias en flor, el rosa de la terraza.</figcaption>
       </figure>
       <figure data-reveal style="--d:1">
         <svg viewBox="0 0 700 420" role="img" aria-label="Dibujo de la terraza: mesas de madera bajo un árbol de flores rosas">
@@ -502,10 +665,10 @@ legend { padding: 0; }
     </div>
     <figure class="frame" id="frame" data-reveal style="--d:1" tabindex="0" aria-label="Fotos de música norteña. Toca para ver la siguiente.">
       <div class="frame-box">
-        <img class="scene is-on" data-cap="Un conjunto norteño tocando en vivo." src="assets/norteno.jpg" alt="Conjunto norteño tocando frente a las mesas de un bar" width="1600" height="1200" style="object-position:30% 50%">
-        <img class="scene" data-cap="Carne sobre las brasas del carbón." src="assets/brasa.jpg" alt="Un trozo de carne sobre la parrilla, encima del carbón encendido" width="1600" height="1195" style="object-position:60% 50%" loading="lazy">
-        <img class="scene" data-cap="Un bajo sexto colgado en una tienda de instrumentos." src="assets/bajosexto-pared.jpg" alt="Bajo sexto colgado en una pared de madera" width="1200" height="1600" style="object-position:50% 62%" loading="lazy">
-        <img class="scene" data-cap="Bugambilias en flor al caer la tarde." src="assets/bugambilia.jpg" alt="Bugambilias rosas contra el cielo" width="1200" height="1600" style="object-position:50% 60%" loading="lazy">
+        <img class="shot is-on" data-cap="Un conjunto norteño tocando en vivo." src="assets/norteno.jpg" alt="Conjunto norteño tocando frente a las mesas de un bar" width="1600" height="1200" style="object-position:30% 50%">
+        <img class="shot" data-cap="Carne sobre las brasas del carbón." src="assets/brasa.jpg" alt="Un trozo de carne sobre la parrilla, encima del carbón encendido" width="1600" height="1195" style="object-position:60% 50%" loading="lazy">
+        <img class="shot" data-cap="Un bajo sexto colgado en una tienda de instrumentos." src="assets/bajosexto-pared.jpg" alt="Bajo sexto colgado en una pared de madera" width="1200" height="1600" style="object-position:50% 62%" loading="lazy">
+        <img class="shot" data-cap="Bugambilias en flor al caer la tarde." src="assets/bugambilia.jpg" alt="Bugambilias rosas contra el cielo" width="1200" height="1600" style="object-position:50% 60%" loading="lazy">
       </div>
       <figcaption id="frame-cap">Un conjunto norteño tocando en vivo.</figcaption>
     </figure>
@@ -545,17 +708,18 @@ legend { padding: 0; }
       <h3>Cuándo ir sin fila</h3>
       <p>Los lunes en Ruiz Cortines la hora más llena es a las 2 p.m. Antes de las 11 casi no hay espera.</p>
       <ol class="bars" aria-label="Afluencia de un lunes típico en la sucursal Ruiz Cortines, por hora">
-        <li data-h="8"><span class="b" style="--v:.23;--i:0"></span><span class="h">8</span><span class="vh">8 a.m.: poca gente</span></li>
-        <li data-h="9"><span class="b" style="--v:.23;--i:1"></span><span class="h">9</span><span class="vh">9 a.m.: poca gente</span></li>
-        <li data-h="10"><span class="b" style="--v:.36;--i:2"></span><span class="h">10</span><span class="vh">10 a.m.: poca gente</span></li>
-        <li data-h="11"><span class="b" style="--v:.45;--i:3"></span><span class="h">11</span><span class="vh">11 a.m.: algo de gente</span></li>
-        <li data-h="12"><span class="b" style="--v:.73;--i:4"></span><span class="h">12</span><span class="vh">12 p.m.: concurrido</span></li>
-        <li data-h="13"><span class="b" style="--v:.96;--i:5"></span><span class="h">1</span><span class="vh">1 p.m.: muy concurrido</span></li>
-        <li data-h="14"><span class="b peak" style="--v:1;--i:6"></span><span class="h">2</span><span class="vh">2 p.m.: la hora más llena</span></li>
-        <li data-h="15"><span class="b" style="--v:.96;--i:7"></span><span class="h">3</span><span class="vh">3 p.m.: muy concurrido</span></li>
-        <li data-h="16"><span class="b" style="--v:.68;--i:8"></span><span class="h">4</span><span class="vh">4 p.m.: concurrido</span></li>
-        <li data-h="17"><span class="b" style="--v:.41;--i:9"></span><span class="h">5</span><span class="vh">5 p.m.: algo de gente</span></li>
+        <li data-h="8" tabindex="0"><span class="b" style="--v:.23;--i:0"></span><span class="h">8</span><span class="vh">8 a.m.: poca gente</span></li>
+        <li data-h="9" tabindex="0"><span class="b" style="--v:.23;--i:1"></span><span class="h">9</span><span class="vh">9 a.m.: poca gente</span></li>
+        <li data-h="10" tabindex="0"><span class="b" style="--v:.36;--i:2"></span><span class="h">10</span><span class="vh">10 a.m.: poca gente</span></li>
+        <li data-h="11" tabindex="0"><span class="b" style="--v:.45;--i:3"></span><span class="h">11</span><span class="vh">11 a.m.: algo de gente</span></li>
+        <li data-h="12" tabindex="0"><span class="b" style="--v:.73;--i:4"></span><span class="h">12</span><span class="vh">12 p.m.: concurrido</span></li>
+        <li data-h="13" tabindex="0"><span class="b" style="--v:.96;--i:5"></span><span class="h">1</span><span class="vh">1 p.m.: muy concurrido</span></li>
+        <li data-h="14" tabindex="0"><span class="b peak" style="--v:1;--i:6"></span><span class="h">2</span><span class="vh">2 p.m.: la hora más llena</span></li>
+        <li data-h="15" tabindex="0"><span class="b" style="--v:.96;--i:7"></span><span class="h">3</span><span class="vh">3 p.m.: muy concurrido</span></li>
+        <li data-h="16" tabindex="0"><span class="b" style="--v:.68;--i:8"></span><span class="h">4</span><span class="vh">4 p.m.: concurrido</span></li>
+        <li data-h="17" tabindex="0"><span class="b" style="--v:.41;--i:9"></span><span class="h">5</span><span class="vh">5 p.m.: algo de gente</span></li>
       </ol>
+      <p class="chart-read" id="chart-read" aria-live="polite">2 p.m.: la hora más llena.</p>
       <p class="note">Horarios populares de Google Maps para un lunes, de 8 a.m. a 5 p.m.</p>
     </div>
   </div>
@@ -600,6 +764,10 @@ legend { padding: 0; }
   </div>
 </footer>
 
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis.min.js"></script>
+<script src="vendor/stage.js"></script>
 <script>
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -655,7 +823,7 @@ legend { padding: 0; }
 
   // ---------- one frame, contents change ----------
   const frame = document.getElementById('frame');
-  const scenes = [...frame.querySelectorAll('.scene')];
+  const scenes = [...frame.querySelectorAll('.shot')];
   const cap = document.getElementById('frame-cap');
   let n = 0, timer = null;
   const show = (i) => { n = (i + scenes.length) % scenes.length; scenes.forEach((s, j) => s.classList.toggle('is-on', j === n)); cap.textContent = scenes[n].dataset.cap; };
@@ -680,6 +848,126 @@ legend { padding: 0; }
     document.getElementById('cupon-status').textContent = ok ? 'Mensaje copiado. Pégalo en el chat que se abrió.' : 'Abre el chat y escribe tus datos.';
     window.open('https://ig.me/m/carnesdelnorteselect', '_blank', 'noopener');
   });
+
+  // ---------- vitrina buttons and the calculator's bull share the calculator's cuts ----------
+  const adders = document.querySelectorAll('.add[data-add]');
+  const box = (cut) => form.querySelector(`[name=corte][value="${cut}"]`);
+  const syncAdds = () => adders.forEach((b) => b.setAttribute('aria-pressed', box(b.dataset.add)?.checked ? 'true' : 'false'));
+  const toggleCut = (cut) => { const cb = box(cut); if (!cb) return false; cb.checked = !cb.checked; update(); syncAdds(); return true; };
+  adders.forEach((b) => b.addEventListener('click', () => toggleCut(b.dataset.add)));
+  form.addEventListener('change', syncAdds);
+  syncAdds();
+  const calcBull = document.querySelector('.calc-bull');
+  calcBull.addEventListener('click', (e) => { const c = e.target.closest('.cut'); if (c) toggleCut(c.dataset.cut); });
+  calcBull.addEventListener('pointerover', (e) => { const c = e.target.closest('.cut'); cuts.forEach((x) => x.classList.toggle('peek', !!c && x.dataset.cut === c.dataset.cut && !!box(c.dataset.cut))); });
+  calcBull.addEventListener('pointerleave', () => cuts.forEach((x) => x.classList.remove('peek')));
+
+  // ---------- hero: the bull leans toward the pointer, each cut names itself ----------
+  const CUTN = { diezmillo: 'Diezmillo', pecho: 'Pecho', ribeye: 'Rib eye', costilla: 'Costilla cargada', newyork: 'New York', arrachera: 'Arrachera', picana: 'Picaña', bola: 'Bola', chamberete: 'Chamberete' };
+  const hero = document.querySelector('.hero'), hb = document.querySelector('.hero-bull'), tip = document.getElementById('tip');
+  const goTo = (id) => { const el = document.getElementById(id); if (!el) return; if (window.Stage && Stage.lenis) Stage.lenis.scrollTo(el, { offset: -140 }); else el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); };
+  if (!reduce) {
+    let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+    const loop = () => { cx += (tx - cx) * 0.08; cy += (ty - cy) * 0.08; hb.style.setProperty('--mx', cx.toFixed(3)); hb.style.setProperty('--my', cy.toFixed(3)); raf = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.002 ? requestAnimationFrame(loop) : 0; };
+    hero.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'touch') return;
+      const r = hero.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width) * 2 - 1; ty = ((e.clientY - r.top) / r.height) * 2 - 1;
+      if (!raf) raf = requestAnimationFrame(loop);
+      const c = e.target.closest && e.target.closest('.hero-bull .cut');
+      if (c) { tip.innerHTML = CUTN[c.dataset.cut] + '<small>Ver en la vitrina</small>'; tip.style.left = e.clientX - r.left + 'px'; tip.style.top = e.clientY - r.top + 'px'; tip.classList.add('is-on'); }
+      else tip.classList.remove('is-on');
+    });
+    hero.addEventListener('pointerleave', () => { tx = ty = 0; tip.classList.remove('is-on'); if (!raf) raf = requestAnimationFrame(loop); });
+  }
+  hb.addEventListener('click', (e) => { const c = e.target.closest('.cut'); if (c) goTo('c-' + c.dataset.cut); });
+
+  // ---------- término ----------
+  const T = [
+    ['Azul', 49, [2, 3], 'Sellado por fuera, morado y casi frío al centro.', '#8e0f3a', 0.88],
+    ['Rojo', 52, [3, 4], 'Centro rojo y tibio, muy jugoso.', '#c2264f', 0.8],
+    ['Término medio', 57, [4, 5.5], 'Centro rosado y jugo claro.', '#df5d6c', 0.68],
+    ['Tres cuartos', 63, [5, 7], 'Apenas un hilo rosado al centro.', '#c98b80', 0.5],
+    ['Bien cocido', 70, [6, 8.5], 'Sin rosado. Le va mejor a un corte con grasa, como la picaña.', '#9a7466', 0.28],
+  ];
+  const tf = document.getElementById('term-form'), tr = document.getElementById('term'), steak = document.querySelector('.steak');
+  const countTo = (el, to, dec = 0, ms = 520) => {
+    if (reduce) { el.textContent = to.toFixed(dec); return; }
+    const from = parseFloat(el.textContent) || 0, t0 = performance.now();
+    const step = (t) => { const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3); el.textContent = (from + (to - from) * e).toFixed(dec); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  };
+  const term = () => {
+    const i = +tr.value, g = +tf.grosor.value, d = T[i], m = d[2][g];
+    document.getElementById('term-name').textContent = d[0];
+    countTo(document.getElementById('term-temp'), d[1]);
+    countTo(document.getElementById('term-min'), m, m % 1 ? 1 : 0);
+    document.getElementById('term-desc').textContent = d[3] + ' Deja reposar cinco minutos antes de rebanar.';
+    steak.style.setProperty('--core', d[4]); steak.style.setProperty('--core-s', d[5]);
+    tr.setAttribute('aria-valuetext', d[0]);
+    tf.querySelectorAll('.term-stops button').forEach((b) => b.classList.toggle('on', +b.dataset.t === i));
+  };
+  tf.addEventListener('input', term);
+  tf.addEventListener('change', term);
+  tf.querySelectorAll('.term-stops button').forEach((b) => b.addEventListener('click', () => { tr.value = b.dataset.t; term(); }));
+  term();
+
+  // ---------- ratings count up when they arrive ----------
+  if ('IntersectionObserver' in window && !reduce) {
+    const io2 = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return; io2.unobserve(e.target);
+      const n = e.target.firstChild, to = parseFloat(n.textContent), t0 = performance.now();
+      const step = (t) => { const k = Math.min(1, (t - t0) / 1100), ee = 1 - Math.pow(1 - k, 4); n.textContent = (to * ee).toFixed(1); if (k < 1) requestAnimationFrame(step); };
+      n.textContent = '0.0'; requestAnimationFrame(step);
+    }), { threshold: 0.6 });
+    document.querySelectorAll('.tile .num').forEach((n) => io2.observe(n));
+  }
+
+  // ---------- chart: read any hour ----------
+  const read = document.getElementById('chart-read');
+  document.querySelectorAll('.bars li').forEach((li) => {
+    const show = () => { read.textContent = li.querySelector('.vh').textContent; };
+    li.addEventListener('pointerenter', show); li.addEventListener('focus', show);
+  });
+
+  // ---------- buttons lean toward the pointer ----------
+  if (!reduce) document.querySelectorAll('.btn').forEach((b) => {
+    b.addEventListener('pointermove', (e) => { if (e.pointerType === 'touch') return; const r = b.getBoundingClientRect(); b.style.setProperty('--tx', (((e.clientX - r.left) / r.width) - 0.5) * 10 + 'px'); b.style.setProperty('--ty', (((e.clientY - r.top) / r.height) - 0.5) * 8 + 'px'); });
+    b.addEventListener('pointerleave', () => { b.style.removeProperty('--tx'); b.style.removeProperty('--ty'); });
+  });
+
+  // ---------- scroll scenes (vendor/stage.js) ----------
+  if (window.Stage) {
+    const EXPLODE = {{EXPLODE}};
+    Scenes.despiece = (root, o) => Stage.scene(root, {
+      hold: o.hold ?? 2, scrub: 0.6,
+      build(tl, { q, phone }) {
+        const svg = root.querySelector('.desp-bull'), vb = svg.viewBox.baseVal, S = phone ? 0.72 : 0.76;
+        const facets = q('.desp-bull .cut, .desp-bull .rest');
+        const vec = (el) => EXPLODE[el.dataset.cut] || EXPLODE.rest;
+        tl.fromTo(svg, { scale: 1 }, { scale: S, transformOrigin: '50% 55%', duration: 0.45, ease: 'power2.inOut' }, 0.05);
+        tl.to(facets, { x: (i, el) => vec(el)[0], y: (i, el) => vec(el)[1], rotation: (i) => ((i * 37) % 9) - 4, transformOrigin: '50% 50%', duration: 0.45, ease: 'power2.inOut', stagger: 0.006 }, 0.05);
+        const labPos = (el, axis) => {
+          const W = svg.offsetWidth, H = svg.offsetHeight, k = W / vb.width, d = EXPLODE[el.dataset.cut];
+          const c = axis === 'x' ? (parseFloat(el.style.left) / 100) * W - 0.5 * W : (parseFloat(el.style.top) / 100) * H - 0.55 * H;
+          return S * d[axis === 'x' ? 0 : 1] * k - (1 - S) * c;
+        };
+        tl.to(q('.desp-label'), { x: (i, el) => labPos(el, 'x'), y: (i, el) => labPos(el, 'y'), duration: 0.45, ease: 'power2.inOut' }, 0.05);
+        tl.fromTo(q('.desp-label span'), { autoAlpha: 0, scale: 0.7 }, { autoAlpha: 1, scale: 1, duration: 0.12, stagger: 0.025, ease: 'back.out(2)', immediateRender: false }, 0.32);
+      },
+    });
+    Scenes.carbon = (root, o) => Stage.scene(root, {
+      hold: o.hold ?? 1.5, scrub: 0.6,
+      build(tl, { q }) {
+        tl.to(q('.carbon-title'), { yPercent: -40, autoAlpha: 0, duration: 0.2, ease: 'power1.in' }, 0.06);
+        tl.fromTo(q('.carbon-pic'), { clipPath: 'inset(38% 30% 12% 30%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.62, ease: 'power2.inOut' }, 0.12);
+        tl.fromTo(q('.carbon-pic img'), { scale: 1.3 }, { scale: 1, duration: 0.8, ease: 'power1.out' }, 0.04);
+        tl.fromTo(q('.carbon-pic figcaption'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.08 }, 0.8);
+      },
+    });
+    Stage.smooth();
+    Stage.init();
+  }
 })();
 </script>
 </body>
