@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carnes del Norte Selecto · Carnicería y asador en Ciudad López Mateos</title>
+<meta name="description" content="Carnicería, asador y terraza en Ciudad López Mateos, Atizapán. Cortes norteños para llevar o para comer aquí, y noches con música en vivo.">
+<meta name="theme-color" content="#0d060b">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+@font-face { font-family: "Libre Franklin"; src: url("fonts/libre-franklin-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Source Serif 4"; src: url("fonts/source-serif-4-latin-wght-normal.woff2") format("woff2"); font-weight: 200 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Source Serif 4"; src: url("fonts/source-serif-4-latin-wght-italic.woff2") format("woff2"); font-weight: 200 900; font-style: italic; font-display: swap; }
+
+:root {
+  --bg: #0d060b;
+  --surface: #1b0e17;
+  --ink: #ffffff;
+  --muted: #b4a9b1;
+  --accent: #ff488b;
+  --accent-ink: #0d060b;
+  --field-1: #470c35;  --field-1-ink: #ffffff;
+  --field-2: #ffffff;  --field-2-ink: #101421;
+  --tile: #f1ecef;
+  --soft-ink: #4a4752;
+
+  --display: "Libre Franklin", "Arial Narrow", Arial, sans-serif;
+  --text: "Source Serif 4", Georgia, "Times New Roman", serif;
+
+  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --step-sub: clamp(1.5rem, 1rem + 1.6vw, 2.25rem);
+  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+  --step-display: clamp(2.4rem, 6.6vw, 7.5rem);
+
+  --m: clamp(16px, 2.4vw, 36px);
+  --gap: clamp(120px, 13vw, 200px);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--text); font-size: var(--step-body); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -0.035em; line-height: 0.98; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+::selection { background: var(--accent); color: var(--accent-ink); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.wrap { padding-inline: var(--m); max-width: 1680px; margin-inline: auto; }
+
+/* ---------- the bull ---------- */
+.bull .cut, .bull .rest, .mini .cut, .mini .rest { stroke: var(--gap-c, var(--bg)); stroke-width: 7; stroke-linejoin: round; }
+.bull .cut { fill: var(--cut-c, var(--accent)); transition: fill 380ms var(--ease-out); }
+.bull .rest { fill: var(--rest-c, var(--accent)); }
+.bull .eye, .mini .eye { fill: var(--gap-c, var(--bg)); }
+.bull .tail, .mini .tail { fill: none; stroke: var(--rest-c, var(--accent)); stroke-width: 12; stroke-linecap: round; }
+.mini { width: 76px; height: auto; flex: none; --gap-c: var(--bg); }
+.mini .cut, .mini .rest { fill: var(--field-1); stroke-width: 10; }
+.mini .tail { stroke: var(--field-1); }
+.mini[data-lit="arrachera"] .r-arrachera, .mini[data-lit="ribeye"] .r-ribeye, .mini[data-lit="newyork"] .r-newyork,
+.mini[data-lit="picana"] .r-picana, .mini[data-lit="costilla"] .r-costilla, .mini[data-lit="diezmillo"] .r-diezmillo,
+.mini[data-lit="bola"] .r-bola, .mini[data-lit="chamberete"] .r-chamberete, .mini[data-lit="pecho"] .r-pecho { fill: var(--accent); }
+
+/* ---------- buttons ---------- */
+.btn { display: inline-flex; align-items: center; gap: 12px; min-height: 56px; padding: 0 26px; border: 0; border-radius: 0; background: var(--accent); color: var(--accent-ink); font: 700 var(--step-body)/1 var(--display); letter-spacing: -0.01em; text-decoration: none; cursor: pointer; transition: transform 160ms var(--ease-out), background-color 200ms; }
+.btn:hover { background: #ff6aa1; }
+.btn:active { transform: scale(0.97); }
+.btn .arr { transition: transform 240ms var(--ease-out); }
+.btn:hover .arr { transform: translateX(4px); }
+.link { font-family: var(--display); font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; transition: text-underline-offset 200ms var(--ease-out), color 200ms; }
+.link:hover { text-underline-offset: 9px; color: var(--accent); }
+
+/* ---------- header ---------- */
+.top { position: absolute; inset: 0 0 auto 0; z-index: 5; }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 84px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; white-space: nowrap; font: 700 1.0625rem/1 var(--display); letter-spacing: -0.02em; }
+.brand svg { width: 52px; --gap-c: var(--bg); }
+.brand .cut, .brand .rest { fill: var(--ink); stroke-width: 12; }
+.brand .tail { stroke: var(--ink); }
+.nav { display: flex; align-items: center; gap: clamp(16px, 2.4vw, 36px); font: 600 var(--step-body)/1 var(--display); }
+.nav a:not(.btn) { position: relative; text-decoration: none; padding: 8px 0; }
+.nav a:not(.btn)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 2px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 260ms var(--ease-out); }
+.nav a:not(.btn):hover::after { transform: scaleX(1); }
+.nav .btn { min-height: 46px; padding: 0 18px; white-space: nowrap; }
+
+/* ---------- hero ---------- */
+.hero { position: relative; min-height: max(100svh, 720px); overflow: hidden; }
+.hero .wrap { position: relative; z-index: 2; padding-top: clamp(120px, 15vh, 160px); }
+.hero h1 { font-size: var(--step-display); text-transform: uppercase; line-height: 0.9; max-width: 9.5em; }
+.hero h1 span { display: block; }
+.hero-copy { margin-top: 40px; max-width: 34ch; }
+.hero-copy p { font-size: var(--step-lead); line-height: 1.4; }
+.hero-act { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 28px; margin-top: 34px; }
+.hero-copy .hero-facts { margin-top: 30px; font-size: var(--step-small); color: var(--muted); max-width: 34ch; }
+.hero-bull { position: absolute; z-index: 1; left: 36vw; top: 33vh; width: 94vw; max-width: none; --gap-c: var(--bg); }
+
+/* ---------- vitrina ---------- */
+.vitrina { padding-block: var(--gap) 0; }
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; }
+.sec-head h2 { font-size: var(--step-head); }
+.sec-head .count { font-size: var(--step-body); color: var(--muted); }
+.vitrina .lead { margin-top: 24px; max-width: 46ch; font-size: var(--step-lead); line-height: 1.4; }
+.cat { margin-top: 96px; }
+.cat h3 { font-size: var(--step-sub); }
+.cat .sec-head { margin-bottom: 44px; }
+.items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 40px 64px; }
+.item { display: flex; gap: 22px; align-items: flex-start; }
+.item .mini { margin-top: 4px; transition: transform 300ms var(--ease-out); }
+.item:hover .mini { transform: translateX(-4px) scale(1.06); }
+.item-body { flex: 1; }
+.item-line { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.item-line strong { font: 700 var(--step-body)/1.2 var(--display); letter-spacing: -0.01em; }
+.item-line span { font-size: var(--step-small); color: var(--muted); white-space: nowrap; }
+.item p { margin-top: 6px; color: var(--ink); max-width: 40ch; }
+
+/* ---------- calculator ---------- */
+.calc { margin-top: var(--gap); background: var(--field-1); color: var(--field-1-ink); padding-block: clamp(80px, 9vw, 140px); }
+.calc-grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(40px, 5vw, 96px); align-items: start; }
+.calc h2 { font-size: var(--step-head); }
+.calc .lead { margin-top: 22px; font-size: var(--step-lead); line-height: 1.4; max-width: 30ch; }
+.calc form { margin-top: 44px; display: grid; gap: 30px; }
+.field-label { display: block; font: 700 var(--step-body)/1.2 var(--display); margin-bottom: 12px; }
+.steppers { display: flex; gap: 28px; flex-wrap: wrap; }
+.stepper { display: flex; align-items: center; background: rgba(13, 6, 11, 0.45); }
+.stepper button { width: 52px; height: 52px; border: 0; background: transparent; color: inherit; font: 700 1.5rem/1 var(--display); cursor: pointer; transition: background-color 160ms, transform 140ms var(--ease-out); }
+.stepper button:hover { background: rgba(255, 255, 255, 0.1); }
+.stepper button:active { transform: scale(0.9); }
+.stepper input { width: 56px; height: 52px; border: 0; background: transparent; color: inherit; text-align: center; font: 700 1.375rem/1 var(--display); font-variant-numeric: tabular-nums; -moz-appearance: textfield; }
+.stepper input::-webkit-inner-spin-button, .stepper input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+legend { padding: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip input { position: absolute; opacity: 0; pointer-events: none; }
+.chip span { display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; background: rgba(13, 6, 11, 0.45); font: 600 var(--step-body)/1 var(--display); cursor: pointer; user-select: none; transition: background-color 200ms, color 200ms, transform 140ms var(--ease-out); }
+.chip span:hover { background: rgba(13, 6, 11, 0.75); }
+.chip span:active { transform: scale(0.96); }
+.chip input:checked + span { background: var(--accent); color: var(--accent-ink); }
+.chip input:focus-visible + span { outline: 3px solid var(--ink); outline-offset: 3px; }
+.calc-out { position: sticky; top: 32px; }
+.calc-bull { width: 100%; --gap-c: var(--field-1); --cut-c: #22061a; --rest-c: #22061a; }
+.calc-bull .cut.on { fill: var(--accent); }
+.calc-bull .cut.peek:not(.on) { fill: #8c1f5c; }
+.nota { margin-top: 28px; background: var(--bg); color: var(--ink); padding: clamp(24px, 3vw, 40px); }
+.nota h3 { font-size: var(--step-lead); letter-spacing: -0.02em; }
+.nota dl { margin: 22px 0 0; display: grid; grid-template-columns: 1fr auto; gap: 12px 24px; font-variant-numeric: tabular-nums; }
+.nota dt { font-size: var(--step-body); }
+.nota dd { margin: 0; font: 700 var(--step-body)/1.5 var(--display); text-align: right; }
+.nota .total dt, .nota .total dd { padding-top: 14px; font-size: var(--step-lead); }
+.nota .total dt { font-family: var(--display); font-weight: 700; }
+.nota-act { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; margin-top: 28px; }
+.status { font-size: var(--step-small); color: var(--muted); min-height: 1.4em; }
+.pop { animation: pop 420ms var(--ease-out); }
+@keyframes pop { from { opacity: 0.2; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ---------- terraza (statement) ---------- */
+.terraza { background: var(--field-2); color: var(--field-2-ink); padding-block: var(--gap); }
+.statement { font: 600 var(--step-sub)/1.3 var(--display); letter-spacing: -0.02em; max-width: 34em; }
+.slot { display: inline-block; width: 1.9em; height: 1em; vertical-align: -0.12em; margin-inline: 0.12em; overflow: hidden; }
+.slot svg { width: 100%; height: 100%; }
+.terraza-foot { margin-top: 72px; margin-left: 50%; display: grid; gap: 24px; justify-items: start; max-width: 40ch; }
+
+.terraza .btn { background: var(--field-2-ink); color: var(--field-2); }
+.terraza .btn:hover { background: #2a2f45; }
+.terraza-pics { margin-top: clamp(64px, 7vw, 110px); display: grid; grid-template-columns: 7fr 5fr; gap: 12px; }
+.terraza-pics figure { margin: 0; }
+.terraza-pics svg { width: 100%; height: auto; }
+.terraza-pics figcaption { margin-top: 12px; font-size: var(--step-small); color: var(--soft-ink); }
+
+/* ---------- noches (one frame) ---------- */
+.noches { background: var(--field-2); color: var(--field-2-ink); padding-bottom: var(--gap); }
+.noches-grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(40px, 6vw, 110px); align-items: center; }
+.noches h2 { font-size: var(--step-head); }
+.noches blockquote { margin: 34px 0 0; font: italic 400 var(--step-lead)/1.4 var(--text); max-width: 28ch; }
+.noches blockquote footer { margin-top: 10px; font: normal 400 var(--step-small)/1.4 var(--text); color: var(--soft-ink); }
+.noches .body { margin-top: 28px; max-width: 40ch; }
+.noches .links { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 30px; }
+.frame { margin: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.frame svg { width: 100%; height: auto; }
+.frame .scene { opacity: 0; transition: opacity 1400ms ease; }
+.frame .scene.is-on { opacity: 1; }
+.no-js-frame .scene:first-of-type { opacity: 1; }
+.frame figcaption { margin-top: 16px; font-size: var(--step-small); color: var(--soft-ink); min-height: 1.5em; text-align: center; }
+
+/* ---------- proof tiles ---------- */
+.google { background: var(--field-2); color: var(--field-2-ink); padding-bottom: clamp(72px, 7vw, 110px); }
+.tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.tile { background: var(--tile); aspect-ratio: 3 / 2; padding: clamp(18px, 2vw, 28px); display: flex; flex-direction: column; justify-content: space-between; }
+.tile.rate { justify-content: flex-end; gap: 14px; }
+.tile.head { grid-column: span 2; aspect-ratio: auto; background: var(--accent); color: var(--accent-ink); }
+.tile.head h2 { font-size: var(--step-head); max-width: 8em; }
+.tile.head p { font-size: var(--step-small); max-width: 36ch; }
+.tile .num { font: 700 var(--step-head)/1 var(--display); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.tile .num small { font-size: 0.4em; letter-spacing: -0.01em; margin-left: 6px; }
+.tile .who { font: 700 var(--step-body)/1.25 var(--display); letter-spacing: -0.01em; }
+.tile .who span { display: block; font: 400 var(--step-small)/1.4 var(--text); color: var(--soft-ink); margin-top: 4px; }
+.tile q { font: italic 400 var(--step-lead)/1.3 var(--text); quotes: "“" "”"; }
+
+/* ---------- sucursales ---------- */
+.sucursales { padding-block: clamp(72px, 7vw, 110px) 0; }
+.suc-grid { display: grid; grid-template-columns: 6fr 6fr; gap: clamp(40px, 6vw, 110px); margin-top: 56px; }
+.branches { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.branch { background: var(--surface); padding: 26px 28px; display: grid; grid-template-columns: 1fr auto; gap: 6px 20px; align-items: baseline; transition: background-color 220ms; }
+.branch:hover { background: #2a1624; }
+.branch h3 { font-size: var(--step-lead); letter-spacing: -0.02em; }
+.branch .open { font: 700 var(--step-body)/1.2 var(--display); color: var(--accent); white-space: nowrap; }
+.branch p { grid-column: 1 / -1; }
+.branch a { grid-column: 1 / -1; justify-self: start; margin-top: 8px; }
+.chart h3 { font-size: var(--step-lead); letter-spacing: -0.02em; }
+.chart p { margin-top: 12px; max-width: 44ch; }
+.bars { list-style: none; margin: 36px 0 0; padding: 0; display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; align-items: end; height: 240px; }
+.bars li { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; }
+.bars .b { background: #5e1c49; height: calc(var(--v) * 100%); transform-origin: bottom; transition: transform 900ms var(--ease-expo); transition-delay: calc(var(--i) * 50ms); }
+.bars .b.peak { background: var(--accent); }
+.js .chart:not(.is-in) .b { transform: scaleY(0.02); }
+.bars .h { position: absolute; top: 100%; left: 0; right: 0; margin-top: 10px; text-align: center; font-size: var(--step-small); color: var(--muted); }
+.bars .now { outline: 3px solid var(--ink); outline-offset: 3px; }
+.chart .note { margin-top: 48px; font-size: var(--step-small); color: var(--muted); }
+
+/* ---------- coupon ---------- */
+.mesa { padding-block: clamp(96px, 9vw, 140px) clamp(80px, 7vw, 110px); overflow: hidden; }
+.coupon { --notch: 28px; position: relative; display: grid; grid-template-columns: 46fr 54fr; background: var(--accent); color: var(--accent-ink); margin-inline: auto; max-width: 1180px; }
+.coupon-l::before, .coupon-l::after { content: ""; position: absolute; width: calc(var(--notch) * 2); height: calc(var(--notch) * 2); border-radius: 50%; background: var(--bg); right: calc(var(--notch) * -1 - 2.5px); }
+.coupon-l::before { top: calc(var(--notch) * -1); }
+.coupon-l::after { bottom: calc(var(--notch) * -1); }
+.coupon-l { position: relative; padding: clamp(32px, 4vw, 56px); display: flex; flex-direction: column; justify-content: space-between; gap: 40px; border-right: 5px dotted var(--bg); }
+.coupon h2 { font-size: var(--step-head); text-transform: uppercase; }
+.coupon-l p { font-size: var(--step-body); max-width: 34ch; }
+.coupon form { padding: clamp(32px, 4vw, 56px); display: grid; gap: 10px; }
+.coupon input { width: 100%; height: 56px; border: 0; border-radius: 0; padding: 0 18px; background: #ff7aab; color: var(--accent-ink); font: 400 1.0625rem/1 var(--text); }
+.coupon input::placeholder { color: #4b1030; opacity: 1; }
+.coupon input:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 0; }
+.coupon .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.coupon button { margin-top: 6px; height: 60px; border: 0; background: var(--accent-ink); color: var(--ink); font: 700 var(--step-body)/1 var(--display); cursor: pointer; transition: transform 140ms var(--ease-out), background-color 200ms; }
+.coupon button:hover { background: #2a1022; }
+.coupon button:active { transform: scale(0.98); }
+.coupon .status { color: #4b1030; }
+
+/* ---------- footer ---------- */
+.foot { background: var(--field-1); color: var(--field-1-ink); padding-block: clamp(48px, 5vw, 80px) 32px; }
+.blocks { width: 100%; height: auto; }
+.blocks text { font: 800 210px/1 var(--display); letter-spacing: -0.04em; fill: var(--field-1); }
+.blocks .blk { transform-box: fill-box; transform-origin: 50% 100%; transition: transform 1000ms var(--ease-expo); transition-delay: calc(var(--i) * 70ms); }
+.js .blocks:not(.is-in) .blk { transform: scaleY(0.05); }
+.foot-cols { margin-top: 56px; display: grid; grid-template-columns: repeat(4, 1fr) 2fr; gap: 28px; font-size: var(--step-small); }
+.foot-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.foot-cols a { text-decoration: none; }
+.foot-cols a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.foot-cols .addr { display: grid; gap: 10px; }
+.foot-last { margin-top: 56px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; font-size: var(--step-small); }
+.foot-last .btn { min-height: 44px; padding: 0 16px; font-size: var(--step-small); }
+
+/* ---------- motion ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] { opacity: 0; transform: translateY(26px); transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-out); transition-delay: calc(var(--d, 0) * 80ms); }
+  .js [data-reveal].is-in { opacity: 1; transform: none; }
+  .js .hero h1 span, .js .hero-copy > * { opacity: 0; transform: translateY(28px); animation: rise 900ms var(--ease-out) forwards; animation-delay: calc(var(--i, 0) * 90ms + 100ms); }
+  .js .hero-bull .cut, .js .hero-bull .rest, .js .hero-bull .tail, .js .hero-bull .eye { opacity: 0; transform: translateY(24px); transform-box: fill-box; animation: rise 1000ms var(--ease-expo) forwards; animation-delay: calc(var(--i, 0) * 70ms + 380ms); }
+  .hero-bull { animation: settle 14s var(--ease-out) both; transform-origin: 20% 40%; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  @keyframes settle { from { transform: scale(1.06) translateX(2vw); } to { transform: none; } }
+  .flame { transform-box: fill-box; transform-origin: 50% 100%; animation: flick 1.6s ease-in-out infinite alternate; }
+  .flame:nth-of-type(2n) { animation-duration: 1.2s; animation-delay: -0.4s; }
+  @keyframes flick { from { transform: scaleY(1); } to { transform: scaleY(0.82) skewX(3deg); } }
+  .blossom { transform-box: fill-box; transform-origin: center; animation: sway 5s ease-in-out infinite alternate; }
+  @keyframes sway { to { transform: translate(2px, -3px) rotate(4deg); } }
+}
+
+/* ---------- phone & tablet ---------- */
+@media (max-width: 980px) {
+  .nav a:not(.btn) { display: none; }
+  .calc-grid, .noches-grid, .suc-grid { grid-template-columns: 1fr; }
+  .calc-out { position: static; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile.head { grid-column: 1 / -1; }
+  .terraza-foot { margin-left: 0; }
+  .foot-cols { grid-template-columns: 1fr 1fr; }
+  .foot-cols .addr { grid-column: 1 / -1; }
+}
+@media (max-width: 980px) {
+  .hero { min-height: 0; }
+  .hero .wrap { padding-top: 112px; }
+  .hero-copy { margin-top: 28px; }
+  .hero-bull { position: relative; left: 14vw; top: auto; width: 120vw; margin-top: 44px; margin-bottom: -10vw; }
+}
+@media (max-width: 720px) {
+  :root { --step-display: 10.2vw; }
+  .hero-bull { left: 6vw; width: 150vw; margin-bottom: -18vw; }
+  .items { grid-template-columns: 1fr; gap: 32px; }
+  .mini { width: 60px; }
+  .brand span { display: none; }
+  .brand svg { width: 60px; }
+  .cat { margin-top: 72px; }
+  .cat h3 { font-size: 8.5vw; }
+  .terraza-pics { grid-template-columns: 1fr; }
+  .tile { aspect-ratio: auto; min-height: 150px; gap: 18px; }
+  .tile q { font-size: 1.125rem; }
+  .coupon { grid-template-columns: 1fr; }
+  .coupon-l::before, .coupon-l::after { top: auto; bottom: calc(var(--notch) * -1 - 2.5px); }
+  .coupon-l::before { left: calc(var(--notch) * -1); right: auto; }
+  .coupon-l::after { right: calc(var(--notch) * -1); }
+  .coupon-l { border-right: 0; border-bottom: 5px dotted var(--bg); }
+  .coupon .two { grid-template-columns: 1fr; }
+  .bars { height: 180px; gap: 5px; }
+  .bars .h { font-size: 0.8125rem; }
+  .bars li:nth-child(even) .h { visibility: hidden; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>{{BULLCLIP bullclip}}</defs></svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio">{{BULL class="bull"}}<span>Carnes del Norte Selecto</span></a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#vitrina">Vitrina</a>
+      <a href="#carne-asada">Carne asada</a>
+      <a href="#noches">Noches</a>
+      <a href="#sucursales">Sucursales</a>
+      <a class="btn" href="#mesa">Aparta mesa</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+
+<section class="hero" aria-labelledby="titulo">
+  <div class="wrap">
+    <h1 id="titulo"><span style="--i:0">Carnes del</span><span style="--i:1">Norte Selecto</span></h1>
+    <div class="hero-copy">
+      <p style="--i:3">Carnicería, asador y terraza en Ciudad López Mateos. Cortes norteños para llevar a tu asador o para comer aquí, al carbón.</p>
+      <div class="hero-act" style="--i:4">
+        <a class="btn" href="#carne-asada">Arma tu carne asada <span class="arr" aria-hidden="true">→</span></a>
+        <a class="link" href="#vitrina">Ver la vitrina</a>
+      </div>
+      <p class="hero-facts" style="--i:5">Tres sucursales en Atizapán de Zaragoza. La carnicería abre a las 7 a.m.</p>
+    </div>
+  </div>
+  {{BULL class="bull hero-bull"}}
+</section>
+
+<section class="vitrina wrap" id="vitrina" aria-labelledby="vitrina-t">
+  <div class="sec-head" data-reveal>
+    <h2 id="vitrina-t">La vitrina</h2>
+    <span class="count">10 cortes de res</span>
+  </div>
+  <p class="lead" data-reveal style="--d:1">Cada corte con su lugar en el animal y el punto de partida para cocinarlo.</p>
+
+  <div class="cat">
+    <div class="sec-head" data-reveal>
+      <h3>Para el asador</h3>
+      <span class="count">6 cortes</span>
+    </div>
+    <ul class="items">
+      <li class="item" data-reveal>{{MINI arrachera}}<div class="item-body"><div class="item-line"><strong>Arrachera</strong><span>4 min por lado</span></div><p>Del diafragma, de grano largo y marcado. Se rebana contra la fibra al servirla.</p></div></li>
+      <li class="item" data-reveal style="--d:1">{{MINI ribeye}}<div class="item-body"><div class="item-line"><strong>Rib eye</strong><span>5 min por lado</span></div><p>Del lomo alto, con el ojo de grasa al centro que se derrite sobre la brasa.</p></div></li>
+      <li class="item" data-reveal>{{MINI newyork}}<div class="item-body"><div class="item-line"><strong>New York</strong><span>5 min por lado</span></div><p>Del lomo bajo, con su orilla de grasa; conviene dejarla puesta mientras se asa.</p></div></li>
+      <li class="item" data-reveal style="--d:1">{{MINI newyork}}<div class="item-body"><div class="item-line"><strong>T-bone</strong><span>6 min por lado</span></div><p>El hueso en T separa dos cortes en uno: de un lado New York, del otro filete.</p></div></li>
+      <li class="item" data-reveal>{{MINI picana}}<div class="item-body"><div class="item-line"><strong>Picaña</strong><span>Grasa primero</span></div><p>La tapa de la cadera, con su capa de grasa. Se asa primero del lado de la grasa.</p></div></li>
+      <li class="item" data-reveal style="--d:1">{{MINI costilla}}<div class="item-body"><div class="item-line"><strong>Costilla cargada</strong><span>3 min por lado</span></div><p>Carne entre hueso y hueso, en corte delgado para que se dore rápido.</p></div></li>
+    </ul>
+  </div>
+
+  <div class="cat">
+    <div class="sec-head" data-reveal>
+      <h3>Para la semana</h3>
+      <span class="count">4 cortes</span>
+    </div>
+    <ul class="items">
+      <li class="item" data-reveal>{{MINI diezmillo}}<div class="item-body"><div class="item-line"><strong>Diezmillo</strong><span>Para guisar</span></div><p>Del cuello y la espalda alta. Para bistec en salsa, guisos y carne con chile.</p></div></li>
+      <li class="item" data-reveal style="--d:1">{{MINI bola}}<div class="item-body"><div class="item-line"><strong>Bistec de bola</strong><span>Plancha, 2 min</span></div><p>De la pierna, magro y parejo. En bistec delgado o para milanesa.</p></div></li>
+      <li class="item" data-reveal>{{MINI chamberete}}<div class="item-body"><div class="item-line"><strong>Chamberete</strong><span>Caldo, 2 h</span></div><p>De la parte alta de la pata, con hueso y tuétano. El corte del caldo de res.</p></div></li>
+      <li class="item" data-reveal style="--d:1">{{MINI pecho}}<div class="item-body"><div class="item-line"><strong>Pecho</strong><span>Olla, 3 h</span></div><p>Fibra larga que se deshace con tiempo. Para deshebrar, salpicón y tacos.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<section class="calc" id="carne-asada" aria-labelledby="calc-t">
+  <div class="wrap calc-grid">
+    <div>
+      <h2 id="calc-t" data-reveal>Arma tu carne asada</h2>
+      <p class="lead" data-reveal style="--d:1">Cuenta 350 gramos de carne cruda por adulto y la mitad por niño. Si son de buen diente, 450.</p>
+      <form id="calc" data-reveal style="--d:2" onsubmit="return false">
+        <div class="steppers">
+          <div>
+            <label class="field-label" for="adultos">Adultos</label>
+            <div class="stepper"><button type="button" data-step="-1" data-for="adultos" aria-label="Un adulto menos">−</button><input id="adultos" type="number" inputmode="numeric" min="1" max="80" value="8"><button type="button" data-step="1" data-for="adultos" aria-label="Un adulto más">+</button></div>
+          </div>
+          <div>
+            <label class="field-label" for="ninos">Niños</label>
+            <div class="stepper"><button type="button" data-step="-1" data-for="ninos" aria-label="Un niño menos">−</button><input id="ninos" type="number" inputmode="numeric" min="0" max="80" value="2"><button type="button" data-step="1" data-for="ninos" aria-label="Un niño más">+</button></div>
+          </div>
+        </div>
+        <fieldset>
+          <legend class="field-label">¿Cómo comen?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="hambre" value="normal" checked><span>Normal</span></label>
+            <label class="chip"><input type="radio" name="hambre" value="norte"><span>De buen diente</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="field-label">Cortes</legend>
+          <div class="chips" id="cortes">
+            <label class="chip" data-cut="arrachera"><input type="checkbox" name="corte" value="arrachera" checked><span>Arrachera</span></label>
+            <label class="chip" data-cut="ribeye"><input type="checkbox" name="corte" value="ribeye" checked><span>Rib eye</span></label>
+            <label class="chip" data-cut="picana"><input type="checkbox" name="corte" value="picana"><span>Picaña</span></label>
+            <label class="chip" data-cut="newyork"><input type="checkbox" name="corte" value="newyork"><span>New York</span></label>
+            <label class="chip" data-cut="costilla"><input type="checkbox" name="corte" value="costilla"><span>Costilla cargada</span></label>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    <div class="calc-out" data-reveal style="--d:1">
+      {{BULL class="bull calc-bull"}}
+      <div class="nota" aria-live="polite">
+        <h3>Tu lista para el mostrador</h3>
+        <dl id="nota">
+          <dt>Arrachera</dt><dd>1.60 kg</dd>
+          <dt>Rib eye</dt><dd>1.60 kg</dd>
+          <dt>Tortillas de harina</dt><dd>46</dd>
+          <dt>Cebollitas</dt><dd>15</dd>
+          <dt>Carbón</dt><dd>5 kg</dd>
+          <dt class="total">Carne en total</dt><dd class="total">3.20 kg</dd>
+        </dl>
+        <div class="nota-act">
+          <button class="btn" type="button" id="copiar">Copiar la lista</button>
+          <span class="status" id="copiar-status" role="status"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="terraza" id="terraza" aria-labelledby="terraza-t">
+  <div class="wrap">
+    <h2 id="terraza-t" class="vh">La terraza</h2>
+    <p class="statement" data-reveal>Lo que sale de la vitrina<span class="slot" aria-hidden="true"><svg viewBox="0 0 76 40" preserveAspectRatio="xMidYMid slice"><rect width="76" height="40" fill="#ff488b"/><path d="M8 14 L30 6 L62 9 L70 22 L58 34 L22 35 L10 28Z" fill="#fff"/><path d="M13 16 L31 10 L59 13 L65 22 L55 30 L24 31 L15 26Z" fill="#9e1446"/><path d="M22 20 C30 17 38 24 48 19 M28 26 C36 24 44 28 52 25" stroke="#ff7aab" stroke-width="2.5" fill="none"/></svg></span> se asa al carbón<span class="slot" aria-hidden="true"><svg viewBox="0 0 76 40" preserveAspectRatio="xMidYMid slice"><rect width="76" height="40" fill="#0d060b"/><path class="flame" d="M18 40 C10 28 20 22 18 8 C28 18 32 28 28 40Z" fill="#ff488b"/><path class="flame" d="M34 40 C28 26 40 18 38 2 C50 16 52 30 46 40Z" fill="#ff488b"/><path class="flame" d="M52 40 C48 30 56 24 56 14 C64 24 66 32 62 40Z" fill="#ff488b"/><rect y="32" width="76" height="8" fill="#470c35"/></svg></span> y se come en la terraza, bajo el árbol de flores rosas<span class="slot" aria-hidden="true"><svg viewBox="0 0 76 40" preserveAspectRatio="xMidYMid slice"><rect width="76" height="40" fill="#101421"/><rect x="35" y="18" width="6" height="22" fill="#6b4a3a"/><circle class="blossom" cx="26" cy="14" r="10" fill="#ff488b"/><circle class="blossom" cx="44" cy="10" r="12" fill="#ff7aab"/><circle class="blossom" cx="56" cy="18" r="9" fill="#ff488b"/></svg></span>.</p>
+    <div class="terraza-foot" data-reveal style="--d:1">
+      <p>El restaurante y la terraza abren a las 8 a.m. Desayuno, comida y sobremesa con la carne de la misma vitrina.</p>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Carnes+del+Norte+Selecto+Ciudad+L%C3%B3pez+Mateos" rel="noopener">Cómo llegar <span class="arr" aria-hidden="true">→</span></a>
+    </div>
+    <div class="terraza-pics">
+      <figure data-reveal>
+        <svg viewBox="0 0 700 420" role="img" aria-label="Dibujo de la terraza: mesas de madera bajo un árbol de flores rosas">
+          <rect width="700" height="420" fill="#101421"/>
+          <rect x="0" y="300" width="700" height="120" fill="#1d2236"/>
+          <rect x="330" y="120" width="30" height="190" fill="#6b4a3a"/>
+          <path d="M345 170 L270 110 M345 150 L430 90 M345 200 L440 160" stroke="#6b4a3a" stroke-width="12" stroke-linecap="round"/>
+          <g fill="#ff488b">
+            <circle class="blossom" cx="250" cy="100" r="58"/><circle class="blossom" cx="340" cy="70" r="70" fill="#ff7aab"/><circle class="blossom" cx="440" cy="85" r="60"/>
+            <circle class="blossom" cx="200" cy="150" r="40" fill="#ff7aab"/><circle class="blossom" cx="480" cy="150" r="46" fill="#ff7aab"/><circle class="blossom" cx="390" cy="140" r="44"/><circle class="blossom" cx="300" cy="140" r="40"/>
+          </g>
+          <g fill="#c98a5a"><rect x="90" y="300" width="160" height="16"/><rect x="100" y="316" width="10" height="70"/><rect x="230" y="316" width="10" height="70"/>
+          <rect x="450" y="300" width="160" height="16"/><rect x="460" y="316" width="10" height="70"/><rect x="590" y="316" width="10" height="70"/></g>
+          <g fill="#8a5a3a"><rect x="60" y="330" width="20" height="56"/><rect x="260" y="330" width="20" height="56"/><rect x="420" y="330" width="20" height="56"/><rect x="620" y="330" width="20" height="56"/></g>
+          <g fill="#fff"><circle cx="40" cy="40" r="4"/><circle cx="110" cy="52" r="4"/><circle cx="180" cy="60" r="4"/><circle cx="520" cy="56" r="4"/><circle cx="590" cy="48" r="4"/><circle cx="660" cy="38" r="4"/></g>
+        </svg>
+        <figcaption>La terraza: mesas de madera y el árbol rosa al centro.</figcaption>
+      </figure>
+      <figure data-reveal style="--d:1">
+        <svg viewBox="0 0 500 420" role="img" aria-label="Dibujo del letrero: un toro blanco sobre fondo negro">
+          <rect width="500" height="420" fill="#0d060b"/>
+          <rect x="40" y="60" width="420" height="300" fill="#1b0e17"/>
+          <g transform="translate(92 82) scale(0.36)" fill="#fff">
+            <polygon points="240,290 232,176 205,168 165,172 125,186 92,210 66,244 74,270 108,280 150,286 192,304"/><polygon points="205,170 196,140 178,114 152,98 170,126 180,152 182,172"/>
+            <polygon points="232,176 330,128 420,140 540,148 660,150 790,145 845,166 872,202 880,300 864,420 852,560 820,560 818,470 804,470 800,560 770,560 760,398 660,400 532,406 404,396 396,560 366,560 362,388 344,378 334,560 300,560 292,362 258,346 240,290"/>
+          </g>
+          <text x="250" y="322" text-anchor="middle" fill="#fff" font-family="Libre Franklin, Arial, sans-serif" font-weight="700" font-size="30" letter-spacing="1">CARNES DEL NORTE</text>
+        </svg>
+        <figcaption>El letrero de la entrada: el toro blanco sobre negro.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="noches" id="noches" aria-labelledby="noches-t">
+  <div class="wrap noches-grid">
+    <div>
+      <h2 id="noches-t" data-reveal>Noches con música en vivo</h2>
+      <blockquote data-reveal style="--d:1">
+        <p>“Hay noches para olvidar… y otras para cantar lo que dolió.”</p>
+        <footer>Carnes del Norte Selecto, en Instagram</footer>
+      </blockquote>
+      <p class="body" data-reveal style="--d:2">La más reciente fue el viernes 30 de octubre con el Dueto Rodríguez, a las 7 p.m. y con cupo limitado. Las próximas fechas salen primero en sus redes.</p>
+      <div class="links" data-reveal style="--d:3">
+        <a class="link" href="https://www.instagram.com/carnesdelnorteselect/" rel="noopener">Fechas en Instagram</a>
+        <a class="link" href="https://www.facebook.com/search/top?q=Carnes%20del%20Norte%20Select" rel="noopener">En Facebook</a>
+      </div>
+    </div>
+    <figure class="frame" id="frame" data-reveal style="--d:1" tabindex="0" aria-label="Escenas de una noche en Carnes del Norte. Toca para ver la siguiente.">
+      <svg viewBox="{{VIEWBOX}}" aria-hidden="true">
+        <g clip-path="url(#bullclip)">
+          <g class="scene is-on" data-cap="El micrófono, bajo la luz rosa.">
+            <rect x="0" y="0" width="1000" height="700" fill="#470c35"/>
+            <circle cx="470" cy="300" r="210" fill="#ff488b"/>
+            <rect x="452" y="300" width="36" height="270" fill="#0d060b"/>
+            <rect x="420" y="190" width="100" height="150" rx="50" fill="#fff"/>
+            <rect x="430" y="300" width="80" height="10" fill="#0d060b"/>
+          </g>
+          <g class="scene" data-cap="La terraza de noche, con su árbol rosa.">
+            <rect x="0" y="0" width="1000" height="700" fill="#101421"/>
+            <rect x="460" y="250" width="34" height="330" fill="#6b4a3a"/>
+            <circle class="blossom" cx="380" cy="230" r="90" fill="#ff488b"/><circle class="blossom" cx="500" cy="170" r="110" fill="#ff7aab"/><circle class="blossom" cx="640" cy="230" r="90" fill="#ff488b"/>
+            <g fill="#fff"><circle cx="160" cy="200" r="7"/><circle cx="240" cy="240" r="7"/><circle cx="760" cy="240" r="7"/><circle cx="840" cy="210" r="7"/><circle cx="900" cy="260" r="7"/></g>
+          </g>
+          <g class="scene" data-cap="El asador encendido.">
+            <rect x="0" y="0" width="1000" height="700" fill="#0d060b"/>
+            <path class="flame" d="M200 470 C150 380 230 330 210 220 C290 300 320 380 290 470Z" fill="#ff488b"/>
+            <path class="flame" d="M380 470 C330 360 420 300 400 170 C500 270 520 380 480 470Z" fill="#ff488b"/>
+            <path class="flame" d="M580 470 C530 370 610 320 600 200 C690 300 700 390 670 470Z" fill="#ff488b"/>
+            <path class="flame" d="M760 470 C720 390 790 340 780 260 C850 330 860 410 830 470Z" fill="#ff488b"/>
+            <g fill="#fff"><rect x="100" y="330" width="800" height="14"/><rect x="100" y="380" width="800" height="14"/></g>
+            <ellipse cx="380" cy="320" rx="110" ry="34" fill="#b0174f"/><ellipse cx="640" cy="318" rx="120" ry="34" fill="#b0174f"/>
+            <rect x="0" y="470" width="1000" height="120" fill="#470c35"/>
+          </g>
+          <g class="scene" data-cap="Guitarra y requinto para el dueto.">
+            <rect x="0" y="0" width="1000" height="700" fill="#ff488b"/>
+            <circle cx="420" cy="380" r="130" fill="#470c35"/><circle cx="420" cy="250" r="95" fill="#470c35"/>
+            <circle cx="420" cy="330" r="34" fill="#0d060b"/>
+            <rect x="404" y="40" width="32" height="210" fill="#0d060b"/>
+            <circle cx="680" cy="360" r="90" fill="#fff"/><circle cx="680" cy="270" r="66" fill="#fff"/><circle cx="680" cy="330" r="24" fill="#0d060b"/>
+            <rect x="669" y="110" width="22" height="160" fill="#0d060b"/>
+          </g>
+        </g>
+      </svg>
+      <figcaption id="frame-cap">El micrófono, bajo la luz rosa.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="google" id="google" aria-labelledby="google-t">
+  <div class="wrap">
+    <ul class="tiles">
+      <li class="tile head" data-reveal><h2 id="google-t">Lo que dicen en Google</h2><p>Calificación y número de opiniones de cada sucursal en Google Maps, noviembre de 2026.</p></li>
+      <li class="tile rate" data-reveal style="--d:1"><span class="num">4.7<small>de 5</small></span><span class="who">Restaurante y terraza<span>290 opiniones</span></span></li>
+      <li class="tile rate" data-reveal style="--d:2"><span class="num">4.5<small>de 5</small></span><span class="who">Carnicería<span>61 opiniones</span></span></li>
+      <li class="tile rate" data-reveal><span class="num">3.9<small>de 5</small></span><span class="who">Sucursal Ruiz Cortines<span>74 opiniones</span></span></li>
+      <li class="tile" data-reveal style="--d:1"><q>Excelente lugar para comer</q><span class="who">Reseña en Google<span>Restaurante y terraza</span></span></li>
+      <li class="tile" data-reveal style="--d:2"><q>Excelente carnicería</q><span class="who">Reseña en Google<span>Carnicería</span></span></li>
+      <li class="tile" data-reveal style="--d:3"><q>Excelente calidad de la carne</q><span class="who">Reseña en Google<span>Sucursal Ruiz Cortines</span></span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="sucursales wrap" id="sucursales" aria-labelledby="suc-t">
+  <div class="sec-head" data-reveal>
+    <h2 id="suc-t">Sucursales y horarios</h2>
+    <span class="count">Ciudad López Mateos</span>
+  </div>
+  <div class="suc-grid">
+    <ul class="branches">
+      <li class="branch" data-reveal><h3>Restaurante y terraza</h3><span class="open">Abre 8 a.m.</span><p>Para comer, con la carne de la vitrina y las noches de música.</p><a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Carnes+del+Norte+Selecto+restaurante+Ciudad+L%C3%B3pez+Mateos" rel="noopener">Ver en Maps</a></li>
+      <li class="branch" data-reveal style="--d:1"><h3>Carnicería</h3><span class="open">Abre 7 a.m.</span><p>Mostrador de cortes para llevar, la primera en abrir.</p><a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Carnes+del+Norte+Selecto+carniceria+Ciudad+L%C3%B3pez+Mateos" rel="noopener">Ver en Maps</a></li>
+      <li class="branch" data-reveal style="--d:2"><h3>Sucursal Ruiz Cortines</h3><span class="open">Abre 8 a.m.</span><p>Carnicería sobre la avenida Ruiz Cortines.</p><a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Carnes+del+Norte+Selecto+Sucursal+Ruiz+Cortines" rel="noopener">Ver en Maps</a></li>
+    </ul>
+    <div class="chart" data-reveal style="--d:1" id="chart">
+      <h3>Cuándo ir sin fila</h3>
+      <p>Los lunes en Ruiz Cortines la hora más llena es a las 2 p.m. Antes de las 11 casi no hay espera.</p>
+      <ol class="bars" aria-label="Afluencia de un lunes típico en la sucursal Ruiz Cortines, por hora">
+        <li data-h="8"><span class="b" style="--v:.23;--i:0"></span><span class="h">8</span><span class="vh">8 a.m.: poca gente</span></li>
+        <li data-h="9"><span class="b" style="--v:.23;--i:1"></span><span class="h">9</span><span class="vh">9 a.m.: poca gente</span></li>
+        <li data-h="10"><span class="b" style="--v:.36;--i:2"></span><span class="h">10</span><span class="vh">10 a.m.: poca gente</span></li>
+        <li data-h="11"><span class="b" style="--v:.45;--i:3"></span><span class="h">11</span><span class="vh">11 a.m.: algo de gente</span></li>
+        <li data-h="12"><span class="b" style="--v:.73;--i:4"></span><span class="h">12</span><span class="vh">12 p.m.: concurrido</span></li>
+        <li data-h="13"><span class="b" style="--v:.96;--i:5"></span><span class="h">1</span><span class="vh">1 p.m.: muy concurrido</span></li>
+        <li data-h="14"><span class="b peak" style="--v:1;--i:6"></span><span class="h">2</span><span class="vh">2 p.m.: la hora más llena</span></li>
+        <li data-h="15"><span class="b" style="--v:.96;--i:7"></span><span class="h">3</span><span class="vh">3 p.m.: muy concurrido</span></li>
+        <li data-h="16"><span class="b" style="--v:.68;--i:8"></span><span class="h">4</span><span class="vh">4 p.m.: concurrido</span></li>
+        <li data-h="17"><span class="b" style="--v:.41;--i:9"></span><span class="h">5</span><span class="vh">5 p.m.: algo de gente</span></li>
+      </ol>
+      <p class="note">Horarios populares de Google Maps para un lunes, de 8 a.m. a 5 p.m.</p>
+    </div>
+  </div>
+</section>
+
+<section class="mesa wrap" id="mesa" aria-labelledby="mesa-t">
+  <div class="coupon" data-reveal>
+    <div class="coupon-l">
+      <h2 id="mesa-t">Aparta tu mesa</h2>
+      <p>Las noches de música tienen cupo limitado. Llena el cupón y se lo mandas a la sucursal por mensaje de Instagram.</p>
+    </div>
+    <form id="cupon" action="https://ig.me/m/carnesdelnorteselect" method="get">
+      <label class="vh" for="c-nombre">Nombre</label><input id="c-nombre" name="nombre" autocomplete="name" placeholder="Nombre" required>
+      <div class="two">
+        <div><label class="vh" for="c-personas">Personas</label><input id="c-personas" name="personas" type="number" inputmode="numeric" min="1" max="40" placeholder="Personas" required></div>
+        <div><label class="vh" for="c-fecha">Fecha</label><input id="c-fecha" name="fecha" placeholder="Fecha, por ejemplo viernes 13" required></div>
+      </div>
+      <label class="vh" for="c-tel">Teléfono</label><input id="c-tel" name="telefono" type="tel" autocomplete="tel" placeholder="Teléfono">
+      <button type="submit">Copiar y abrir Instagram</button>
+      <span class="status" id="cupon-status" role="status"></span>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <svg class="blocks" id="blocks" viewBox="0 0 1396 300" role="img" aria-label="Selecto"><g class="blk" style="--i:0"><rect x="0" y="54" width="196" height="246" fill="#ff488b"/><text x="98" y="232" text-anchor="middle">S</text></g><g class="blk" style="--i:1"><rect x="200" y="0" width="196" height="300" fill="#ffffff"/><text x="298" y="178" text-anchor="middle">E</text></g><g class="blk" style="--i:2"><rect x="400" y="96" width="196" height="204" fill="#ff488b"/><text x="498" y="274" text-anchor="middle">L</text></g><g class="blk" style="--i:3"><rect x="600" y="30" width="196" height="270" fill="#ffffff"/><text x="698" y="208" text-anchor="middle">E</text></g><g class="blk" style="--i:4"><rect x="800" y="78" width="196" height="222" fill="#ff488b"/><text x="898" y="256" text-anchor="middle">C</text></g><g class="blk" style="--i:5"><rect x="1000" y="12" width="196" height="288" fill="#ffffff"/><text x="1098" y="190" text-anchor="middle">T</text></g><g class="blk" style="--i:6"><rect x="1200" y="114" width="196" height="186" fill="#ff488b"/><text x="1298" y="292" text-anchor="middle">O</text></g></svg>
+    <div class="foot-cols">
+      <ul><li><a href="#vitrina">La vitrina</a></li><li><a href="#carne-asada">Carne asada</a></li></ul>
+      <ul><li><a href="#terraza">La terraza</a></li><li><a href="#noches">Noches</a></li></ul>
+      <ul><li><a href="#sucursales">Sucursales</a></li><li><a href="#mesa">Aparta mesa</a></li></ul>
+      <ul><li><a href="https://www.instagram.com/carnesdelnorteselect/" rel="noopener">Instagram</a></li><li><a href="https://www.facebook.com/search/top?q=Carnes%20del%20Norte%20Select" rel="noopener">Facebook</a></li></ul>
+      <div class="addr"><p>Ciudad López Mateos, Atizapán de Zaragoza, Estado de México.</p><p>Carnicería desde las 7 a.m. · Restaurante desde las 8 a.m.</p></div>
+    </div>
+    <div class="foot-last">
+      <p>Propuesta de diseño para Carnes del Norte Selecto · no es el sitio oficial · 2026</p>
+      <a class="btn" href="#inicio">Volver arriba ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // reveal once, never leave content hidden
+  const targets = document.querySelectorAll('[data-reveal], #chart, #blocks');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+    targets.forEach((t) => io.observe(t));
+    addEventListener('load', () => setTimeout(() => targets.forEach((t) => { const r = t.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) t.classList.add('is-in'); }), 2500));
+  } else targets.forEach((t) => t.classList.add('is-in'));
+
+  // ---------- calculator ----------
+  const NAMES = { arrachera: 'Arrachera', ribeye: 'Rib eye', picana: 'Picaña', newyork: 'New York', costilla: 'Costilla cargada' };
+  const form = document.getElementById('calc');
+  const nota = document.getElementById('nota');
+  const cuts = document.querySelectorAll('.calc-bull .cut');
+  const kg = (n) => n.toFixed(2) + ' kg';
+  const clamp = (el) => { const v = Math.round(+el.value || 0); el.value = Math.min(+el.max, Math.max(+el.min, v)); return +el.value; };
+  let list = '';
+  function update() {
+    const a = clamp(form.adultos), k = clamp(form.ninos);
+    const big = form.hambre.value === 'norte';
+    const chosen = [...form.querySelectorAll('[name=corte]:checked')].map((i) => i.value);
+    cuts.forEach((c) => c.classList.toggle('on', chosen.includes(c.dataset.cut)));
+    const meat = a * (big ? 0.45 : 0.35) + k * (big ? 0.2 : 0.175);
+    const rows = [];
+    let total = 0;
+    if (!chosen.length) rows.push(['Elige al menos un corte', '—']);
+    chosen.forEach((c) => { const w = Math.ceil((meat / chosen.length) * 20) / 20; total += w; rows.push([NAMES[c], kg(w)]); });
+    const people = a + k;
+    rows.push(['Tortillas de harina', String(Math.ceil(a * 5 + k * 3))]);
+    rows.push(['Cebollitas', String(Math.ceil(people * 1.5))]);
+    rows.push(['Carbón', Math.max(3, Math.ceil(total) + 1) + ' kg']);
+    nota.innerHTML = rows.map(([t, v]) => `<dt>${t}</dt><dd>${v}</dd>`).join('') + `<dt class="total">Carne en total</dt><dd class="total">${kg(total)}</dd>`;
+    if (!reduce) { nota.classList.remove('pop'); void nota.offsetWidth; nota.classList.add('pop'); }
+    list = `Carne asada para ${a} adulto${a === 1 ? '' : 's'}${k ? ` y ${k} niño${k === 1 ? '' : 's'}` : ''}:\n` + rows.map(([t, v]) => `· ${t}: ${v}`).join('\n') + `\nCarne en total: ${kg(total)}`;
+  }
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  form.querySelectorAll('[data-step]').forEach((b) => b.addEventListener('click', () => { const el = document.getElementById(b.dataset.for); el.value = (+el.value || 0) + +b.dataset.step; update(); }));
+  document.querySelectorAll('#cortes .chip').forEach((chip) => {
+    const peek = (on) => cuts.forEach((c) => c.classList.toggle('peek', on && c.dataset.cut === chip.dataset.cut));
+    chip.addEventListener('pointerenter', () => peek(true));
+    chip.addEventListener('pointerleave', () => peek(false));
+  });
+  update();
+  async function copy(text) { try { await navigator.clipboard.writeText(text); return true; } catch { return false; } }
+  document.getElementById('copiar').addEventListener('click', async () => {
+    const ok = await copy(list);
+    document.getElementById('copiar-status').textContent = ok ? 'Lista copiada.' : 'No se pudo copiar; selecciona la lista a mano.';
+  });
+
+  // ---------- one frame, contents change ----------
+  const frame = document.getElementById('frame');
+  const scenes = [...frame.querySelectorAll('.scene')];
+  const cap = document.getElementById('frame-cap');
+  let n = 0, timer = null;
+  const show = (i) => { n = (i + scenes.length) % scenes.length; scenes.forEach((s, j) => s.classList.toggle('is-on', j === n)); cap.textContent = scenes[n].dataset.cap; };
+  const start = () => { if (reduce || timer) return; timer = setInterval(() => show(n + 1), 4200); };
+  const stop = () => { clearInterval(timer); timer = null; };
+  frame.addEventListener('click', () => { stop(); show(n + 1); start(); });
+  frame.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); stop(); show(n + 1); start(); } });
+  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+  start();
+
+  // ---------- chart: mark the current hour on Mondays ----------
+  const now = new Date();
+  if (now.getDay() === 1) { const li = document.querySelector(`.bars li[data-h="${now.getHours()}"] .b`); if (li) li.classList.add('now'); }
+
+  // ---------- coupon ----------
+  const cupon = document.getElementById('cupon');
+  cupon.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = cupon.elements;
+    const msg = `Hola, quiero apartar mesa.\nNombre: ${f.nombre.value}\nPersonas: ${f.personas.value}\nFecha: ${f.fecha.value}` + (f.telefono.value ? `\nTeléfono: ${f.telefono.value}` : '');
+    const ok = await copy(msg);
+    document.getElementById('cupon-status').textContent = ok ? 'Mensaje copiado. Pégalo en el chat que se abrió.' : 'Abre el chat y escribe tus datos.';
+    window.open('https://ig.me/m/carnesdelnorteselect', '_blank', 'noopener');
+  });
+})();
+</script>
+</body>
+</html>
