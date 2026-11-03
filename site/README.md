@@ -3,7 +3,8 @@
 Página estática de prueba para las skills de diseño (`design-taste-frontend`). **No es el sitio oficial** del negocio.
 
 * `index.html` — la página final, autocontenida (fuentes incrustadas, sin dependencias). Ábrela directo en el navegador.
-* `page.html` + `build.py` — fuente. `python3 build.py` regenera `index.html` (dibuja el toro y su despiece, incrusta las fuentes).
+* `page.html` + `build.py` — fuente. `python3 build.py` regenera `index.html` (dibuja el toro y sus cortes, incrusta las fuentes).
+* `trace_logo.py` → `bull.json` — calca el toro del logo (sus facetas) y lo divide en los cortes de res. Requiere `pip install opencv-python-headless shapely`.
 * `assets/logo.png` — logotipo del negocio, sin modificar (recortado de una captura; conviene reemplazarlo por el archivo original en alta resolución).
 * `fonts/` — Libre Franklin y Source Serif 4 (SIL Open Font License, vía Fontsource).
 
