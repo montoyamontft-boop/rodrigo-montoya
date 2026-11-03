@@ -4,3 +4,4 @@ fuente/
 __pycache__/
 *.pdf
 *.mp4
+.playwright-mcp/
