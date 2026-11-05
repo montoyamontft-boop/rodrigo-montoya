@@ -24,18 +24,6 @@
   ]
  },
  {
-  "slot": "band-3",
-  "file": "band-3.jpg",
-  "title": "Dry-aged beef-01.jpg",
-  "creator": "Wonderlane from Seattle, USA",
-  "license": "CC BY 2.0",
-  "source": "https://commons.wikimedia.org/wiki/File:Dry-aged_beef-01.jpg",
-  "size": [
-   1280,
-   1775
-  ]
- },
- {
   "slot": "band-4",
   "file": "band-4.jpg",
   "title": "Tomahawk steaks on the grill.jpg",
@@ -81,18 +69,6 @@
   "size": [
    1800,
    1061
-  ]
- },
- {
-  "slot": "visit",
-  "file": "visit.jpg",
-  "title": "Picanha above charcoal at the Fire Food Festival 2024 in Abu Dhabi, UAE.jpg",
-  "creator": "TravelPhotosNL",
-  "license": "CC BY-SA 4.0",
-  "source": "https://commons.wikimedia.org/wiki/File:Picanha_above_charcoal_at_the_Fire_Food_Festival_2024_in_Abu_Dhabi,_UAE.jpg",
-  "size": [
-   1800,
-   1350
   ]
  }
 ]

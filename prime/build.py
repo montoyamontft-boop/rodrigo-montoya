@@ -37,8 +37,9 @@ PHOTOS = {
     "visit": ("Picañas asándose sobre un lecho de carbón al rojo", "Picaña sobre el carbón encendido."),
 }
 CREDITS = {c["slot"]: c for c in json.loads((HERE / "assets/credits.json").read_text())}
-SUCURSAL = "Escríbenos por Instagram para la dirección, el horario y los pedidos."
-BANDCAP = "Cortes en maduración, picaña bajo la llama y tomahawks sobre la parrilla."
+PHOTOS = {k: v for k, v in PHOTOS.items() if f"{{{{ALT {k}}}}}" in (HERE / "page.html").read_text(encoding="utf-8")}
+SUCURSAL = ""
+BANDCAP = "Nuestro rib eye; junto a él, picaña bajo la llama, cortes madurando en cámara y tomahawks sobre la parrilla."
 
 src = (HERE / "page.html").read_text(encoding="utf-8")
 for slot, (alt, cap) in PHOTOS.items():

@@ -19,8 +19,15 @@ aparecen como piezas iluminadas. Acento latón (el sorteo daba salvia; se cambi�
 * «La báscula»: calcula kilos, tortillas, cebollitas y carbón; copia la lista y abre el chat de Instagram.
 * Sin WebGL, sin JavaScript o con «reducir movimiento»: se ve el toro plano y todo el contenido completo.
 
+## Datos del negocio (de su perfil de Instagram @karnesprime)
+
+* «Carnicería boutique con cortes premium y productos de alta calidad». Res, pollo, cerdo y mariscos.
+* Calzada de los Jinetes 79B · 8:00 a 19:00 h · tel. 55 8926 0375.
+* Frases suyas usadas en la página: «Única sucursal, única calidad, única Karne Prime» y «¿No sabes qué corte pedir? Nosotros te ayudamos».
+* Logo, rib eye y fachada recortados de sus publicaciones (`assets/logo-prime*.png`, `ribeye-prime.jpg`, `fachada.jpg`), en baja resolución:
+  conviene pedir los originales.
+
 ## Pendiente de confirmar con el negocio
 
-* Dirección, horario y teléfono de la sucursal (la tarjeta dice que se pidan por Instagram).
-* Lista de cortes, tiempos de cocción (orientativos) y si manejan tomahawk.
-* Las fotos son libres de Wikimedia Commons (créditos en el pie y en `assets/credits.json`); no son del local.
+* Días de apertura (el perfil solo dice 8:00 a 19:00 h), lista de cortes, tiempos de cocción (orientativos) y si manejan tomahawk.
+* El resto de las fotos son libres de Wikimedia Commons (créditos en el pie y en `assets/credits.json`); no son del local.
