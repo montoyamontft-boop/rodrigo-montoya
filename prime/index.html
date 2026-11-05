@@ -115,40 +115,58 @@ p { margin: 0; }
 @keyframes det-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .marker { position: absolute; left: 0; width: 1px; height: 42svh; pointer-events: none; }
 
-/* ---------- the line-up of cuts ---------- */
+/* ---------- the cuts: a filtered menu beside a lit bull ---------- */
 .lista { margin-top: var(--gap); }
-.lista h2 { font-size: var(--step-head); margin-bottom: 40px; }
-.lineup { width: 100%; border-collapse: collapse; font-size: var(--step-lead); line-height: 1.5; font-variant-numeric: tabular-nums; }
-.lineup th, .lineup td { text-align: left; font-weight: 400; padding: 0.2em 0; vertical-align: baseline; }
-.lineup td:nth-child(1) { width: 26%; }
-.lineup td:nth-child(2) { width: 24%; color: var(--muted); }
-.lineup td:nth-child(3) { width: 30%; color: var(--muted); }
-.lineup td:nth-child(4) { text-align: right; }
-.lineup td:nth-child(5) { width: 64px; text-align: right; }
-.lineup tr.row { transition: background-color 200ms; }
-.lineup tr.row:hover td:first-child { color: var(--accent); }
-.lineup .cat th { position: sticky; top: 0; z-index: 1; background: var(--bg); color: var(--accent); padding: 72px 0 20px; }
-.lineup tbody:first-of-type .cat th { padding-top: 0; }
-.tog { width: 40px; height: 40px; border: 0; background: var(--surface); color: var(--ink); font: 400 1.5rem/1 var(--face); cursor: pointer; transition: background-color 200ms, color 200ms, transform 140ms var(--ease-out); }
-.tog:hover { background: #342e2b; }
+.lista-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px 40px; flex-wrap: wrap; margin-bottom: 48px; }
+.lista h2 { font-size: var(--step-head); }
+.filtros { display: flex; gap: 6px; background: var(--surface); padding: 6px; }
+.filtros button { border: 0; background: transparent; color: var(--muted); font: 400 var(--step-body)/1 var(--face); padding: 12px 18px; cursor: pointer; white-space: nowrap; transition: background-color 220ms, color 220ms; }
+.filtros button span { margin-left: 6px; font-size: var(--step-small); font-variant-numeric: tabular-nums; }
+.filtros button:hover { color: var(--ink); }
+.filtros button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.lista-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 96px); align-items: start; }
+.menu { list-style: none; margin: 0; padding: 0; }
+.cut { display: grid; grid-template-columns: minmax(0, 1fr) auto 44px; align-items: center; gap: 4px 28px; padding: 18px 20px; margin-inline: -20px; transition: background-color 240ms; }
+.cut:hover, .cut.is-lit { background: var(--surface); }
+.cut h3 { font-size: var(--step-lead); font-weight: 400; letter-spacing: -0.01em; line-height: 1.15; transition: color 240ms; }
+.cut.is-lit h3 { color: var(--accent); }
+.cut-main p { margin-top: 4px; color: var(--muted); font-size: var(--step-small); }
+.cut-time { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cut-time small { display: block; color: var(--muted); font-size: var(--step-small); }
+.js .cut.is-out { display: none; }
+.js .menu.is-swapping .cut { animation: cut-in 520ms var(--ease-out) both; animation-delay: calc(var(--k, 0) * 40ms); }
+@keyframes cut-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.tog { width: 44px; height: 44px; border: 0; background: var(--surface); color: var(--ink); font: 400 1.5rem/1 var(--face); cursor: pointer; transition: background-color 200ms, color 200ms, transform 140ms var(--ease-out); }
+.cut:hover .tog, .cut.is-lit .tog { background: #3a3431; }
+.tog:hover { background: #4a423e !important; }
 .tog:active { transform: scale(0.9); }
-.tog[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
-.lista-note { margin-top: 28px; color: var(--muted); font-size: var(--step-small); max-width: 70ch; }
+.tog[aria-pressed="true"] { background: var(--accent) !important; color: var(--accent-ink); }
+.lista-art { position: sticky; top: 112px; }
+.lista-art .bull-flat { width: 100%; height: auto; }
+.lista-art polygon { fill: #3a3431; transition: fill 420ms var(--ease-out); }
+.lista-art polygon.lit { fill: var(--accent); }
+.lista-art-cap { margin-top: 20px; font-size: var(--step-lead); line-height: 1.3; min-height: 2.6em; }
+.lista-art-cap small { display: block; color: var(--muted); font-size: var(--step-small); margin-top: 4px; }
+.lista-note { margin-top: 32px; color: var(--muted); font-size: var(--step-small); max-width: 70ch; }
 
-/* ---------- how it works: photographs down a diagonal ---------- */
+/* ---------- fuego, grasa y reposo: three equal plates ---------- */
 .pasos { margin-top: var(--gap); }
-.pasos-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
-.pasos h2 { grid-column: 7 / 13; grid-row: 1; font-size: var(--step-head); align-self: start; }
+.pasos-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 48px; flex-wrap: wrap; margin-bottom: 48px; }
+.pasos h2 { font-size: var(--step-head); }
+.pasos-head p { max-width: 36ch; color: var(--muted); font-size: var(--step-body); }
+.pasos-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 40px); }
 .paso { margin: 0; }
-.paso img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.86) contrast(1.06); }
-.paso p { max-width: 36ch; }
-.paso p b { font-weight: 500; }
-.p1 { grid-column: 1 / 5; grid-row: 1 / 3; aspect-ratio: 3 / 4; }
-.t1 { grid-column: 5 / 9; grid-row: 2; align-self: start; padding-top: 8px; }
-.p2 { grid-column: 6 / 9; grid-row: 3; aspect-ratio: 1; margin-top: 120px; }
-.t2 { grid-column: 9 / 13; grid-row: 3; align-self: start; margin-top: 128px; }
-.p3 { grid-column: 8 / 13; grid-row: 4; aspect-ratio: 16 / 10; margin-top: 160px; }
-.t3 { grid-column: 3 / 8; grid-row: 4; align-self: start; margin-top: 168px; justify-self: end; }
+.paso figure { margin: 0; aspect-ratio: 4 / 5; overflow: hidden; background: var(--surface); }
+.paso img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.84) contrast(1.06); transform: scale(1.03); transition: transform 1200ms var(--ease-out), filter 600ms; }
+.paso:hover img { transform: scale(1); filter: brightness(0.98) contrast(1.06); }
+.paso h3 { margin-top: 26px; font-size: var(--step-lead); font-weight: 400; letter-spacing: -0.01em; }
+.paso p { margin-top: 10px; max-width: 34ch; }
+.timer { margin-top: 22px; display: inline-flex; align-items: center; gap: 14px; min-height: 52px; padding: 0 20px; border: 0; background: var(--surface); color: var(--ink); font: 400 var(--step-body)/1 var(--face); cursor: pointer; transition: background-color 200ms, transform 140ms var(--ease-out); }
+.timer:hover { background: #342e2b; }
+.timer:active { transform: scale(0.97); }
+.timer b { font-weight: 400; font-variant-numeric: tabular-nums; color: var(--accent); min-width: 3.2ch; }
+.timer.is-on { background: var(--ink); color: var(--bg); }
+.timer.is-on b { color: var(--bg); }
 
 /* ---------- la báscula ---------- */
 .bascula { margin-top: var(--gap); background: var(--field-1); color: var(--field-1-ink); padding-block: clamp(80px, 9vw, 150px); }
@@ -185,20 +203,29 @@ legend { padding: 0; }
 .ghost:active { transform: scale(0.97); }
 .status { color: var(--muted); font-size: var(--step-small); min-height: 1.4em; }
 
-/* ---------- visit card on a photograph ---------- */
-.visita { position: relative; margin-top: var(--gap); padding-inline: var(--m); max-width: 1720px; margin-inline: auto; display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); align-items: center; }
-.visita > img { grid-column: 1; grid-row: 1; width: 100%; height: auto; aspect-ratio: 836 / 562; object-fit: cover; filter: brightness(0.78) contrast(1.08) saturate(0.92); }
-.card { position: relative; z-index: 1; grid-column: 2; grid-row: 1; margin-left: -96px; width: auto; max-width: none; background: var(--ink); color: var(--bg); padding: 32px 32px 0; }
-.card h2 { font-size: var(--step-lead); }
-.card p { margin-top: 14px; font-size: var(--step-body); line-height: 1.5; }
-.card .hours { margin: 18px 0 0; display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; font-variant-numeric: tabular-nums; }
-.card .hours dt { color: #55524c; }
-.card .hours dd { margin: 0; text-align: right; }
-.card .hours a { text-decoration: none; }
-.card .hours a:hover { text-decoration: underline; }
-.card .soft { color: #55524c; font-size: var(--step-small); }
-.card .btn { width: calc(100% + 64px); margin: 28px -32px 0; min-height: 56px; }
-.visita figcaption { grid-column: 1; grid-row: 2; margin-top: 14px; font-size: var(--step-small); color: var(--muted); }
+/* ---------- the shop: address as the headline, a dark map, the storefront pinned on it ---------- */
+.visita { margin-top: var(--gap); display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 6vw, 120px); align-items: center; }
+.visita h2 { font-size: var(--step-head); max-width: 9em; }
+.vis-sub { margin-top: 18px; font-size: var(--step-lead); line-height: 1.4; color: var(--muted); max-width: 26ch; }
+.vis-open { margin-top: 30px; display: inline-flex; align-items: center; gap: 12px; background: var(--surface); padding: 12px 16px; }
+.vis-open .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); }
+.vis-open.is-open .dot { background: #8fbf7a; animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.35; } }
+.vis-rows { margin: 30px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 12px 32px; max-width: 420px; font-variant-numeric: tabular-nums; }
+.vis-rows dt { color: var(--muted); }
+.vis-rows dd { margin: 0; text-align: right; }
+.vis-rows a { text-decoration: none; }
+.vis-rows a:hover { color: var(--accent); }
+.vis-act { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 12px; }
+.ghost.as-link { display: inline-flex; align-items: center; text-decoration: none; }
+.vis-quote { margin-top: 34px; font-style: italic; color: var(--muted); }
+.vis-map { position: relative; aspect-ratio: 5 / 4; background: var(--surface); }
+.vis-map::before { content: "Calzada de los Jinetes 79B"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: var(--step-body); }
+.vis-map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: grayscale(1) invert(0.92) contrast(0.92) brightness(0.92); }
+.vis-photo { position: absolute; z-index: 3; left: clamp(-48px, -3vw, -16px); bottom: clamp(-48px, -3vw, -16px); width: min(42%, 380px); margin: 0; background: var(--ink); padding: 10px 10px 12px; transform: rotate(-2deg); transition: transform 500ms var(--ease-out); }
+.vis-photo:hover { transform: rotate(0deg) scale(1.04); }
+.vis-photo img { width: 100%; height: auto; aspect-ratio: 836 / 562; object-fit: cover; }
+.vis-photo figcaption { margin-top: 10px; color: var(--bg); font-size: var(--step-small); }
 
 /* ---------- footer: one quiet line ---------- */
 .foot { margin-top: 30svh; padding: 0 var(--m) 30px; display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px 24px; align-items: baseline; font-size: var(--step-small); color: var(--muted); }
@@ -227,6 +254,11 @@ legend { padding: 0; }
 @media (max-width: 980px) {
   .nav a:not(.btn) { display: none; }
   .corte-pin, .bas-grid { grid-template-columns: 1fr; }
+  .lista-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr); }
+  .visita { grid-template-columns: 1fr; }
+  .pasos-row { gap: 14px; }
+  .vis-map { margin-bottom: 40px; }
+  .vis-photo { left: 16px; bottom: -32px; }
   .bas-grid { row-gap: 88px; }
   .js .corte.is-live .corte-pin { grid-template-rows: 46svh 1fr; align-items: start; gap: 0; padding-top: 12px; }
   .js .corte.is-live .stage3d { height: 46svh; order: -1; }
@@ -243,22 +275,17 @@ legend { padding: 0; }
   .panel { flex: 0 0 auto; height: 50%; }
   .panel:nth-child(1), .panel:nth-child(4) { width: 64%; }
   .panel:nth-child(2), .panel:nth-child(3) { width: 36%; }
-  .lineup, .lineup tbody, .lineup tr, .lineup th, .lineup td { display: block; }
-  .lineup tr.row { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 9px 0; }
-  .lineup td { width: auto !important; padding: 0; text-align: left !important; }
-  .lineup td:nth-child(1) { font-size: 1.375rem; grid-column: 1; }
-  .lineup td:nth-child(2), .lineup td:nth-child(3), .lineup td:nth-child(4) { font-size: var(--step-small); grid-column: 1; }
-  .lineup td:nth-child(5) { grid-column: 2; grid-row: 1 / 4; align-self: center; }
-  .lineup .cat th { padding: 48px 0 12px; }
-  .pasos-grid { display: flex; flex-direction: column; gap: 16px; }
-  .pasos h2 { margin-bottom: 24px; }
-  .p1 { width: 100%; } .p2 { width: 62%; align-self: flex-end; margin-top: 40px; } .p3 { width: 78%; margin-top: 40px; }
-  .t1, .t2, .t3 { margin-top: 0; justify-self: auto; }
-  .t2 { align-self: flex-end; width: 62%; }
-  .visita { grid-template-columns: 1fr; padding-inline: 0; }
-  .visita > img { grid-row: 1; }
-  .card { grid-column: 1; grid-row: 2; margin: -64px var(--m) 0; max-width: none; }
-  .visita figcaption { grid-row: 3; margin: 14px var(--m) 0; }
+  .lista-grid { grid-template-columns: 1fr; }
+  .lista-art { display: none; }
+  .filtros { width: 100%; flex-wrap: wrap; }
+  .filtros button { flex: 1 1 auto; padding: 12px 14px; }
+  .cut { grid-template-columns: minmax(0, 1fr) auto 44px; gap: 2px 14px; padding: 14px 12px; margin-inline: -12px; }
+  .cut h3 { font-size: 1.3125rem; }
+  .pasos-row { grid-template-columns: 1fr; gap: 56px; }
+  .paso figure { aspect-ratio: 4 / 3; }
+  .visita { grid-template-columns: 1fr; }
+  .vis-map { aspect-ratio: 4 / 5; margin-bottom: 40px; }
+  .vis-photo { left: 12px; bottom: -32px; width: 56%; }
   .foot { grid-template-columns: 1fr; margin-top: 20svh; }
   .foot nav { justify-content: flex-start; }
   .foot .r { text-align: left; }
@@ -328,42 +355,60 @@ legend { padding: 0; }
 </section>
 
 <section class="lista wrap" id="cortes" aria-labelledby="cortes-t">
-  <h2 id="cortes-t" data-reveal>Todos los cortes</h2>
-  <table class="lineup" data-reveal style="--d:1">
-    <caption class="vh">Cortes de res: de dónde salen, cómo se cocinan y en cuánto tiempo</caption>
-    <thead class="vh"><tr><th scope="col">Corte</th><th scope="col">Sale de</th><th scope="col">Cómo</th><th scope="col">Tiempo</th><th scope="col">Báscula</th></tr></thead>
-    <tbody>
-      <tr class="cat"><th colspan="5" scope="rowgroup">Para el asador</th></tr>
-      <tr class="row"><td>Rib eye</td><td>Lomo alto</td><td>Brasa fuerte</td><td>4–5 min por lado</td><td><button class="tog" type="button" data-add="ribeye" aria-pressed="false" aria-label="Agregar rib eye a la báscula">+</button></td></tr>
-      <tr class="row"><td>New York</td><td>Lomo bajo</td><td>Brasa fuerte</td><td>4–5 min por lado</td><td><button class="tog" type="button" data-add="newyork" aria-pressed="false" aria-label="Agregar New York a la báscula">+</button></td></tr>
-      <tr class="row"><td>Arrachera</td><td>Diafragma</td><td>Contra la fibra</td><td>3–4 min por lado</td><td><button class="tog" type="button" data-add="arrachera" aria-pressed="false" aria-label="Agregar arrachera a la báscula">+</button></td></tr>
-      <tr class="row"><td>Picaña</td><td>Tapa de la cadera</td><td>Grasa al carbón</td><td>6–8 min por lado</td><td><button class="tog" type="button" data-add="picana" aria-pressed="false" aria-label="Agregar picaña a la báscula">+</button></td></tr>
-      <tr class="row"><td>Costilla cargada</td><td>Costillar</td><td>Corte delgado</td><td>2–3 min por lado</td><td><button class="tog" type="button" data-add="costilla" aria-pressed="false" aria-label="Agregar costilla cargada a la báscula">+</button></td></tr>
-      <tr class="row"><td>Sirloin</td><td>Cadera</td><td>Brasa fuerte</td><td>4–5 min por lado</td><td><button class="tog" type="button" data-add="sirloin" aria-pressed="false" aria-label="Agregar sirloin a la báscula">+</button></td></tr>
-      <tr class="row"><td>Tomahawk</td><td>Lomo alto con hueso</td><td>Fuego indirecto</td><td>25–35 min</td><td><button class="tog" type="button" data-add="tomahawk" aria-pressed="false" aria-label="Agregar tomahawk a la báscula">+</button></td></tr>
-      <tr class="row"><td>Hueso de tuétano</td><td>Hueso de la pierna</td><td>Abierto, al carbón</td><td>15–20 min</td><td></td></tr>
-      <tr class="row"><td>Chistorra</td><td>Embutido de cerdo</td><td>Al carbón</td><td>8–10 min</td><td></td></tr>
-    </tbody>
-    <tbody>
-      <tr class="cat"><th colspan="5" scope="rowgroup">Para la semana</th></tr>
-      <tr class="row"><td>Diezmillo</td><td>Cuello y espalda</td><td>Guisado</td><td>1 h 30</td><td></td></tr>
-      <tr class="row"><td>Bistec de bola</td><td>Pierna</td><td>Plancha</td><td>2 min por lado</td><td></td></tr>
-      <tr class="row"><td>Chamberete</td><td>Parte alta de la pata</td><td>Caldo de res</td><td>2 h</td><td></td></tr>
-      <tr class="row"><td>Pecho</td><td>Pecho</td><td>Olla, deshebrado</td><td>3 h</td><td></td></tr>
-    </tbody>
-  </table>
+  <div class="lista-head">
+    <h2 id="cortes-t" data-reveal>Todos los cortes</h2>
+    <div class="filtros" role="group" aria-label="Mostrar cortes" data-reveal style="--d:1">
+      <button type="button" data-f="asador" aria-pressed="true">Para el asador<span>9</span></button>
+      <button type="button" data-f="semana" aria-pressed="false">Para la semana<span>4</span></button>
+      <button type="button" data-f="todos" aria-pressed="false">Todos<span>13</span></button>
+    </div>
+  </div>
+  <div class="lista-grid">
+    <ul class="menu" id="menu" data-reveal style="--d:1">
+      <li class="cut" data-g="asador" data-r="ribeye" data-de="Lomo alto" tabindex="0"><div class="cut-main"><h3>Rib eye</h3><p>Lomo alto · Brasa fuerte</p></div><span class="cut-time">4–5 min<small>por lado</small></span><button class="tog" type="button" data-add="ribeye" aria-pressed="false" aria-label="Agregar rib eye a la báscula">+</button></li>
+      <li class="cut" data-g="asador" data-r="newyork" data-de="Lomo bajo" tabindex="0"><div class="cut-main"><h3>New York</h3><p>Lomo bajo · Brasa fuerte</p></div><span class="cut-time">4–5 min<small>por lado</small></span><button class="tog" type="button" data-add="newyork" aria-pressed="false" aria-label="Agregar New York a la báscula">+</button></li>
+      <li class="cut" data-g="asador" data-r="arrachera" data-de="Diafragma" tabindex="0"><div class="cut-main"><h3>Arrachera</h3><p>Diafragma · Se rebana contra la fibra</p></div><span class="cut-time">3–4 min<small>por lado</small></span><button class="tog" type="button" data-add="arrachera" aria-pressed="false" aria-label="Agregar arrachera a la báscula">+</button></li>
+      <li class="cut" data-g="asador" data-r="picana" data-de="Tapa de la cadera" tabindex="0"><div class="cut-main"><h3>Picaña</h3><p>Tapa de la cadera · La grasa hacia el carbón</p></div><span class="cut-time">6–8 min<small>por lado</small></span><button class="tog" type="button" data-add="picana" aria-pressed="false" aria-label="Agregar picaña a la báscula">+</button></li>
+      <li class="cut" data-g="asador" data-r="costilla" data-de="Costillar" tabindex="0"><div class="cut-main"><h3>Costilla cargada</h3><p>Costillar · En corte delgado</p></div><span class="cut-time">2–3 min<small>por lado</small></span><button class="tog" type="button" data-add="costilla" aria-pressed="false" aria-label="Agregar costilla cargada a la báscula">+</button></li>
+      <li class="cut" data-g="asador" data-r="picana" data-de="Cadera" tabindex="0"><div class="cut-main"><h3>Sirloin</h3><p>Cadera · Brasa fuerte</p></div><span class="cut-time">4–5 min<small>por lado</small></span><button class="tog" type="button" data-add="sirloin" aria-pressed="false" aria-label="Agregar sirloin a la báscula">+</button></li>
+      <li class="cut" data-g="asador" data-r="ribeye" data-de="Lomo alto con hueso" tabindex="0"><div class="cut-main"><h3>Tomahawk</h3><p>Lomo alto con hueso · Fuego indirecto, sellado al final</p></div><span class="cut-time">25–35 min<small>en total</small></span><button class="tog" type="button" data-add="tomahawk" aria-pressed="false" aria-label="Agregar tomahawk a la báscula">+</button></li>
+      <li class="cut" data-g="asador" data-r="chamberete" data-de="Hueso de la pierna" tabindex="0"><div class="cut-main"><h3>Hueso de tuétano</h3><p>Hueso de la pierna · Abierto, al carbón</p></div><span class="cut-time">15–20 min<small>en total</small></span><span aria-hidden="true"></span></li>
+      <li class="cut" data-g="asador" data-r="none" data-de="Embutido de cerdo" tabindex="0"><div class="cut-main"><h3>Chistorra</h3><p>Embutido de cerdo · Al carbón</p></div><span class="cut-time">8–10 min<small>en total</small></span><span aria-hidden="true"></span></li>
+      <li class="cut" data-g="semana" data-r="diezmillo" data-de="Cuello y espalda" tabindex="0"><div class="cut-main"><h3>Diezmillo</h3><p>Cuello y espalda · Guisado a fuego bajo</p></div><span class="cut-time">1 h 30<small>en olla</small></span><span aria-hidden="true"></span></li>
+      <li class="cut" data-g="semana" data-r="bola" data-de="Pierna" tabindex="0"><div class="cut-main"><h3>Bistec de bola</h3><p>Pierna · A la plancha</p></div><span class="cut-time">2 min<small>por lado</small></span><span aria-hidden="true"></span></li>
+      <li class="cut" data-g="semana" data-r="chamberete" data-de="Parte alta de la pata" tabindex="0"><div class="cut-main"><h3>Chamberete</h3><p>Parte alta de la pata · Caldo de res</p></div><span class="cut-time">2 h<small>en olla</small></span><span aria-hidden="true"></span></li>
+      <li class="cut" data-g="semana" data-r="pecho" data-de="Pecho" tabindex="0"><div class="cut-main"><h3>Pecho</h3><p>Pecho · Olla y deshebrado</p></div><span class="cut-time">3 h<small>en olla</small></span><span aria-hidden="true"></span></li>
+    </ul>
+    <aside class="lista-art" aria-hidden="true">
+      <svg class="bull-flat" viewBox="72 51 599 570" aria-hidden="true" focusable="false"><polygon data-cut="diezmillo" points="165,522 161,538 311,501 327,482 276,301"/><polygon data-cut="pecho" points="267,254 259,255 246,265 197,310 148,365 117,408 113,421 113,435 117,450 141,504 152,522 275,280 278,267"/><polygon data-cut="ribeye" points="286,285 337,470 413,379 409,372 367,346 326,316 291,283"/><polygon data-cut="costilla" points="502,546 481,524 470,507 461,488 457,473 326,502 272,566 507,549"/><polygon data-cut="newyork" points="451,419 454,398 450,392 429,384 422,386 402,412 340,485 453,461"/><polygon data-cut="arrachera" points="358,592 410,596 449,596 490,592 494,595 505,615 557,615 545,575 524,561 277,578"/><polygon data-cut="picana" points="497,410 466,400 463,414 463,440 554,458 554,438 540,430"/><polygon data-cut="bola" points="466,465 474,490 494,522 518,545 540,558 539,554 616,542 600,493 644,483 655,476 559,476 556,475 554,471 464,453"/><polygon data-cut="chamberete" points="156,615 215,615 297,517 159,552"/><polygon data-cut="chamberete" points="557,566 591,615 639,615 620,555 553,565"/><polygon points="306,166 262,151 192,136 179,136 173,141 149,194 125,274 114,339 113,392 154,339 218,273 249,246 293,213 311,180 311,173"/><polygon points="78,75 78,91 82,106 90,121 112,141 144,157 150,157 165,131 138,122 111,106 93,85 85,57"/><polygon points="277,116 256,138 264,142 281,145 291,136 294,120 288,103 281,95 277,94"/><polygon points="567,338 567,351 573,365 583,376 618,401 638,422 646,441 646,449 640,460 627,468 613,468 586,462 560,442 560,470 659,470 665,460 664,439 649,409 616,381 610,361 601,352 578,342 569,335"/></svg>
+      <p class="lista-art-cap" id="art-cap">Rib eye<small>Sale del lomo alto</small></p>
+    </aside>
+  </div>
   <p class="lista-note">Además de res: pollo, cerdo y mariscos. Tiempos orientativos para cortes de 2.5 cm sobre carbón bien encendido.</p>
 </section>
 
 <section class="pasos wrap" aria-labelledby="pasos-t">
-  <div class="pasos-grid">
-    <h2 id="pasos-t">Fuego, grasa y reposo</h2>
-    <figure class="paso p1" data-reveal><img src="assets/step-1.jpg" alt="Pintura de El Greco: un muchacho sopla una brasa para encender una vela" width="1280" height="1539" loading="lazy"></figure>
-    <p class="paso t1" data-reveal style="--d:1"><b>Primero, el fuego:</b> enciende el carbón media hora antes y espera a que la brasa se cubra de ceniza blanca.</p>
-    <figure class="paso p2" data-reveal><img src="assets/step-2.jpg" alt="Detalle del marmoleo blanco dentro de un corte de res" width="1800" height="1350" loading="lazy"></figure>
-    <p class="paso t2" data-reveal style="--d:1"><b>En el mostrador, la grasa:</b> las vetas blancas dentro de la carne son las que la vuelven jugosa sobre el carbón.</p>
-    <figure class="paso p3" data-reveal><img src="assets/step-3.jpg" alt="Filetes gruesos sobre una parrilla con carbón encendido" width="1800" height="1061" loading="lazy"></figure>
-    <p class="paso t3" data-reveal style="--d:1"><b>Al final, el reposo:</b> sala al poner la carne, voltéala una sola vez y déjala reposar cinco minutos antes de rebanar.</p>
+  <div class="pasos-head">
+    <h2 id="pasos-t" data-reveal>Fuego, grasa y reposo</h2>
+    <p data-reveal style="--d:1">Tres cosas que separan un buen asado de uno cualquiera.</p>
+  </div>
+  <div class="pasos-row">
+    <article class="paso" data-reveal>
+      <figure><img src="assets/step-1.jpg" alt="Pintura de El Greco: un muchacho sopla una brasa para encender una vela" width="1280" height="1539" style="object-position:50% 35%" loading="lazy"></figure>
+      <h3>Primero, el fuego</h3>
+      <p>Enciende el carbón media hora antes y espera a que la brasa se cubra de ceniza blanca.</p>
+    </article>
+    <article class="paso" data-reveal style="--d:1">
+      <figure><img src="assets/ribeye-detalle.jpg" alt="Detalle del marmoleo de nuestro rib eye" width="440" height="550" loading="lazy"></figure>
+      <h3>En el mostrador, la grasa</h3>
+      <p>Las vetas blancas dentro de la carne son las que la vuelven jugosa sobre el carbón. Pídela bien marmoleada.</p>
+    </article>
+    <article class="paso" data-reveal style="--d:2">
+      <figure><img src="assets/step-3.jpg" alt="Filetes gruesos sobre una parrilla con carbón encendido" width="1800" height="1061" style="object-position:55% 50%" loading="lazy"></figure>
+      <h3>Al final, el reposo</h3>
+      <p>Sala al poner la carne, voltéala una sola vez y déjala reposar cinco minutos antes de rebanar.</p>
+      <button class="timer" type="button" id="timer" aria-live="polite">Contar el reposo <b id="timer-t">5:00</b></button>
+    </article>
   </div>
 </section>
 
@@ -406,16 +451,19 @@ legend { padding: 0; }
   </div>
 </section>
 
-<section class="visita" id="sucursal" aria-labelledby="suc-t">
-  <img src="assets/fachada.jpg" alt="Fachada de Karnes del Norte Prime en Calzada de los Jinetes, con el toro del logo sobre la entrada" width="836" height="562" loading="lazy">
-  <div class="card">
-    <h2 id="suc-t">La sucursal</h2>
-    <p>Calzada de los Jinetes 79B, Estado de México.</p>
-    <dl class="hours"><dt>Horario</dt><dd>8:00 – 19:00 h</dd><dt>Teléfono</dt><dd><a href="tel:+525589260375">55 8926 0375</a></dd></dl>
-    <p class="soft">Única sucursal, única calidad, única Karne Prime.</p>
-    <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Karnes+del+Norte+Prime+Calzada+de+los+Jinetes+79B" rel="noopener">Cómo llegar <span class="arr" aria-hidden="true">→</span></a>
+<section class="visita wrap" id="sucursal" aria-labelledby="suc-t">
+  <div class="vis-info">
+    <h2 id="suc-t" data-reveal>Calzada de los Jinetes 79B</h2>
+    <p class="vis-sub" data-reveal style="--d:1">Nuestra única sucursal, en el Estado de México.</p>
+    <p class="vis-open" id="open-now" data-reveal style="--d:2"><span class="dot" aria-hidden="true"></span><span id="open-t">Abrimos de 8:00 a 19:00 h</span></p>
+    <dl class="vis-rows" data-reveal style="--d:2"><dt>Horario</dt><dd>8:00 – 19:00 h</dd><dt>Teléfono</dt><dd><a href="tel:+525589260375">55 8926 0375</a></dd><dt>Instagram</dt><dd><a href="https://www.instagram.com/karnesprime/" rel="noopener">@karnesprime</a></dd></dl>
+    <div class="vis-act" data-reveal style="--d:3"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Karnes+del+Norte+Prime+Calzada+de+los+Jinetes+79B" rel="noopener">Cómo llegar <span class="arr" aria-hidden="true">→</span></a><a class="ghost as-link" href="tel:+525589260375">Llamar</a></div>
+    <p class="vis-quote" data-reveal style="--d:3">Única sucursal, única calidad, única Karne Prime.</p>
   </div>
-  <figcaption>La fachada, en Calzada de los Jinetes 79B.</figcaption>
+  <div class="vis-map" data-reveal style="--d:1">
+    <iframe title="Mapa: Karnes del Norte Prime en Calzada de los Jinetes 79B" src="https://www.google.com/maps?q=Karnes+del+Norte+Prime,+Calzada+de+los+Jinetes+79B,+Estado+de+M%C3%A9xico&amp;z=16&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <figure class="vis-photo"><img src="assets/fachada.jpg" alt="Fachada de Karnes del Norte Prime, con el toro del logo sobre la entrada" width="836" height="562" loading="lazy"><figcaption>La fachada, en Calzada de los Jinetes.</figcaption></figure>
+  </div>
 </section>
 
 </main>
@@ -426,7 +474,7 @@ legend { padding: 0; }
     <nav aria-label="Pie"><a href="tel:+525589260375">55 8926 0375</a><a href="#cortes">Cortes</a><a href="#bascula">La báscula</a><a href="https://www.instagram.com/karnesprime/" rel="noopener">Instagram</a><a href="https://www.facebook.com/karnednorteprime/" rel="noopener">Facebook</a></nav>
     <p class="r">2026 · propuesta de diseño, no es el sitio oficial</p>
   </div>
-  <details class="credits"><summary>Créditos de las fotos</summary><ul><li><a href="https://commons.wikimedia.org/wiki/File:Dry-aging_beef.jpg" rel="noopener">Dry-aging beef</a>, Filipe Fortes from United States · CC BY-SA 2.0</li><li><a href="https://commons.wikimedia.org/wiki/File:Picanha_Under_Broiler.jpg" rel="noopener">Picanha Under Broiler</a>, IReallyLikeYorhshirePuddding · CC BY 4.0</li><li><a href="https://commons.wikimedia.org/wiki/File:Tomahawk_steaks_on_the_grill.jpg" rel="noopener">Tomahawk steaks on the grill</a>, StoppedTime · CC0</li><li><a href="https://commons.wikimedia.org/wiki/File:El_Sopl%C3%B3n_-_El_Greco_(Naples).jpg" rel="noopener">El Soplón - El Greco (Naples)</a>, El Greco · Public domain</li><li><a href="https://commons.wikimedia.org/wiki/File:Wagyu_beef_marbling_detail.jpg" rel="noopener">Wagyu beef marbling detail</a>, originally uploaded by User:Schellack · Public domain</li><li><a href="https://commons.wikimedia.org/wiki/File:Hapcheongun_County_43.jpg" rel="noopener">Hapcheongun County 43</a>, KOREA.NET · CC BY-SA 2.0</li></ul></details>
+  <details class="credits"><summary>Créditos de las fotos</summary><ul><li><a href="https://commons.wikimedia.org/wiki/File:Dry-aging_beef.jpg" rel="noopener">Dry-aging beef</a>, Filipe Fortes from United States · CC BY-SA 2.0</li><li><a href="https://commons.wikimedia.org/wiki/File:Picanha_Under_Broiler.jpg" rel="noopener">Picanha Under Broiler</a>, IReallyLikeYorhshirePuddding · CC BY 4.0</li><li><a href="https://commons.wikimedia.org/wiki/File:Tomahawk_steaks_on_the_grill.jpg" rel="noopener">Tomahawk steaks on the grill</a>, StoppedTime · CC0</li><li><a href="https://commons.wikimedia.org/wiki/File:El_Sopl%C3%B3n_-_El_Greco_(Naples).jpg" rel="noopener">El Soplón - El Greco (Naples)</a>, El Greco · Public domain</li><li><a href="https://commons.wikimedia.org/wiki/File:Hapcheongun_County_43.jpg" rel="noopener">Hapcheongun County 43</a>, KOREA.NET · CC BY-SA 2.0</li></ul></details>
 </footer>
 
 <div class="tip" id="tip" aria-hidden="true"></div>
@@ -4279,7 +4327,7 @@ three/build/three.module.js:
 <script>
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const NAMES = { ribeye: 'Rib eye', newyork: 'New York', arrachera: 'Arrachera', picana: 'Picaña', costilla: 'Costilla cargada', diezmillo: 'Diezmillo', bola: 'Bola', chamberete: 'Chamberete', pecho: 'Pecho', tomahawk: 'Tomahawk', sirloin: 'Sirloin' };
+  const NAMES = { ribeye: 'Rib eye', newyork: 'New York', arrachera: 'Arrachera', picana: 'Picaña', costilla: 'Costilla cargada', diezmillo: 'Diezmillo', bola: 'Bola', chamberete: 'Chamberete', pecho: 'Pecho', tomahawk: 'Tomahawk', sirloin: 'Sirloin', tuetano: 'Hueso de tuétano', chistorra: 'Chistorra' };
 
   // reveal once
   const targets = document.querySelectorAll('[data-reveal]');
@@ -4298,7 +4346,7 @@ three/build/three.module.js:
     tip.style.left = x + 'px'; tip.style.top = y + 'px'; tip.classList.add('is-on');
   };
   const stepFor = (cut) => document.querySelector(`.step[data-cut="${cut}"]`);
-  const rowFor = (cut) => [...document.querySelectorAll('.lineup tr.row')].find((r) => r.cells[0].textContent.trim() === NAMES[cut]);
+  const rowFor = (cut) => document.querySelector(`.cut[data-r="${cut}"]`);
   const Bull3D = window.Bull3D;
   let heroBull = null, corteBull = null;
   if (Bull3D) {
@@ -4333,6 +4381,45 @@ three/build/three.module.js:
   }
   steps.forEach((s, i) => s.querySelector('button').addEventListener('click', () => jump(i)));
   setStep(0);
+
+
+  // ---------- the cuts: filter, and light each cut on the bull ----------
+  const menu = document.getElementById('menu'), cutsEls = [...menu.querySelectorAll('.cut')];
+  const artPolys = [...document.querySelectorAll('.lista-art polygon')], artCap = document.getElementById('art-cap');
+  const light = (li) => {
+    cutsEls.forEach((c) => c.classList.toggle('is-lit', c === li));
+    const r = li ? li.dataset.r : null;
+    artPolys.forEach((p) => p.classList.toggle('lit', !!r && p.dataset.cut === r));
+    if (li) artCap.innerHTML = li.querySelector('h3').textContent + '<small>' + (r === 'none' ? 'Embutido de cerdo: no sale del toro' : 'Sale de: ' + li.dataset.de.toLowerCase()) + '</small>';
+  };
+  cutsEls.forEach((li) => { li.addEventListener('pointerenter', () => light(li)); li.addEventListener('focus', () => light(li)); });
+  const filtros = document.querySelectorAll('.filtros button');
+  const filter = (f) => {
+    filtros.forEach((b) => b.setAttribute('aria-pressed', b.dataset.f === f));
+    let k = 0;
+    cutsEls.forEach((c) => { const show = f === 'todos' || c.dataset.g === f; c.classList.toggle('is-out', !show); if (show) c.style.setProperty('--k', k++); });
+    if (!reduce) { menu.classList.remove('is-swapping'); void menu.offsetWidth; menu.classList.add('is-swapping'); }
+    light(cutsEls.find((c) => !c.classList.contains('is-out')));
+  };
+  filtros.forEach((b) => b.addEventListener('click', () => filter(b.dataset.f)));
+  filter('asador');
+
+  // ---------- el reposo: a five-minute count ----------
+  const timer = document.getElementById('timer'), timerT = document.getElementById('timer-t');
+  let left = 300, tick = null;
+  const show = () => { timerT.textContent = Math.floor(left / 60) + ':' + (left % 60 < 10 ? "0" : "") + (left % 60); };
+  timer.addEventListener('click', () => {
+    if (tick) { clearInterval(tick); tick = null; left = 300; show(); timer.classList.remove('is-on'); timer.firstChild.textContent = 'Contar el reposo '; return; }
+    timer.classList.add('is-on'); timer.firstChild.textContent = 'Reposando ';
+    tick = setInterval(() => { left--; show(); if (left <= 0) { clearInterval(tick); tick = null; timer.classList.remove('is-on'); timer.firstChild.textContent = 'Listo, a rebanar '; left = 300; } }, 1000);
+  });
+
+  // ---------- is the shop open right now (Mexico City time) ----------
+  const openEl = document.getElementById('open-now'), openT = document.getElementById('open-t');
+  const mx = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Mexico_City' }));
+  const mins = mx.getHours() * 60 + mx.getMinutes();
+  if (mins >= 480 && mins < 1140) { openEl.classList.add('is-open'); openT.textContent = 'Abierto ahora · cierra a las 19:00'; }
+  else openT.textContent = 'Cerrado ahora · abrimos a las 8:00';
 
   // ---------- la báscula ----------
   const form = document.getElementById('calc'), nota = document.getElementById('nota'), kgEl = document.getElementById('kg');
